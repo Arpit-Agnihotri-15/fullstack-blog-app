@@ -3,14 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog App</title>
-
-    <link rel="stylesheet" href="css/style.css">
+    <title>Scriptora | Where Ideas Become Stories</title>
+    <!-- Favicon -->
+    <link rel="icon" href="assets/favicon/favicon.png">
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
+    <!-- ======NAVBAR========-->
+    <header>
+        <nav class="navbar container">
+            <div class="logo">
+                <img src="assets/logo/scriptora-logo-light.png"
+                    alt="Scriptora Logo">
+                <h2>Scriptora</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a class="active" href="#">Home</a></li>
+                <li><a href="#">Blogs</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <div class="nav-right">
+                <button class="search-btn">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+                <button class="login-btn">
+                    <i class="fa-regular fa-user"></i>
+                    Login
+                </button>
+            </div>
+            <!-- Burger -->
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+    <!-- =========HERO============-->
+    <section class="hero" id="home">
+        <div class="hero-content container">
+            <span class="hero-badge">
+                ✨ Modern Blogging Platform
+            </span>
+            <h1>
+                Where Ideas Become Stories.
+            </h1>
+            <p>
+                Scriptora is a modern blogging platform where writers,
+                developers, students and creators share knowledge,
+                inspire minds and build communities through
+                meaningful stories.
+            </p>
+            <div class="hero-buttons">
+                <button class="primary-btn">
+                    Start Reading
+                </button>
+                <button class="secondary-btn">
+                    Explore Blogs
+                </button>
+            </div>
+        </div>
+        <div class="scroll-down" id="scrollBtn">
+            <span>Scroll Down</span>
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
+    </section>
+    <!-- =======FEATURED BLOGS========== -->
+    <section id="featured" class="featured" >
+        <div class="container">
+            <h2 class="section-title">
+                Featured Blogs
+            </h2>
+            <p class="section-subtitle">
+                Discover some of the best stories shared by our
+                community.
+            </p>
+            <div class="blog-grid">
+                <!-- Card 1 -->
+                <div class="blog-card">
+                    <div class="blog-image"></div>
+                    <div class="blog-content">
+                        <span class="blog-category">
+                            AI
+                        </span>
+                        <h3>
+                            Artificial Intelligence in Everyday Life
+                        </h3>
+                        <p>
+                            Explore how AI is transforming education,
+                            healthcare and everyday experiences.
+                        </p>
+                        <a href="#">
+                            Read More →
+                        </a>
+                        <div class="blog-footer">
+                            <span><i class="far fa-heart"></i>248</span>
+                            <span><i class="far fa-comment"></i>41</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="blog-card">
+                    <div class="blog-image"></div>
+                    <div class="blog-content">
+                        <span class="blog-category">
+                            Web Development
+                        </span>
+                        <h3>
+                            Learning Full Stack Development
+                        </h3>
+                        <p>
+                            Step-by-step roadmap for becoming a modern
+                            full stack developer.
+                        </p>
+                        <a href="#">
+                            Read More →
+                        </a>
+                        <div class="blog-footer">
+                            <span><i class="far fa-heart"></i>325</span>
+                            <span><i class="far fa-comment"></i>63</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="blog-card">
+                    <div class="blog-image"></div>
+                    <div class="blog-content">
+                        <span class="blog-category">
+                            Travel
+                        </span>
+                        <h3>
+                            Hidden Places Worth Exploring
+                        </h3>
+                        <p>
+                            Beautiful destinations away from crowded
+                            tourist attractions.
+                        </p>
+                        <a href="#">
+                            Read More →
+                        </a>
+                        <div class="blog-footer">
+                            <span><i class="far fa-heart"></i>196</span>
+                            <span><i class="far fa-comment"></i>24</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- =======CATEGORIES=========-->
+    <section class="categories">
+        <div class="container">
+            <h2 class="section-title">
+                Explore Categories
+            </h2>
+            <div class="category-list">
+                <span class="category">🤖 AI</span>
+                <span class="category">💻 Programming</span>
+                <span class="category">🌐 Web Development</span>
+                <span class="category">🔐 Cyber Security</span>
+                <span class="category">✈ Travel</span>
+                <span class="category">📚 Lifestyle</span>
+            </div>
+        </div>
+    </section>
+    <!-- =========NEWSLETTER=========== -->
+    <section class="newsletter">
+        <div class="container">
+            <h2>
+                Never Miss A Story
+            </h2>
+            <p>
+                Subscribe to receive our latest blogs directly in your inbox.
+            </p>
+            <form class="newsletter-form">
+                <input
+                    type="email"
+                    placeholder="Enter your email">
+                <button type="submit">
+                    Subscribe
+                </button>
+            </form>
+        </div>
+    </section>
+    <!-- =========FOOTER============ -->
+    <footer>
+        <div class="container footer-grid">
+            <div>
+                <div class="footer-logo">
+                    <img src="assets/logo/scriptora-logo-light.png">
+                    <h2>Scriptora</h2>
+                </div>
+                <p>
+                    Where Ideas Become Stories.
 
-    <h1>Blog App</h1>
-
-    <script src="js/script.js"></script>
+                    Share knowledge. Inspire minds.
+                    Connect with the world.
+                </p>
+            </div>
+            <div>
+                <h3>
+                    Quick Links
+                </h3>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Blogs</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3>
+                    Connect
+                </h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2026 Scriptora. All Rights Reserved.
+        </div>
+    </footer>
+    <script src="js/main.js"></script>
+    <script src="js/home.js"></script>
 </body>
 </html>
