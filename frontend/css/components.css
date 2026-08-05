@@ -1,0 +1,277 @@
+/* ===========SCRIPTORA DESIGN SYSTEM============ */
+
+/* ===========COLOR VARIABLES=============*/
+
+:root{
+    --primary:#6C63FF;
+    --primary-hover:#5A52E8;
+    --secondary:#1F2937;
+    --success:#16A34A;
+    --danger:#DC2626;
+    --warning:#F59E0B;
+    --info:#2563EB;
+    --white:#FFFFFF;
+    --background:#F8FAFC;
+    --surface:#FFFFFF;
+    --border:#E5E7EB;
+    --text:#1F2937;
+    --text-light:#6B7280;
+    --radius-sm:8px;
+    --radius-md:12px;
+    --radius-lg:18px;
+    --radius-xl:24px;
+    --shadow-sm:0 4px 10px rgba(0,0,0,.05);
+    --shadow-md:0 10px 25px rgba(0,0,0,.08);
+    --shadow-lg:0 18px 45px rgba(0,0,0,.12);
+}
+
+/* ===============BUTTONS================== */
+
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    padding:15px 30px;
+    border:none;
+    border-radius:var(--radius-md);
+    cursor:pointer;
+    font-size:16px;
+    font-weight:600;
+    transition:.3s;
+    text-decoration:none;
+}
+.btn-primary{
+    background:var(--primary);
+    color:white;
+}
+.btn-primary:hover{
+    background:var(--primary-hover);
+    transform:translateY(-3px);
+}
+.btn-outline{
+    background:white;
+    border:2px solid var(--primary);
+    color:var(--primary);
+}
+.btn-outline:hover{
+    background:var(--primary);
+    color:white;
+}
+.btn-success{
+    background:var(--success);
+    color:white;
+}
+.btn-danger{
+    background:var(--danger);
+    color:white;
+}
+
+/* ==============INPUTS================== */
+
+.input-group{
+    margin-bottom:22px;
+}
+.input-group label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+    color:var(--text);
+}
+.input{
+    width:100%;
+    padding:15px 18px;
+    border:1px solid var(--border);
+    border-radius:var(--radius-md);
+    font-size:16px;
+    transition:.3s;
+    outline:none;
+}
+.input:focus{
+    border-color:var(--primary);
+    box-shadow:0 0 0 4px rgba(108,99,255,.15);
+}
+.input-error{
+    border-color:var(--danger);
+}
+.input-success{
+    border-color:var(--success);
+}
+
+/* ==============CARD==================== */
+
+.card{
+    background:var(--surface);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-md);
+    overflow:hidden;
+}
+.card-header{
+    padding:22px;
+    border-bottom:1px solid var(--border);
+}
+.card-body{
+    padding:25px;
+}
+.card-footer{
+    padding:20px;
+    border-top:1px solid var(--border);
+}
+
+/* ================BADGES================ */
+
+.badge{
+    display:inline-block;
+    padding:8px 16px;
+    border-radius:40px;
+    font-size:14px;
+    font-weight:600;
+}
+.badge-primary{
+    background:#ECEBFF;
+    color:var(--primary);
+}
+.badge-success{
+    background:#DCFCE7;
+    color:var(--success);
+}
+.badge-warning{
+    background:#FEF3C7;
+    color:var(--warning);
+}
+.badge-danger{
+    background:#FEE2E2;
+    color:var(--danger);
+}
+
+
+/* ================AVATAR================== */
+
+.avatar{
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+/* =============SPINNER================= */
+
+.spinner{
+    width:22px;
+    height:22px;
+    border:3px solid rgba(255,255,255,.4);
+    border-top:3px solid white;
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+}
+@keyframes spin{
+    from{
+        transform:rotate(0deg);
+    }
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* ==============UTILITIES================== */
+
+.text-center{
+    text-align:center;
+}
+.hidden{
+    display:none;
+}
+.flex{
+    display:flex;
+}
+.flex-center{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.w-100{
+    width:100%;
+}
+
+/* ==============SCRIPTORA TOAST================ */
+
+.scriptora-toast{
+    position:fixed;
+    top:25px;
+    right:25px;
+    min-width:340px;
+    max-width:420px;
+    background:white;
+    border-radius:16px;
+    box-shadow:0 20px 45px rgba(0,0,0,.15);
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding:18px;
+    z-index:99999;
+    transform:translateX(500px);
+    opacity:0;
+    transition:.35s ease;
+    overflow:hidden;
+}
+.scriptora-toast.show{
+    transform:translateX(0);
+    opacity:1;
+}
+.toast-icon{
+    font-size:24px;
+}
+.scriptora-toast.success .toast-icon{
+    color:#22C55E;
+}
+.scriptora-toast.error .toast-icon{
+    color:#EF4444;
+}
+.scriptora-toast.warning .toast-icon{
+    color:#F59E0B;
+}
+.scriptora-toast.info .toast-icon{
+    color:#3B82F6;
+}
+.toast-message{
+    flex:1;
+    font-weight:500;
+    color:#374151;
+    line-height:1.5;
+}
+.toast-close{
+    background:none;
+    border:none;
+    cursor:pointer;
+    color:#9CA3AF;
+    font-size:18px;
+}
+.toast-progress{
+    position:absolute;
+    left:0;
+    bottom:0;
+    height:4px;
+    width:100%;
+    background:#6366F1;
+    animation:toastProgress 3.5s linear forwards;
+}
+.scriptora-toast.success .toast-progress{
+    background:#22C55E;
+}
+.scriptora-toast.error .toast-progress{
+    background:#EF4444;
+}
+.scriptora-toast.warning .toast-progress{
+    background:#F59E0B;
+}
+.scriptora-toast.info .toast-progress{
+    background:#3B82F6;
+}
+@keyframes toastProgress{
+    from{
+        width:100%;
+    }
+    to{
+        width:0;
+    }
+}

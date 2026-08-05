@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Scriptora</title>
+    <link rel="icon" href="../assets/favicon/favicon.png">
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/register.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+<div class="register-page">
+    <!-- LEFT -->
+    <div class="register-left">
+        <img src="../assets/logo/scriptora-logo-light.png"
+            alt="Scriptora Logo">
+        <span class="badge badge-primary">
+            ✨ Join Scriptora
+        </span>
+        <h1>
+            Create your account
+        </h1>
+        <p>
+            Start writing blogs, discovering amazing stories and connecting with creators around the world.
+        </p>
+    </div>
+    <!-- RIGHT -->
+    <div class="register-right">
+        <h2>
+            Register
+        </h2>
+        <form class="register-form">
+            <div class="input-group">
+                <label>
+                    Full Name
+                </label>
+                <input
+                    type="text"
+                    class="input"
+                    id="name"
+                    placeholder="Enter your full name">
+            </div>
+            <div class="input-group">
+                <label>
+                    Email
+                </label>
+                <input
+                    type="email"
+                    class="input"
+                    id="email"
+                    placeholder="Enter your email">
+            </div>
+            <div class="input-group">
+                <label>
+                    Password
+                </label>
+                <div class="password-box">
+                    <input
+                        type="password"
+                        class="input"
+                        id="password"
+                        placeholder="Create password">
+                    <i
+                        class="fa-solid fa-eye"
+                        id="togglePassword">
+                    </i>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>
+                    Confirm Password
+                </label>
+                <div class="password-box">
+                    <input
+                        type="password"
+                        class="input"
+                        id="confirmPassword"
+                        placeholder="Confirm password">
+                    <i
+                        class="fa-solid fa-eye"
+                        id="toggleConfirmPassword">
+                    </i>
+                </div>
+            </div>
+            <button
+                type="submit"
+                class="btn btn-primary w-100 register-btn">
+                Create Account
+            </button>
+        </form>
+        <div class="divider">
+            <span>
+                OR
+            </span>
+        </div>
+        <button
+            class="google-btn">
+            <i class="fa-brands fa-google"></i>
+            Continue with Google
+        </button>
+        <p class="login-link">
+            Already have an account?
+            <a href="login.html">
+                Login
+            </a>
+        </p>
+    </div>
+</div>
+<!-- Toastify -->
+<script src="../js/toast.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/register.js"></script>
+</body>
+</html>
