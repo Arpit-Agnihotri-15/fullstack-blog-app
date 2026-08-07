@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile | Scriptora</title>
+
+    <link rel="icon" href="../assets/favicon/favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/profile.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <header class="header">
+
+        <nav class="navbar container">
+
+            <a href="../index.html" class="logo">
+                <img src="../assets/logo/scriptora-logo-light.png" alt="Scriptora Logo">
+                <h2>Scriptora</h2>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="blogs.html">Blogs</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+
+            <div class="nav-right">
+
+                <button class="search-btn">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+
+                <!-- Guest -->
+                <div id="guestMenu">
+                    <a href="login.html" class="login-btn">
+                        <i class="fa-regular fa-user"></i>
+                        Login
+                    </a>
+                </div>
+
+                <!-- Logged User -->
+                <div id="userMenu" class="user-menu hidden">
+                    <button id="userDropdownBtn" class="user-btn">
+                        <i class="fa-solid fa-circle-user"></i>
+                        <span id="navbarUserName">User</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+
+                    <div id="dropdownMenu" class="dropdown-menu">
+                        <a href="dashboard.html">
+                            <i class="fa-solid fa-table-columns"></i>
+                            Dashboard
+                        </a>
+                        <a href="my-blogs.html">
+                            <i class="fa-solid fa-file-lines"></i>
+                            My Blogs
+                        </a>
+                        <a href="create-blog.html">
+                            <i class="fa-solid fa-pen"></i>
+                            Create Blog
+                        </a>
+                        <a href="profile.html" class="active">
+                            <i class="fa-solid fa-user"></i>
+                            Profile
+                        </a>
+                        <hr>
+                        <a href="#" id="logoutBtn">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            Logout
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+
+        </nav>
+
+    </header>
+
+    <!-- ================= PROFILE PAGE ================= -->
+
+    <section class="profile-page">
+        <div class="container">
+
+            <!-- Profile Header -->
+            <div class="profile-header">
+
+                <div class="profile-avatar" id="profileAvatar">
+                    U
+                </div>
+
+                <div class="profile-header-info">
+                    <h1 id="profileName">User Name</h1>
+                    <p id="profileEmail">user@email.com</p>
+                    <span class="badge badge-primary" id="profileJoined">
+                        <i class="fa-solid fa-calendar-check"></i>
+                        Member
+                    </span>
+                </div>
+
+            </div>
+
+            <!-- Stats -->
+            <div class="profile-stats">
+
+                <div class="stat-card">
+                    <i class="fa-solid fa-pen"></i>
+                    <h2 id="statBlogs">0</h2>
+                    <p>Blogs</p>
+                </div>
+
+                <div class="stat-card">
+                    <i class="fa-solid fa-heart"></i>
+                    <h2 id="statLikes">0</h2>
+                    <p>Likes</p>
+                </div>
+
+                <div class="stat-card">
+                    <i class="fa-solid fa-comment"></i>
+                    <h2 id="statComments">0</h2>
+                    <p>Comments</p>
+                </div>
+
+                <div class="stat-card">
+                    <i class="fa-solid fa-eye"></i>
+                    <h2 id="statViews">0</h2>
+                    <p>Views</p>
+                </div>
+
+            </div>
+
+            <!-- Tabs -->
+            <div class="profile-tabs">
+                <button class="tab-btn active" data-tab="editProfileTab">
+                    <i class="fa-solid fa-user-pen"></i>
+                    Edit Profile
+                </button>
+                <button class="tab-btn" data-tab="changePasswordTab">
+                    <i class="fa-solid fa-lock"></i>
+                    Change Password
+                </button>
+                <button class="tab-btn" data-tab="dangerZoneTab">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    Danger Zone
+                </button>
+            </div>
+
+            <!-- Edit Profile -->
+            <div class="profile-panel active" id="editProfileTab">
+
+                <form id="editProfileForm" class="profile-form">
+
+                    <div class="input-group">
+                        <label for="editName">Full Name</label>
+                        <input type="text" id="editName" class="input" placeholder="Your full name">
+                        <span class="field-error" id="editNameError"></span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="editEmail">Email Address</label>
+                        <input type="email" id="editEmail" class="input" placeholder="Your email">
+                        <span class="field-error" id="editEmailError"></span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="editBio">Bio</label>
+                        <textarea id="editBio" class="input" rows="4" placeholder="Tell readers a little about yourself..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        Save Changes
+                    </button>
+
+                </form>
+
+            </div>
+
+            <!-- Change Password -->
+            <div class="profile-panel" id="changePasswordTab">
+
+                <form id="changePasswordForm" class="profile-form">
+
+                    <div class="input-group">
+                        <label for="currentPassword">Current Password</label>
+                        <div class="password-box">
+                            <input type="password" id="currentPassword" class="input" placeholder="Enter current password">
+                            <i class="fa-solid fa-eye" data-toggle="currentPassword"></i>
+                        </div>
+                        <span class="field-error" id="currentPasswordError"></span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="newPassword">New Password</label>
+                        <div class="password-box">
+                            <input type="password" id="newPassword" class="input" placeholder="Enter new password">
+                            <i class="fa-solid fa-eye" data-toggle="newPassword"></i>
+                        </div>
+                        <span class="field-error" id="newPasswordError"></span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="confirmNewPassword">Confirm New Password</label>
+                        <div class="password-box">
+                            <input type="password" id="confirmNewPassword" class="input" placeholder="Confirm new password">
+                            <i class="fa-solid fa-eye" data-toggle="confirmNewPassword"></i>
+                        </div>
+                        <span class="field-error" id="confirmNewPasswordError"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-key"></i>
+                        Update Password
+                    </button>
+
+                </form>
+
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="profile-panel" id="dangerZoneTab">
+
+                <div class="danger-zone-card">
+
+                    <div class="danger-zone-text">
+                        <h3>Delete Account</h3>
+                        <p>
+                            Permanently delete your Scriptora account and all
+                            of your blogs. This action cannot be undone.
+                        </p>
+                    </div>
+
+                    <button class="btn btn-danger" id="deleteAccountBtn">
+                        <i class="fa-solid fa-trash"></i>
+                        Delete My Account
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <div class="container footer-grid">
+
+            <div>
+                <div class="footer-logo">
+                    <img src="../assets/logo/scriptora-logo-light.png" alt="Scriptora Logo">
+                    <h2>Scriptora</h2>
+                </div>
+                <p>
+                    Where Ideas Become Stories.
+                    Share knowledge, inspire minds and build
+                    a community of passionate writers.
+                </p>
+            </div>
+
+            <div>
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="blogs.html">Blogs</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3>Connect</h3>
+                <div class="social-icons">
+                    <a href="https://github.com/Arpit-Agnihotri-15" target="_blank" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/arpit-agnihotri15/" target="_blank" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://www.instagram.com/_arpitx.exe/" target="_blank" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=arpit151604@gmail.com" target="_blank" aria-label="Email">
+                        <i class="fa-solid fa-envelope"></i>
+                    </a>
+                    <a href="https://your-portfolio-url.com" target="_blank" aria-label="Portfolio">
+                        <i class="fa-solid fa-code"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            © 2026 Scriptora. All Rights Reserved.
+        </div>
+
+    </footer>
+
+    <script src="../js/toast.js"></script>
+    <script src="../js/modal.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/profile.js"></script>
+
+</body>
+
+</html>

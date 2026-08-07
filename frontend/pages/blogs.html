@@ -8,12 +8,12 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>Dashboard | Scriptora</title>
+    <title>Blogs | Scriptora</title>
 
     <link rel="icon"
         href="../assets/logo/scriptora-logo-light.png">
 
-    <!-- Fonts -->
+    <!-- Google Font -->
 
     <link rel="preconnect"
         href="https://fonts.googleapis.com">
@@ -22,7 +22,7 @@
         href="https://fonts.gstatic.com"
         crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
 
     <!-- Font Awesome -->
@@ -39,7 +39,7 @@
         href="../css/components.css">
 
     <link rel="stylesheet"
-        href="../css/dashboard.css">
+        href="../css/blogs.css">
 
     <link rel="stylesheet"
         href="../css/responsive.css">
@@ -192,153 +192,143 @@
 
     </header>
 
-    <!-- ================= DASHBOARD ================= -->
 
-    <section class="dashboard">
+
+
+    <!-- ================= PAGE HEADER ================= -->
+
+    <section class="blogs-header">
 
         <div class="container">
 
-            <div class="dashboard-header">
+            <h1>
 
-                <h1>
+                Explore Blogs
 
-                    Welcome Back 👋
+            </h1>
 
-                </h1>
+            <p>
 
-                <p id="userName">
+                Discover amazing articles written by our community.
 
-                    Welcome to your Scriptora Dashboard
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= SEARCH ================= -->
+
+    <section class="blogs-controls">
+
+        <div class="container controls">
+
+            <div class="search-box">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search blogs...">
+
+            </div>
+
+            <select id="categoryFilter">
+
+                <option value="all">
+
+                    All Categories
+
+                </option>
+
+                <option value="Technology">
+
+                    Technology
+
+                </option>
+
+                <option value="AI">
+
+                    AI
+
+                </option>
+
+                <option value="Programming">
+
+                    Programming
+
+                </option>
+
+                <option value="Web Development">
+
+                    Web Development
+
+                </option>
+
+                <option value="Lifestyle">
+
+                    Lifestyle
+
+                </option>
+
+            </select>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= BLOG GRID ================= -->
+
+    <section class="blogs-section">
+
+        <div class="container">
+
+            <div
+                class="blogs-grid"
+                id="blogsContainer">
+
+            </div>
+
+            <!-- Empty State -->
+
+            <div
+                id="emptyState"
+                class="empty-state">
+
+                <i class="fa-solid fa-book-open"></i>
+
+                <h2>
+
+                    No Blogs Found
+
+                </h2>
+
+                <p>
+
+                    Start writing your first blog.
 
                 </p>
 
-            </div>
-
-            <!-- Statistics -->
-
-            <div class="stats-grid">
-
-                <div class="stat-card">
-
-                    <i class="fa-solid fa-pen"></i>
-
-                    <h2 id="totalBlogs">
-
-                        0
-
-                    </h2>
-
-                    <p>
-
-                        Total Blogs
-
-                    </p>
-
-                </div>
-
-                <div class="stat-card">
-
-                    <i class="fa-solid fa-heart"></i>
-
-                    <h2 id="totalLikes">
-
-                        0
-
-                    </h2>
-
-                    <p>
-
-                        Total Likes
-
-                    </p>
-
-                </div>
-
-                <div class="stat-card">
-
-                    <i class="fa-solid fa-comment"></i>
-
-                    <h2 id="totalComments">
-
-                        0
-
-                    </h2>
-
-                    <p>
-
-                        Comments
-
-                    </p>
-
-                </div>
-
-                <div class="stat-card">
-
-                    <i class="fa-solid fa-eye"></i>
-
-                    <h2 id="totalViews">
-
-                        0
-
-                    </h2>
-
-                    <p>
-
-                        Views
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <!-- Quick Actions -->
-
-            <div class="quick-actions">
-
-                <a href="create-blog.html"
+                <a
+                    href="create-blog.html"
                     class="btn btn-primary">
-
-                    <i class="fa-solid fa-plus"></i>
 
                     Create Blog
 
                 </a>
 
-                <a href="blogs.html"
-                    class="btn btn-outline">
-
-                    <i class="fa-solid fa-book-open"></i>
-
-                    View Blogs
-
-                </a>
-
-                <a href="profile.html"
-                    class="btn btn-outline">
-
-                    <i class="fa-solid fa-user"></i>
-
-                    Profile
-
-                </a>
-
             </div>
-
-            <!-- Recent Blogs -->
-
-            <section class="recent-blogs">
-
-                <h2>Recent Blogs</h2>
-
-                <div id="recentBlogsContainer"></div>
-
-            </section>
 
         </div>
 
     </section>
-        <!-- ================= FOOTER ================= -->
+
+
 
     <footer>
 
@@ -494,7 +484,9 @@
 
     </footer>
 
-    <!-- ================= JAVASCRIPT ================= -->
+
+
+    <!-- JS -->
 
     <script src="../js/toast.js"></script>
 
@@ -502,7 +494,7 @@
 
     <script src="../js/main.js"></script>
 
-    <script src="../js/dashboard.js"></script>
+    <script src="../js/blogs.js"></script>
 
 </body>
 

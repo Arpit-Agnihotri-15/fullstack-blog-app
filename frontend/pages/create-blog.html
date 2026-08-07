@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Create Blog | Scriptora</title>
+
+    <link rel="icon"
+        href="../assets/logo/scriptora-logo-light.png">
+
+    <link rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="stylesheet"
+        href="../css/global.css">
+
+    <link rel="stylesheet"
+        href="../css/components.css">
+
+    <link rel="stylesheet"
+        href="../css/create-blog.css">
+
+    <link rel="stylesheet"
+        href="../css/responsive.css">
+
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <header class="header">
+
+        <nav class="navbar container">
+
+            <a href="../index.html" class="logo">
+                <img src="../assets/logo/scriptora-logo-light.png" alt="Scriptora Logo">
+                <h2>Scriptora</h2>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="blogs.html">Blogs</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+
+            <div class="nav-right">
+
+                <button class="search-btn">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+
+                <!-- Guest -->
+                <div id="guestMenu">
+                    <a href="login.html" class="login-btn">
+                        <i class="fa-regular fa-user"></i>
+                        Login
+                    </a>
+                </div>
+
+                <!-- Logged User -->
+                <div id="userMenu" class="user-menu hidden">
+                    <button id="userDropdownBtn" class="user-btn">
+                        <i class="fa-solid fa-circle-user"></i>
+                        <span id="navbarUserName">User</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+
+                    <div id="dropdownMenu" class="dropdown-menu">
+                        <a href="dashboard.html">
+                            <i class="fa-solid fa-table-columns"></i>
+                            Dashboard
+                        </a>
+                        <a href="my-blogs.html">
+                            <i class="fa-solid fa-file-lines"></i>
+                            My Blogs
+                        </a>
+                        <a href="create-blog.html" class="active">
+                            <i class="fa-solid fa-pen"></i>
+                            Create Blog
+                        </a>
+                        <a href="profile.html">
+                            <i class="fa-solid fa-user"></i>
+                            Profile
+                        </a>
+                        <hr>
+                        <a href="#" id="logoutBtn">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            Logout
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+
+        </nav>
+
+    </header>
+
+    <main class="create-blog-page">
+
+        <div class="container">
+
+            <div class="page-header">
+
+                <div class="back-btn-container">
+
+                    <button
+                        onclick="history.back()"
+                        class="btn btn-outline">
+
+                        <i class="fa-solid fa-arrow-left"></i>
+
+                        Back
+
+                    </button>
+
+                </div>
+
+                <h1>Create New Blog</h1>
+
+                <p>
+
+                    Share your ideas with the Scriptora community.
+
+                </p>
+
+            </div>
+
+            <form id="createBlogForm"
+                class="blog-form">
+
+                <div class="form-group">
+
+                    <label>
+
+                        Blog Title
+
+                    </label>
+
+                    <input type="text"
+                        id="blogTitle"
+                        placeholder="Enter blog title">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+
+                        Category
+
+                    </label>
+
+                    <select id="blogCategory">
+
+                        <option value="">
+
+                            Select Category
+
+                        </option>
+
+                        <option>
+
+                            Technology
+
+                        </option>
+
+                        <option>
+
+                            AI
+
+                        </option>
+
+                        <option>
+
+                            Programming
+
+                        </option>
+
+                        <option>
+
+                            Web Development
+
+                        </option>
+
+                        <option>
+
+                            Lifestyle
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+
+                        Cover Image URL
+
+                    </label>
+
+                    <input type="url"
+                        id="blogImage"
+                        placeholder="https://example.com/image.jpg">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+
+                        Short Description
+
+                    </label>
+
+                    <textarea
+                        id="blogDescription"
+                        rows="4"
+                        placeholder="Write a short description..."></textarea>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+
+                        Blog Content
+
+                    </label>
+
+                    <textarea
+                        id="blogContent"
+                        rows="12"
+                        placeholder="Start writing here..."></textarea>
+
+                    <div class="word-counter">
+
+                        <span id="wordCount">0</span> Words
+
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+
+                        Tags
+
+                    </label>
+
+                    <input type="text"
+                        id="blogTags"
+                        placeholder="JavaScript, CSS, HTML">
+
+                </div>
+
+                <div class="button-group">
+
+                    <button
+                        type="button"
+                        class="btn btn-outline"
+                        id="previewBtn">
+
+                        Preview
+
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-outline"
+                        id="draftBtn">
+
+                        Save Draft
+
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+
+                        Publish Blog
+
+                    </button>
+
+                </div>
+
+            </form>
+
+            <div class="preview-box" id="previewBox">
+
+                <img id="previewImage" alt="Blog Preview">
+
+                <h2 id="previewTitle"></h2>
+
+                <p id="previewDescription"></p>
+
+                <div id="previewContent"></div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <div class="container footer-grid">
+
+            <div>
+                <div class="footer-logo">
+                    <img src="../assets/logo/scriptora-logo-light.png" alt="Scriptora Logo">
+                    <h2>Scriptora</h2>
+                </div>
+                <p>
+                    Where Ideas Become Stories.
+                    Share knowledge, inspire minds and build
+                    a community of passionate writers.
+                </p>
+            </div>
+
+            <div>
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="blogs.html">Blogs</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3>Connect</h3>
+                <div class="social-icons">
+                    <a href="https://github.com/Arpit-Agnihotri-15" target="_blank" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/arpit-agnihotri15/" target="_blank" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://www.instagram.com/_arpitx.exe/" target="_blank" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=arpit151604@gmail.com" target="_blank" aria-label="Email">
+                        <i class="fa-solid fa-envelope"></i>
+                    </a>
+                    <a href="https://your-portfolio-url.com" target="_blank" aria-label="Portfolio">
+                        <i class="fa-solid fa-code"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            © 2026 Scriptora. All Rights Reserved.
+        </div>
+
+    </footer>
+
+    <script src="../js/toast.js"></script>
+
+    <script src="../js/modal.js"></script>
+
+    <script src="../js/main.js"></script>
+
+    <script src="../js/create-blog.js"></script>
+
+</body>
+
+</html>

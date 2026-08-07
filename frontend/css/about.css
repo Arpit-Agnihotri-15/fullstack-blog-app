@@ -1,0 +1,316 @@
+/* =====================================================
+                ABOUT PAGE
+===================================================== */
+
+.section-tag{
+    display:inline-block;
+    color:var(--primary);
+    font-weight:700;
+    letter-spacing:.5px;
+    text-transform:uppercase;
+    font-size:.85rem;
+    margin-bottom:14px;
+}
+
+/* =====================================================
+                OUR STORY
+===================================================== */
+
+.about-story{
+    padding:90px 0;
+}
+
+.about-story-grid{
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    gap:60px;
+    align-items:center;
+}
+
+.about-story-text h2{
+    font-size:2.4rem;
+    color:var(--secondary);
+    margin-bottom:22px;
+    line-height:1.25;
+}
+
+.about-story-text p{
+    color:var(--text-light);
+    line-height:1.85;
+    margin-bottom:20px;
+    font-size:1.02rem;
+}
+
+.about-story-text .btn{
+    margin-top:10px;
+}
+
+.about-story-stats{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:22px;
+}
+
+.stat-box{
+    background:#fff;
+    border-radius:var(--radius-lg);
+    padding:32px 24px;
+    text-align:center;
+    box-shadow:var(--shadow-md);
+    transition:.35s;
+}
+
+.stat-box:hover{
+    transform:translateY(-8px);
+    box-shadow:var(--shadow-lg);
+}
+
+.stat-box i{
+    font-size:2rem;
+    color:var(--primary);
+    margin-bottom:16px;
+}
+
+.stat-box h3{
+    font-size:1.2rem;
+    color:var(--text);
+    margin-bottom:6px;
+}
+
+.stat-box p{
+    color:var(--text-light);
+    font-size:.9rem;
+}
+
+/* =====================================================
+                MISSION / VISION
+===================================================== */
+
+.mission-vision{
+    padding:20px 0 90px;
+}
+
+.mission-vision-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:35px;
+}
+
+.mv-card{
+    background:linear-gradient(135deg,#6C63FF,#4F7CF7);
+    color:#fff;
+    border-radius:var(--radius-xl);
+    padding:48px 40px;
+    box-shadow:var(--shadow-lg);
+    transition:.35s;
+}
+
+.mv-card:nth-child(2){
+    background:linear-gradient(135deg,#0f172a,#1e293b);
+}
+
+.mv-card:hover{
+    transform:translateY(-8px);
+}
+
+.mv-icon{
+    width:64px;
+    height:64px;
+    border-radius:18px;
+    background:rgba(255,255,255,.18);
+    backdrop-filter:blur(6px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:26px;
+    margin-bottom:22px;
+}
+
+.mv-card h3{
+    font-size:1.5rem;
+    margin-bottom:14px;
+}
+
+.mv-card p{
+    line-height:1.8;
+    opacity:.92;
+}
+
+/* =====================================================
+                VALUES
+===================================================== */
+
+.values{
+    padding:20px 0 100px;
+    background:var(--bg);
+}
+
+.values-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:28px;
+}
+
+.value-card{
+    background:#fff;
+    border-radius:var(--radius-lg);
+    padding:36px 26px;
+    text-align:center;
+    box-shadow:var(--shadow-sm);
+    transition:.35s;
+}
+
+.value-card:hover{
+    transform:translateY(-8px);
+    box-shadow:var(--shadow-md);
+}
+
+.value-icon{
+    width:64px;
+    height:64px;
+    margin:0 auto 20px;
+    border-radius:50%;
+    background:#ECEBFF;
+    color:var(--primary);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+}
+
+.value-card h3{
+    font-size:1.2rem;
+    color:var(--text);
+    margin-bottom:10px;
+}
+
+.value-card p{
+    color:var(--text-light);
+    font-size:.92rem;
+    line-height:1.7;
+}
+
+/* =====================================================
+                CTA
+===================================================== */
+
+.about-cta{
+    background:linear-gradient(135deg,#6C63FF,#4F7CF7);
+    color:#fff;
+    text-align:center;
+    padding:90px 0;
+}
+
+.about-cta h2{
+    font-size:2.4rem;
+    margin-bottom:14px;
+}
+
+.about-cta p{
+    font-size:1.1rem;
+    opacity:.92;
+    margin-bottom:34px;
+}
+
+.about-cta-buttons{
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    flex-wrap:wrap;
+}
+
+.about-cta .btn-outline{
+    background:transparent;
+    border-color:#fff;
+    color:#fff;
+}
+
+.about-cta .btn-outline:hover{
+    background:#fff;
+    color:var(--primary);
+}
+
+.about-cta .btn-primary{
+    background:#fff;
+    color:var(--primary);
+}
+
+.about-cta .btn-primary:hover{
+    background:#f1f0ff;
+}
+
+/* =====================================================
+                RESPONSIVE
+===================================================== */
+
+@media(max-width:992px){
+
+    .about-story-grid{
+        grid-template-columns:1fr;
+        gap:45px;
+    }
+
+    .mission-vision-grid{
+        grid-template-columns:1fr;
+    }
+
+    .values-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:768px){
+
+    .about-story{
+        padding:60px 0;
+    }
+
+    .about-story-text h2{
+        font-size:1.9rem;
+    }
+
+    .about-story-stats{
+        grid-template-columns:1fr 1fr;
+        gap:16px;
+    }
+
+    .stat-box{
+        padding:24px 16px;
+    }
+
+    .mv-card{
+        padding:36px 26px;
+    }
+
+    .values{
+        padding:20px 0 70px;
+    }
+
+    .about-cta h2{
+        font-size:1.9rem;
+    }
+
+    .about-cta-buttons{
+        flex-direction:column;
+        align-items:center;
+    }
+
+    .about-cta-buttons .btn{
+        width:100%;
+        max-width:300px;
+    }
+
+}
+
+@media(max-width:480px){
+
+    .about-story-stats{
+        grid-template-columns:1fr;
+    }
+
+    .values-grid{
+        grid-template-columns:1fr;
+    }
+
+}

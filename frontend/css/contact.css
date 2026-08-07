@@ -1,0 +1,171 @@
+/* =====================================================
+                CONTACT PAGE
+===================================================== */
+
+.contact-section{
+    padding:90px 0 110px;
+}
+
+.contact-grid{
+    display:grid;
+    grid-template-columns:.85fr 1.15fr;
+    gap:55px;
+    align-items:start;
+}
+
+/* =====================================================
+                CONTACT INFO
+===================================================== */
+
+.contact-info h2{
+    font-size:2rem;
+    color:var(--secondary);
+    margin-bottom:16px;
+}
+
+.contact-info > p{
+    color:var(--text-light);
+    line-height:1.8;
+    margin-bottom:35px;
+}
+
+.info-card{
+    display:flex;
+    align-items:flex-start;
+    gap:18px;
+    margin-bottom:24px;
+}
+
+.info-icon{
+    width:52px;
+    height:52px;
+    min-width:52px;
+    border-radius:14px;
+    background:#ECEBFF;
+    color:var(--primary);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+}
+
+.info-card h4{
+    font-size:1rem;
+    color:var(--text);
+    margin-bottom:4px;
+}
+
+.info-card a,
+.info-card span{
+    color:var(--text-light);
+    font-size:.95rem;
+}
+
+.info-card a:hover{
+    color:var(--primary);
+}
+
+.contact-socials{
+    margin-top:35px;
+}
+
+.contact-socials h4{
+    margin-bottom:16px;
+    color:var(--text);
+}
+
+.contact-socials .social-icons a{
+    background:#ECEBFF;
+    color:var(--primary);
+}
+
+.contact-socials .social-icons a:hover{
+    background:var(--primary);
+    color:#fff;
+}
+
+/* =====================================================
+                CONTACT FORM
+===================================================== */
+
+.contact-form-card{
+    background:#fff;
+    border-radius:var(--radius-xl);
+    box-shadow:var(--shadow-md);
+    padding:44px;
+}
+
+.contact-form-card h2{
+    font-size:1.6rem;
+    color:var(--secondary);
+    margin-bottom:28px;
+}
+
+.contact-form-card textarea.input{
+    resize:vertical;
+    font-family:inherit;
+}
+
+.field-error{
+    display:block;
+    min-height:18px;
+    color:var(--danger);
+    font-size:.82rem;
+    margin-top:6px;
+}
+
+.contact-form-card .btn{
+    margin-top:6px;
+}
+
+/* =====================================================
+                RESPONSIVE
+===================================================== */
+
+@media(max-width:992px){
+
+    .contact-grid{
+        grid-template-columns:1fr;
+        gap:45px;
+    }
+
+    .contact-form-card{
+        padding:34px 26px;
+    }
+
+}
+
+@media(max-width:768px){
+
+    .contact-section{
+        padding:60px 0 80px;
+    }
+
+    .contact-info h2{
+        font-size:1.7rem;
+    }
+
+    .contact-form-card{
+        padding:28px 20px;
+    }
+
+    .contact-form-card h2{
+        font-size:1.4rem;
+    }
+
+}
+
+@media(max-width:480px){
+
+    .info-card{
+        gap:14px;
+    }
+
+    .info-icon{
+        width:44px;
+        height:44px;
+        min-width:44px;
+        font-size:17px;
+    }
+
+}

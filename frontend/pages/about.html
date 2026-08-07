@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>About Us | Scriptora</title>
+
+    <link rel="icon" href="../assets/favicon/favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/about.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <header class="header">
+
+        <nav class="navbar container">
+
+            <a href="../index.html" class="logo">
+                <img src="../assets/logo/scriptora-logo-light.png" alt="Scriptora Logo">
+                <h2>Scriptora</h2>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="blogs.html">Blogs</a></li>
+                <li><a class="active" href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+
+            <div class="nav-right">
+
+                <button class="search-btn">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+
+                <!-- Guest -->
+                <div id="guestMenu">
+                    <a href="login.html" class="login-btn">
+                        <i class="fa-regular fa-user"></i>
+                        Login
+                    </a>
+                </div>
+
+                <!-- Logged User -->
+                <div id="userMenu" class="user-menu hidden">
+                    <button id="userDropdownBtn" class="user-btn">
+                        <i class="fa-solid fa-circle-user"></i>
+                        <span id="navbarUserName">User</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+
+                    <div id="dropdownMenu" class="dropdown-menu">
+                        <a href="dashboard.html">
+                            <i class="fa-solid fa-table-columns"></i>
+                            Dashboard
+                        </a>
+                        <a href="my-blogs.html">
+                            <i class="fa-solid fa-file-lines"></i>
+                            My Blogs
+                        </a>
+                        <a href="create-blog.html">
+                            <i class="fa-solid fa-pen"></i>
+                            Create Blog
+                        </a>
+                        <a href="profile.html">
+                            <i class="fa-solid fa-user"></i>
+                            Profile
+                        </a>
+                        <hr>
+                        <a href="#" id="logoutBtn">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            Logout
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+
+        </nav>
+
+    </header>
+
+    <!-- ================= PAGE HERO ================= -->
+
+    <section class="page-hero">
+        <div class="container">
+            <span class="badge badge-primary">
+                ✨ About Scriptora
+            </span>
+            <h1>Where Ideas Become Stories</h1>
+            <p>
+                Scriptora is a modern blogging platform built for writers, developers,
+                students and creators who want to share knowledge, inspire minds and
+                grow a community around meaningful stories.
+            </p>
+        </div>
+    </section>
+
+    <!-- ================= OUR STORY ================= -->
+
+    <section class="about-story">
+        <div class="container about-story-grid">
+
+            <div class="about-story-text fade-up">
+                <span class="section-tag">Our Story</span>
+                <h2>Built By Writers, For Writers</h2>
+                <p>
+                    Scriptora started with a simple idea: writing and sharing knowledge
+                    online should feel effortless, beautiful and rewarding. Too many
+                    blogging tools feel cluttered or outdated, so we set out to build
+                    a platform that gets out of your way and lets your ideas take
+                    center stage.
+                </p>
+                <p>
+                    From your very first draft to publishing, engaging with readers
+                    through likes and comments, and tracking your growth on a personal
+                    dashboard, Scriptora is designed to make every step of your writing
+                    journey simple and enjoyable.
+                </p>
+                <a href="register.html" class="btn btn-primary">
+                    <i class="fa-solid fa-pen-nib"></i>
+                    Start Writing Today
+                </a>
+            </div>
+
+            <div class="about-story-stats fade-up">
+                <div class="stat-box">
+                    <i class="fa-solid fa-feather-pointed"></i>
+                    <h3>Effortless</h3>
+                    <p>Writing Experience</p>
+                </div>
+                <div class="stat-box">
+                    <i class="fa-solid fa-people-group"></i>
+                    <h3>Growing</h3>
+                    <p>Writer Community</p>
+                </div>
+                <div class="stat-box">
+                    <i class="fa-solid fa-shield-heart"></i>
+                    <h3>Trusted</h3>
+                    <p>&amp; Secure Platform</p>
+                </div>
+                <div class="stat-box">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <h3>Insightful</h3>
+                    <p>Personal Dashboard</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================= MISSION / VISION ================= -->
+
+    <section class="mission-vision">
+        <div class="container mission-vision-grid">
+
+            <div class="mv-card fade-up">
+                <div class="mv-icon">
+                    <i class="fa-solid fa-bullseye"></i>
+                </div>
+                <h3>Our Mission</h3>
+                <p>
+                    To give every writer — beginner or expert — a clean, distraction-free
+                    space to publish their ideas and connect with readers who care about
+                    the same things they do.
+                </p>
+            </div>
+
+            <div class="mv-card fade-up">
+                <div class="mv-icon">
+                    <i class="fa-solid fa-eye"></i>
+                </div>
+                <h3>Our Vision</h3>
+                <p>
+                    To become the go-to home for meaningful, knowledge-driven blogging —
+                    a place where curiosity is celebrated and every story finds the
+                    right audience.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ================= VALUES ================= -->
+
+    <section class="values">
+        <div class="container">
+            <h2 class="section-title">What We Value</h2>
+            <p class="section-subtitle">
+                The principles that shape every part of Scriptora.
+            </p>
+
+            <div class="values-grid">
+
+                <div class="value-card fade-up">
+                    <div class="value-icon">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <h3>Creativity</h3>
+                    <p>We celebrate original ideas and give them room to grow.</p>
+                </div>
+
+                <div class="value-card fade-up">
+                    <div class="value-icon">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <h3>Community</h3>
+                    <p>Great stories are better when they're shared and discussed.</p>
+                </div>
+
+                <div class="value-card fade-up">
+                    <div class="value-icon">
+                        <i class="fa-solid fa-gem"></i>
+                    </div>
+                    <h3>Quality</h3>
+                    <p>We care about clean design and a smooth reading experience.</p>
+                </div>
+
+                <div class="value-card fade-up">
+                    <div class="value-icon">
+                        <i class="fa-solid fa-seedling"></i>
+                    </div>
+                    <h3>Growth</h3>
+                    <p>We're always learning, building and improving Scriptora.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= CTA ================= -->
+
+    <section class="about-cta">
+        <div class="container">
+            <h2>Ready To Share Your Story?</h2>
+            <p>Join the Scriptora community and start publishing today.</p>
+            <div class="about-cta-buttons">
+                <a href="register.html" class="btn btn-primary">
+                    <i class="fa-solid fa-user-plus"></i>
+                    Create Free Account
+                </a>
+                <a href="blogs.html" class="btn btn-outline">
+                    <i class="fa-solid fa-book-open"></i>
+                    Explore Blogs
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <div class="container footer-grid">
+
+            <div>
+                <div class="footer-logo">
+                    <img src="../assets/logo/scriptora-logo-light.png" alt="Scriptora Logo">
+                    <h2>Scriptora</h2>
+                </div>
+                <p>
+                    Where Ideas Become Stories.
+                    Share knowledge, inspire minds and build
+                    a community of passionate writers.
+                </p>
+            </div>
+
+            <div>
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="blogs.html">Blogs</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3>Connect</h3>
+                <div class="social-icons">
+                    <a href="https://github.com/Arpit-Agnihotri-15" target="_blank" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/arpit-agnihotri15/" target="_blank" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://www.instagram.com/_arpitx.exe/" target="_blank" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=arpit151604@gmail.com" target="_blank" aria-label="Email">
+                        <i class="fa-solid fa-envelope"></i>
+                    </a>
+                    <a href="https://your-portfolio-url.com" target="_blank" aria-label="Portfolio">
+                        <i class="fa-solid fa-code"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            © 2026 Scriptora. All Rights Reserved.
+        </div>
+
+    </footer>
+
+    <script src="../js/toast.js"></script>
+    <script src="../js/modal.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/scroll-reveal.js"></script>
+
+</body>
+
+</html>

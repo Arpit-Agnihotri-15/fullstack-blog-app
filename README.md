@@ -13,15 +13,21 @@ A modern Full Stack Blogging Platform developed as part of my Full Stack Web Dev
 - MongoDB (Upcoming)
 
 ## Current Status
-🟢 Module 2 – Frontend Development (Day 3 Completed)
+🟢 Module 1 – Frontend Development (Completed)
 
 ### Completed Features
 - Responsive Home Page
-- Login & Register Pages
+- Login & Register Pages (fully responsive)
+- Dashboard, Profile, Create Blog & Blog Management
+- Blog Details (likes, comments, views, share)
+- My Blogs, Featured Blogs
+- About Page
+- Contact Page (validation + success state)
 - Form Validation
 - Custom Toast Notifications
+- Custom Confirmation Modals (replacing native confirm())
 - LocalStorage Authentication
 - Password Visibility Toggle
-- Responsive Design
+- Fully Responsive Design (desktop, tablet, mobile)
 
-🚀 Next: Dashboard, Profile, Create Blog & Blog Management (Day 4)
+🚀 Next: Module 2 – Backend Development (Node.js, Express.js, MongoDB)

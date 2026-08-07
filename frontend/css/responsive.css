@@ -55,8 +55,44 @@
     .nav-links.active{
         display:flex;
     }
+    .logo h2{
+        font-size:28px;
+    }
+    .logo img{
+        width:38px;
+    }
     .nav-right{
+        gap:10px;
+    }
+    .search-btn{
         display:none;
+    }
+    .login-btn{
+        font-size:15px;
+        padding:8px 14px;
+        border:2px solid #ececec;
+        border-radius:50px;
+    }
+}
+
+/* =============SMALL MOBILE NAVBAR================ */
+
+@media (max-width:480px){
+    .logo h2{
+        font-size:22px;
+    }
+    .logo img{
+        width:32px;
+    }
+    .login-btn span,
+    .login-btn{
+        font-size:14px;
+    }
+    #navbarUserName{
+        display:none;
+    }
+    .user-btn{
+        padding:8px 10px;
     }
 }
 

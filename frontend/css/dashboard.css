@@ -1,1 +1,341 @@
-/* Dashboard CSS */
+/* =====================================================
+                    DASHBOARD
+===================================================== */
+
+.dashboard{
+    padding:140px 0 80px;
+    min-height:100vh;
+    background:var(--bg);
+}
+
+/* =====================================================
+                HEADER
+===================================================== */
+
+.dashboard-header{
+    text-align:center;
+    margin-bottom:60px;
+}
+
+.dashboard-header h1{
+    font-size:3rem;
+    font-weight:700;
+    color:var(--text);
+    margin-bottom:15px;
+}
+
+.dashboard-header p{
+    font-size:1.05rem;
+    color:var(--text-light);
+}
+
+/* =====================================================
+                STATISTICS
+===================================================== */
+
+.stats-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:25px;
+
+    margin-bottom:60px;
+
+}
+
+.stat-card{
+
+    background:#fff;
+
+    border-radius:18px;
+
+    padding:35px 20px;
+
+    text-align:center;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+    transition:.35s;
+
+}
+
+.stat-card:hover{
+
+    transform:translateY(-8px);
+
+}
+
+.stat-card i{
+
+    font-size:2rem;
+
+    color:var(--primary);
+
+    margin-bottom:20px;
+
+}
+
+.stat-card h2{
+
+    font-size:2rem;
+
+    margin-bottom:8px;
+
+    color:var(--text);
+
+}
+
+.stat-card p{
+
+    color:var(--text-light);
+
+}
+
+/* =====================================================
+                QUICK ACTIONS
+===================================================== */
+
+.quick-actions{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:70px;
+
+}
+
+/* =====================================================
+                RECENT BLOGS
+===================================================== */
+
+.recent-blogs{
+
+    background:#fff;
+
+    border-radius:20px;
+
+    padding:35px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.recent-blogs h2{
+
+    margin-bottom:30px;
+
+    font-size:2rem;
+
+    text-align:center;
+
+}
+
+.empty-state{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-align:center;
+
+    padding:60px 20px;
+
+}
+
+.empty-state i{
+
+    font-size:4rem;
+
+    color:var(--primary);
+
+    margin-bottom:20px;
+
+}
+
+.empty-state h3{
+
+    margin-bottom:10px;
+
+    font-size:1.6rem;
+
+}
+
+.empty-state p{
+
+    color:var(--text-light);
+
+    max-width:450px;
+
+    margin-bottom:25px;
+
+}
+
+/* =====================================================
+                NAVBAR USER
+===================================================== */
+
+.nav-user{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    font-weight:600;
+
+    color:var(--primary);
+
+}
+
+/* =====================================================
+                RESPONSIVE
+===================================================== */
+
+@media(max-width:992px){
+
+.stats-grid{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+@media(max-width:768px){
+
+.dashboard{
+
+padding-top:120px;
+
+}
+
+.dashboard-header h1{
+
+font-size:2.3rem;
+
+}
+
+.stats-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.quick-actions{
+
+flex-direction:column;
+
+align-items:center;
+
+}
+
+.quick-actions .btn{
+
+width:100%;
+max-width:320px;
+
+}
+
+.recent-blogs{
+
+padding:25px;
+
+}
+
+}
+
+@media(max-width:480px){
+
+.dashboard-header h1{
+
+font-size:2rem;
+
+}
+
+.dashboard-header p{
+
+font-size:.95rem;
+
+}
+
+.stat-card{
+
+padding:25px 15px;
+
+}
+
+.stat-card h2{
+
+font-size:1.7rem;
+
+}
+
+}
+
+#recentBlogsContainer{
+
+    display:grid;
+
+    gap:25px;
+
+    margin-top:30px;
+
+}
+
+.dashboard-blog-card{
+
+    display:flex;
+
+    gap:25px;
+
+    background:#fff;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    box-shadow:0 10px 20px rgba(0,0,0,.08);
+
+}
+
+.dashboard-blog-card img{
+
+    width:260px;
+
+    height:180px;
+
+    object-fit:cover;
+
+}
+
+.dashboard-blog-card div{
+
+    padding:20px;
+
+}
+
+.dashboard-blog-card h3{
+
+    margin:15px 0;
+
+}
+
+.dashboard-blog-card p{
+
+    margin-bottom:20px;
+
+    color:#666;
+
+}

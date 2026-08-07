@@ -6,49 +6,35 @@
     <meta charset="UTF-8">
 
     <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+          content="width=device-width, initial-scale=1.0">
 
-    <title>Dashboard | Scriptora</title>
+    <title>Blog Details | Scriptora</title>
 
     <link rel="icon"
-        href="../assets/logo/scriptora-logo-light.png">
-
-    <!-- Fonts -->
-
-    <link rel="preconnect"
-        href="https://fonts.googleapis.com">
-
-    <link rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
-
-    <!-- Font Awesome -->
+          href="../assets/logo/scriptora-logo-light.png">
 
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
-    <!-- CSS -->
+          href="../css/global.css">
 
     <link rel="stylesheet"
-        href="../css/global.css">
+          href="../css/components.css">
 
     <link rel="stylesheet"
-        href="../css/components.css">
+          href="../css/blog-details.css">
 
     <link rel="stylesheet"
-        href="../css/dashboard.css">
+          href="../css/responsive.css">
 
     <link rel="stylesheet"
-        href="../css/responsive.css">
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
 <body>
 
-    <!-- ================= NAVBAR ================= -->
+    <!-- ===========================
+            NAVBAR
+    ============================ -->
 
     <header class="header">
 
@@ -192,153 +178,154 @@
 
     </header>
 
-    <!-- ================= DASHBOARD ================= -->
 
-    <section class="dashboard">
+
+    <!-- ===========================
+        BLOG DETAILS
+    ============================ -->
+
+    <section class="blog-details">
 
         <div class="container">
 
-            <div class="dashboard-header">
-
-                <h1>
-
-                    Welcome Back 👋
-
-                </h1>
-
-                <p id="userName">
-
-                    Welcome to your Scriptora Dashboard
-
-                </p>
-
-            </div>
-
-            <!-- Statistics -->
-
-            <div class="stats-grid">
-
-                <div class="stat-card">
-
-                    <i class="fa-solid fa-pen"></i>
-
-                    <h2 id="totalBlogs">
-
-                        0
-
-                    </h2>
-
-                    <p>
-
-                        Total Blogs
-
-                    </p>
-
-                </div>
-
-                <div class="stat-card">
-
-                    <i class="fa-solid fa-heart"></i>
-
-                    <h2 id="totalLikes">
-
-                        0
-
-                    </h2>
-
-                    <p>
-
-                        Total Likes
-
-                    </p>
-
-                </div>
-
-                <div class="stat-card">
-
-                    <i class="fa-solid fa-comment"></i>
-
-                    <h2 id="totalComments">
-
-                        0
-
-                    </h2>
-
-                    <p>
-
-                        Comments
-
-                    </p>
-
-                </div>
-
-                <div class="stat-card">
-
-                    <i class="fa-solid fa-eye"></i>
-
-                    <h2 id="totalViews">
-
-                        0
-
-                    </h2>
-
-                    <p>
-
-                        Views
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <!-- Quick Actions -->
-
-            <div class="quick-actions">
-
-                <a href="create-blog.html"
-                    class="btn btn-primary">
-
-                    <i class="fa-solid fa-plus"></i>
-
-                    Create Blog
-
-                </a>
+            <div class="back-btn">
 
                 <a href="blogs.html"
-                    class="btn btn-outline">
+                   class="btn btn-outline">
 
-                    <i class="fa-solid fa-book-open"></i>
+                    <i class="fa-solid fa-arrow-left"></i>
 
-                    View Blogs
-
-                </a>
-
-                <a href="profile.html"
-                    class="btn btn-outline">
-
-                    <i class="fa-solid fa-user"></i>
-
-                    Profile
+                    Back to Blogs
 
                 </a>
 
             </div>
 
-            <!-- Recent Blogs -->
+            <img
+                id="blogImage"
+                class="details-image"
+                alt="Blog Image"
+                onerror="this.src='https://picsum.photos/1200/600';">
 
-            <section class="recent-blogs">
+            <span
+                id="blogCategory"
+                class="details-category">
 
-                <h2>Recent Blogs</h2>
+            </span>
 
-                <div id="recentBlogsContainer"></div>
+            <h1 id="blogTitle"></h1>
+
+            <div class="details-meta">
+
+                <span id="blogAuthor"></span>
+
+                <span id="blogDate"></span>
+
+                <span id="readingTime">
+
+                </span>
+
+                <span id="viewCount">
+
+                </span>
+
+            </div>
+
+            <p
+                id="blogDescription"
+                class="blog-description">
+
+            </p>
+
+            <div
+                id="blogContent"
+                class="blog-content">
+
+            </div>
+
+            <!-- TAGS -->
+
+            <div
+                id="blogTags"
+                class="blog-tags">
+
+            </div>
+
+            <!-- ACTIONS -->
+
+            <div class="blog-actions">
+
+                <button
+                    id="likeBtn"
+                    class="btn btn-primary">
+
+                    ❤️ Like
+
+                    (<span id="likeCount">0</span>)
+
+                </button>
+
+                <button
+                    id="shareBtn"
+                    class="btn btn-outline">
+
+                    <i class="fa-solid fa-share-nodes"></i>
+
+                    Share
+
+                </button>
+
+            </div>
+
+            <hr>
+
+            <!-- COMMENTS -->
+
+            <section class="comments-section">
+
+                <h2>
+
+                    Comments
+
+                    (<span id="commentCount">0</span>)
+
+                </h2>
+
+                <div id="commentsContainer">
+
+                </div>
+
+                <div class="comment-form">
+
+                    <textarea
+                        id="commentText"
+                        placeholder="Write your comment...">
+
+                    </textarea>
+
+                    <button
+                        id="commentBtn"
+                        class="btn btn-primary">
+
+                        <i class="fa-solid fa-paper-plane"></i>
+
+                        Post Comment
+
+                    </button>
+
+                </div>
 
             </section>
 
         </div>
 
     </section>
-        <!-- ================= FOOTER ================= -->
+
+
+
+    <!-- ===========================
+            FOOTER
+    ============================ -->
 
     <footer>
 
@@ -494,15 +481,15 @@
 
     </footer>
 
-    <!-- ================= JAVASCRIPT ================= -->
+
 
     <script src="../js/toast.js"></script>
 
-<script src="../js/modal.js"></script>
+    <script src="../js/modal.js"></script>
 
     <script src="../js/main.js"></script>
 
-    <script src="../js/dashboard.js"></script>
+    <script src="../js/blog-details.js"></script>
 
 </body>
 

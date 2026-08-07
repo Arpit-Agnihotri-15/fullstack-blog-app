@@ -3,52 +3,36 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-    <title>Dashboard | Scriptora</title>
+<title>My Blogs | Scriptora</title>
 
-    <link rel="icon"
-        href="../assets/logo/scriptora-logo-light.png">
+<link rel="icon"
+href="../assets/logo/scriptora-logo-light.png">
 
-    <!-- Fonts -->
+<link rel="stylesheet"
+href="../css/global.css">
 
-    <link rel="preconnect"
-        href="https://fonts.googleapis.com">
+<link rel="stylesheet"
+href="../css/components.css">
 
-    <link rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin>
+<link rel="stylesheet"
+href="../css/my-blogs.css">
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
+<link rel="stylesheet"
+href="../css/responsive.css">
 
-    <!-- Font Awesome -->
-
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
-    <!-- CSS -->
-
-    <link rel="stylesheet"
-        href="../css/global.css">
-
-    <link rel="stylesheet"
-        href="../css/components.css">
-
-    <link rel="stylesheet"
-        href="../css/dashboard.css">
-
-    <link rel="stylesheet"
-        href="../css/responsive.css">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
 <body>
 
-    <!-- ================= NAVBAR ================= -->
+<!-- ================= NAVBAR ================= -->
 
     <header class="header">
 
@@ -192,155 +176,72 @@
 
     </header>
 
-    <!-- ================= DASHBOARD ================= -->
+<section class="my-blogs-page">
 
-    <section class="dashboard">
+<div class="container">
 
-        <div class="container">
+<div class="page-header">
 
-            <div class="dashboard-header">
+    <div>
 
-                <h1>
+        <h1>
+            My Blogs
+        </h1>
 
-                    Welcome Back 👋
+        <p>
+            Manage all your published blogs.
+        </p>
 
-                </h1>
+    </div>
 
-                <p id="userName">
+    <a href="create-blog.html" class="btn btn-primary">
 
-                    Welcome to your Scriptora Dashboard
+        <i class="fa-solid fa-plus"></i>
 
-                </p>
+        Create Blog
 
-            </div>
+    </a>
 
-            <!-- Statistics -->
+</div>
+<div
+id="myBlogsContainer"
+class="my-blogs-grid">
 
-            <div class="stats-grid">
+</div>
 
-                <div class="stat-card">
+<div
+id="emptyBlogs"
+class="empty-state">
 
-                    <i class="fa-solid fa-pen"></i>
+<i class="fa-solid fa-file-circle-plus"></i>
 
-                    <h2 id="totalBlogs">
+<h2>
 
-                        0
+No Blogs Yet
 
-                    </h2>
+</h2>
 
-                    <p>
+<p>
 
-                        Total Blogs
+Create your first blog and share your knowledge.
 
-                    </p>
+</p>
 
-                </div>
+<a
+href="create-blog.html"
+class="btn btn-primary">
 
-                <div class="stat-card">
+Create Blog
 
-                    <i class="fa-solid fa-heart"></i>
+</a>
 
-                    <h2 id="totalLikes">
+</div>
 
-                        0
+</div>
 
-                    </h2>
+</section>
 
-                    <p>
-
-                        Total Likes
-
-                    </p>
-
-                </div>
-
-                <div class="stat-card">
-
-                    <i class="fa-solid fa-comment"></i>
-
-                    <h2 id="totalComments">
-
-                        0
-
-                    </h2>
-
-                    <p>
-
-                        Comments
-
-                    </p>
-
-                </div>
-
-                <div class="stat-card">
-
-                    <i class="fa-solid fa-eye"></i>
-
-                    <h2 id="totalViews">
-
-                        0
-
-                    </h2>
-
-                    <p>
-
-                        Views
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <!-- Quick Actions -->
-
-            <div class="quick-actions">
-
-                <a href="create-blog.html"
-                    class="btn btn-primary">
-
-                    <i class="fa-solid fa-plus"></i>
-
-                    Create Blog
-
-                </a>
-
-                <a href="blogs.html"
-                    class="btn btn-outline">
-
-                    <i class="fa-solid fa-book-open"></i>
-
-                    View Blogs
-
-                </a>
-
-                <a href="profile.html"
-                    class="btn btn-outline">
-
-                    <i class="fa-solid fa-user"></i>
-
-                    Profile
-
-                </a>
-
-            </div>
-
-            <!-- Recent Blogs -->
-
-            <section class="recent-blogs">
-
-                <h2>Recent Blogs</h2>
-
-                <div id="recentBlogsContainer"></div>
-
-            </section>
-
-        </div>
-
-    </section>
-        <!-- ================= FOOTER ================= -->
-
-    <footer>
+<footer>
 
         <div class="container footer-grid">
 
@@ -494,15 +395,13 @@
 
     </footer>
 
-    <!-- ================= JAVASCRIPT ================= -->
-
-    <script src="../js/toast.js"></script>
+<script src="../js/toast.js"></script>
 
 <script src="../js/modal.js"></script>
 
-    <script src="../js/main.js"></script>
+<script src="../js/main.js"></script>
 
-    <script src="../js/dashboard.js"></script>
+<script src="../js/my-blogs.js"></script>
 
 </body>
 

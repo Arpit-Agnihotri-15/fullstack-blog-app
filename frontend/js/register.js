@@ -88,7 +88,9 @@ document.addEventListener("DOMContentLoaded", () => {
         users.push({
             name:fullName,
             email:userEmail,
-            password:userPassword
+            password:userPassword,
+            bio:"",
+            joinedAt:new Date().toLocaleDateString("en-US",{month:"long",year:"numeric"})
         });
         localStorage.setItem("scriptoraUsers",JSON.stringify(users));
         registerBtn.disabled=true;
