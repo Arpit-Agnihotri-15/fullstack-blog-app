@@ -27,31 +27,40 @@ A modern Full Stack Blogging Platform developed as part of my Full Stack Web Dev
 - Mongoose
 - JWT Authentication
 
-## Current Status
+---
 
-🟢 **Module 1 – Frontend Development (Completed)**
+## Module 1 – Frontend Development
+
+🟢 **Completed**
 
 ### Completed Features
 
 - Responsive Home Page
 - Login & Register Pages
-- Dashboard, Profile, Create Blog & Blog Management
-- Blog Details with likes, comments, views & share
-- My Blogs & Featured Blogs
+- Dashboard
+- Profile Page
+- Create Blog Page
+- Blog Management
+- Blog Details
+- Likes, Comments, Views & Share UI
+- My Blogs
+- Featured Blogs
 - About Page
-- Contact Page with validation & success state
+- Contact Page
 - Form Validation
 - Custom Toast Notifications
 - Custom Confirmation Modals
 - LocalStorage Authentication
 - Password Visibility Toggle
-- Fully Responsive Design for desktop, tablet & mobile
+- Fully Responsive Design for Desktop, Tablet & Mobile
 
 ---
 
-🟢 **Module 2 – Backend Development**
+## Module 2 – Backend Development
 
-### Day 5 – Backend Setup (Completed)
+### Day 5 – Backend Setup
+
+🟢 **Completed**
 
 - Initialized Node.js backend
 - Configured Express.js server
@@ -63,22 +72,18 @@ A modern Full Stack Blogging Platform developed as part of my Full Stack Web Dev
 - Added 404 route handling
 - Tested APIs using Postman
 
-### Day 6 – User Authentication APIs (Completed)
+### API Endpoints
 
-- Created User Registration API
-- Created User Login API
-- Added request validation
-- Added email format validation
-- Added duplicate email validation
-- Added password hashing using bcryptjs
-- Added password comparison during login
-- Added proper HTTP status codes
-- Added authentication controllers and routes
-- Tested registration and login APIs using Postman
+**GET /**
 
-### Authentication API Endpoints
+Returns the backend server status.
 
-**Register**
+**GET /api/test**
 
-```text
-POST /api/auth/register
+Returns:
+
+```json
+{
+  "success": true,
+  "message": "API is working!"
+}
