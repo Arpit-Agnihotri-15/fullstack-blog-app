@@ -17,6 +17,7 @@ A modern Full Stack Blogging Platform developed as part of my Full Stack Web Dev
 - CORS
 - dotenv
 - Nodemon
+- bcryptjs
 
 ### API Testing
 - Postman
@@ -62,18 +63,22 @@ A modern Full Stack Blogging Platform developed as part of my Full Stack Web Dev
 - Added 404 route handling
 - Tested APIs using Postman
 
-### Tested API Endpoints
+### Day 6 – User Authentication APIs (Completed)
 
-**GET /**
+- Created User Registration API
+- Created User Login API
+- Added request validation
+- Added email format validation
+- Added duplicate email validation
+- Added password hashing using bcryptjs
+- Added password comparison during login
+- Added proper HTTP status codes
+- Added authentication controllers and routes
+- Tested registration and login APIs using Postman
 
-Returns the backend server status.
+### Authentication API Endpoints
 
-**GET /api/test**
+**Register**
 
-Returns:
-
-```json
-{
-  "success": true,
-  "message": "API is working!"
-}
+```text
+POST /api/auth/register
