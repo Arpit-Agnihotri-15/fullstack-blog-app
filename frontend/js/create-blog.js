@@ -22,6 +22,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const submitBtn = form.querySelector("button[type='submit']");
 
+    // Backend API
+    const API_URL = "http://localhost:5000/api/blogs";
+
+
     // =============================
     // EDIT MODE
     // =============================
@@ -67,6 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
+
     // =============================
     // WORD COUNTER
     // =============================
@@ -86,6 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
+
     // =============================
     // PREVIEW
     // =============================
@@ -93,13 +99,9 @@ document.addEventListener("DOMContentLoaded", () => {
     previewBtn.addEventListener("click", () => {
 
         if (
-
             title.value.trim() === "" ||
-
             description.value.trim() === "" ||
-
             content.value.trim() === ""
-
         ) {
 
             showError("Please fill required fields.");
@@ -124,12 +126,11 @@ document.addEventListener("DOMContentLoaded", () => {
         previewBox.style.display = "block";
 
         previewBox.scrollIntoView({
-
             behavior: "smooth"
-
         });
 
     });
+
 
     // =============================
     // SAVE DRAFT
@@ -139,6 +140,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const loggedUser =
             JSON.parse(localStorage.getItem("loggedInUser"));
+
+        if (!loggedUser) {
+
+            showError("Please login first.");
+
+            return;
+
+        }
 
         const draft = {
 
@@ -169,158 +178,216 @@ document.addEventListener("DOMContentLoaded", () => {
         drafts.push(draft);
 
         localStorage.setItem(
-
             "draftBlogs",
-
             JSON.stringify(drafts)
-
         );
 
         showSuccess("Draft Saved Successfully!");
 
     });
 
-    form.addEventListener("submit", (e) => {
-
-    e.preventDefault();
 
     // =============================
-    // VALIDATION
+    // PUBLISH BLOG
     // =============================
 
-    if (
+    form.addEventListener("submit", async (e) => {
 
-        title.value.trim() === "" ||
+        e.preventDefault();
 
-        category.value === "" ||
 
-        description.value.trim() === "" ||
+        // =============================
+        // VALIDATION
+        // =============================
 
-        content.value.trim() === ""
+        if (
+            title.value.trim() === "" ||
+            category.value === "" ||
+            description.value.trim() === "" ||
+            content.value.trim() === ""
+        ) {
 
-    ) {
+            showError("Please fill all required fields.");
 
-        showError("Please fill all required fields.");
+            return;
 
-        return;
+        }
 
-    }
 
-    const loggedUser =
-        JSON.parse(localStorage.getItem("loggedInUser"));
+        // =============================
+        // CHECK LOGIN
+        // =============================
 
-    let blogs =
-        JSON.parse(localStorage.getItem("blogs")) || [];
+        const loggedUser =
+            JSON.parse(localStorage.getItem("loggedInUser"));
 
-    // =============================
-    // BLOG OBJECT
-    // =============================
+        if (!loggedUser) {
 
-    const blogData = {
+            showError("Please login before publishing a blog.");
 
-        id: editingBlog ? editingBlog.id : Date.now(),
+            return;
 
-        title: title.value,
+        }
 
-        category: category.value,
 
-        image:
-            image.value ||
-            "https://placehold.co/900x400?text=Scriptora",
+        // =============================
+        // EDIT MODE
+        // =============================
 
-        description: description.value,
+        if (editingBlog) {
 
-        content: content.value,
+            showInfo(
+                "Blog editing will be connected to the backend in the CRUD module."
+            );
 
-        tags: tags.value
-            .split(",")
-            .map(tag => tag.trim())
-            .filter(tag => tag !== ""),
+            return;
 
-        author: loggedUser.name,
+        }
 
-        createdAt: editingBlog
-            ? editingBlog.createdAt
-            : new Date().toLocaleDateString(),
 
-        status: "Published"
+        // =============================
+        // PREPARE BLOG DATA
+        // =============================
 
-    };
+        const blogData = {
 
-    // =============================
-    // UPDATE BLOG
-    // =============================
+            title: title.value.trim(),
 
-    if (editingBlog) {
+            category: category.value,
 
-        blogs = blogs.map(blog =>
+            image:
+                image.value.trim() ||
+                "https://placehold.co/900x400?text=Scriptora",
 
-            blog.id == editingBlog.id
+            description:
+                description.value.trim(),
 
-                ? blogData
+            content:
+                content.value.trim(),
 
-                : blog
+            tags: tags.value
+                .split(",")
+                .map(tag => tag.trim())
+                .filter(tag => tag !== ""),
 
-        );
+            author:
+                loggedUser.name
 
-        localStorage.setItem(
+        };
 
-            "blogs",
 
-            JSON.stringify(blogs)
+        // =============================
+        // LOADING STATE
+        // =============================
 
-        );
+        submitBtn.disabled = true;
 
-        localStorage.removeItem("editBlog");
+        submitBtn.innerHTML =
+            '<i class="fa-solid fa-spinner fa-spin"></i> Publishing...';
 
-        showSuccess("Blog Updated Successfully!");
 
-    }
+        try {
 
-    // =============================
-    // CREATE BLOG
-    // =============================
+            // =============================
+            // SEND TO BACKEND
+            // =============================
 
-    else {
+            const response = await fetch(API_URL, {
 
-        blogs.push(blogData);
+                method: "POST",
 
-        localStorage.setItem(
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-            "blogs",
+                body: JSON.stringify(blogData)
 
-            JSON.stringify(blogs)
+            });
 
-        );
 
-        showSuccess("Blog Published Successfully!");
+            const data = await response.json();
 
-    }
 
-    // =============================
-    // RESET FORM
-    // =============================
+            // =============================
+            // HANDLE ERROR
+            // =============================
 
-    form.reset();
+            if (!response.ok) {
 
-    previewBox.style.display = "none";
+                showError(
+                    data.message ||
+                    "Unable to publish blog."
+                );
 
-    wordCount.textContent = 0;
+                return;
 
-    submitBtn.innerHTML =
+            }
 
-        '<i class="fa-solid fa-paper-plane"></i> Publish Blog';
 
-    // =============================
-    // REDIRECT
-    // =============================
+            // =============================
+            // SUCCESS
+            // =============================
 
-    setTimeout(() => {
+            console.log(
+                "Blog created successfully:",
+                data
+            );
 
-        window.location.href = "my-blogs.html";
+            showSuccess(
+                "Blog Published Successfully!"
+            );
 
-    }, 1500);
 
-});
+            // =============================
+            // RESET FORM
+            // =============================
+
+            form.reset();
+
+            previewBox.style.display = "none";
+
+            wordCount.textContent = 0;
+
+            submitBtn.innerHTML =
+                '<i class="fa-solid fa-paper-plane"></i> Publish Blog';
+
+
+            // =============================
+            // REDIRECT
+            // =============================
+
+            setTimeout(() => {
+
+                window.location.href =
+                    "my-blogs.html";
+
+            }, 1500);
+
+
+        } catch (error) {
+
+            console.error(
+                "Create Blog Error:",
+                error
+            );
+
+            showError(
+                "Unable to connect to the backend server."
+            );
+
+        } finally {
+
+            submitBtn.disabled = false;
+
+            if (!editingBlog) {
+
+                submitBtn.innerHTML =
+                    '<i class="fa-solid fa-paper-plane"></i> Publish Blog';
+
+            }
+
+        }
+
+    });
 
 });

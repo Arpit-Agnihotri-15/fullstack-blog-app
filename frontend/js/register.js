@@ -1,110 +1,291 @@
-/* ===============SCRIPTORA REGISTER JS================ */
-
 document.addEventListener("DOMContentLoaded", () => {
+
     const form = document.querySelector(".register-form");
+
     const name = document.getElementById("name");
     const email = document.getElementById("email");
     const password = document.getElementById("password");
     const confirmPassword = document.getElementById("confirmPassword");
+
     const togglePassword = document.getElementById("togglePassword");
-    const toggleConfirmPassword = document.getElementById("toggleConfirmPassword");
-    const registerBtn = document.querySelector(".register-btn");
-    const googleBtn = document.querySelector(".google-btn");
+    const toggleConfirmPassword =
+        document.getElementById("toggleConfirmPassword");
 
-    /* ============PASSWORD TOGGLE============ */
+    const registerBtn =
+        document.querySelector(".register-btn");
 
-    function toggle(input, icon){
-        if(input.type==="password"){
-            input.type="text";
-            icon.classList.replace("fa-eye","fa-eye-slash");
-        }
-        else{
-            input.type="password";
-            icon.classList.replace("fa-eye-slash","fa-eye");
-        }
-    }
-    togglePassword.addEventListener("click",()=>{
-        toggle(password,togglePassword);
-    });
-    toggleConfirmPassword.addEventListener("click",()=>{
-        toggle(confirmPassword,toggleConfirmPassword);
-    });
+    const googleBtn =
+        document.querySelector(".google-btn");
 
-    /* =======DISABLE COPY / CUT / PASTE========= */
+    const API_URL =
+        "http://localhost:5000/api/auth/register";
 
-    [password,confirmPassword].forEach(field=>{
-        ["copy","cut","paste"].forEach(event=>{
-            field.addEventListener(event,e=>{
-                e.preventDefault();
-                showWarning("Copy, Cut & Paste are disabled.");
-            });
+
+    /* ==============================
+            PASSWORD TOGGLE
+    ============================== */
+
+    if (togglePassword) {
+
+        togglePassword.addEventListener("click", () => {
+
+            if (password.type === "password") {
+
+                password.type = "text";
+
+                togglePassword.classList.replace(
+                    "fa-eye",
+                    "fa-eye-slash"
+                );
+
+            } else {
+
+                password.type = "password";
+
+                togglePassword.classList.replace(
+                    "fa-eye-slash",
+                    "fa-eye"
+                );
+
+            }
+
         });
-    });
 
-    /* ==========EMAIL VALIDATION============ */
+    }
 
-    function validateEmail(mail){
-        const regex=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    /* ==============================
+        CONFIRM PASSWORD TOGGLE
+    ============================== */
+
+    if (toggleConfirmPassword) {
+
+        toggleConfirmPassword.addEventListener("click", () => {
+
+            if (confirmPassword.type === "password") {
+
+                confirmPassword.type = "text";
+
+                toggleConfirmPassword.classList.replace(
+                    "fa-eye",
+                    "fa-eye-slash"
+                );
+
+            } else {
+
+                confirmPassword.type = "password";
+
+                toggleConfirmPassword.classList.replace(
+                    "fa-eye-slash",
+                    "fa-eye"
+                );
+
+            }
+
+        });
+
+    }
+
+
+    /* ==============================
+            EMAIL VALIDATION
+    ============================== */
+
+    function validateEmail(mail) {
+
+        const regex =
+            /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/;
+
         return regex.test(mail);
+
     }
 
-    /* ===========REGISTER============*/
 
-    form.addEventListener("submit",(e)=>{
+    /* ==============================
+            REGISTER
+    ============================== */
+
+    form.addEventListener("submit", async (e) => {
+
         e.preventDefault();
-        const fullName=name.value.trim();
-        const userEmail=email.value.trim().toLowerCase();
-        const userPassword=password.value.trim();
-        const confirm=confirmPassword.value.trim();
-        if(fullName.length<3){
-            showWarning("Full name must contain at least 3 characters.");
-            name.focus();
+
+        const userName =
+            name.value.trim();
+
+        const userEmail =
+            email.value.trim().toLowerCase();
+
+        const userPassword =
+            password.value;
+
+        const userConfirmPassword =
+            confirmPassword.value;
+
+
+        /* Required fields */
+
+        if (
+            !userName ||
+            !userEmail ||
+            !userPassword ||
+            !userConfirmPassword
+        ) {
+
+            showError(
+                "Please fill all required fields."
+            );
+
             return;
+
         }
-        if(!validateEmail(userEmail)){
-            showError("Please enter a valid email address.");
+
+
+        /* Email validation */
+
+        if (!validateEmail(userEmail)) {
+
+            showError(
+                "Please enter a valid email address."
+            );
+
             email.focus();
+
             return;
+
         }
-        if(userPassword.length<6){
-            showWarning("Password must contain at least 6 characters.");
+
+
+        /* Password length */
+
+        if (userPassword.length < 6) {
+
+            showWarning(
+                "Password must contain at least 6 characters."
+            );
+
             password.focus();
+
             return;
+
         }
-        if(userPassword!==confirm){
-            showError("Passwords do not match.");
+
+
+        /* Confirm password */
+
+        if (userPassword !== userConfirmPassword) {
+
+            showError(
+                "Passwords do not match."
+            );
+
             confirmPassword.focus();
+
             return;
+
         }
 
-        /* ===========CHECK EXISTING USER============ */
 
-        let users=JSON.parse(localStorage.getItem("scriptoraUsers")) || [];
-        const exists=users.find(user=>user.email===userEmail);
-        if(exists){
-            showError("Account already exists with this email.");
-            return;
+        /* Loading state */
+
+        registerBtn.disabled = true;
+
+        registerBtn.innerHTML =
+            `<i class="fa-solid fa-spinner fa-spin"></i> Creating Account...`;
+
+
+        try {
+
+            const response = await fetch(API_URL, {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    name: userName,
+
+                    email: userEmail,
+
+                    password: userPassword
+
+                })
+
+            });
+
+
+            const data = await response.json();
+
+
+            if (!response.ok) {
+
+                showError(
+                    data.message ||
+                    "Registration failed."
+                );
+
+                return;
+
+            }
+
+
+            /* Successful registration */
+
+            showSuccess(
+                "Account created successfully!"
+            );
+
+
+            form.reset();
+
+
+            setTimeout(() => {
+
+                window.location.href =
+                    "login.html";
+
+            }, 1200);
+
+
+        } catch (error) {
+
+            console.error(
+                "Registration error:",
+                error
+            );
+
+            showError(
+                "Unable to connect to the server."
+            );
+
+        } finally {
+
+            registerBtn.disabled = false;
+
+            registerBtn.innerHTML =
+                "Create Account";
+
         }
-        users.push({
-            name:fullName,
-            email:userEmail,
-            password:userPassword,
-            bio:"",
-            joinedAt:new Date().toLocaleDateString("en-US",{month:"long",year:"numeric"})
+
+    });
+
+
+    /* ==============================
+            GOOGLE LOGIN
+    ============================== */
+
+    if (googleBtn) {
+
+        googleBtn.addEventListener("click", () => {
+
+            showInfo(
+                "Google Login Coming Soon."
+            );
+
         });
-        localStorage.setItem("scriptoraUsers",JSON.stringify(users));
-        registerBtn.disabled=true;
-        registerBtn.innerHTML="Creating Account...";
-        showSuccess("Registration Successful!");
-        form.reset();
-        setTimeout(()=>{
-            window.location.href="login.html";
-        },1800);
-    });
 
-    /* ============GOOGLE BUTTON=============*/
+    }
 
-    googleBtn.addEventListener("click",()=>{
-        showInfo("Google Sign Up Coming Soon.");
-    });
 });

@@ -22,8 +22,8 @@ A modern Full Stack Blogging Platform developed as part of my Full Stack Web Dev
 ### API Testing
 - Postman
 
-### Upcoming
-- MongoDB
+### Upcoming Technologies
+- MongoDB / Supabase
 - Mongoose
 - JWT Authentication
 
@@ -33,34 +33,38 @@ A modern Full Stack Blogging Platform developed as part of my Full Stack Web Dev
 
 🟢 **Completed**
 
-### Completed Features
+Scriptora's frontend was developed using HTML, CSS and JavaScript with a responsive and interactive user interface.
+
+### Features
 
 - Responsive Home Page
-- Login & Register Pages
+- Login & Registration Pages
 - Dashboard
 - Profile Page
 - Create Blog Page
+- My Blogs
 - Blog Management
 - Blog Details
-- Likes, Comments, Views & Share UI
-- My Blogs
 - Featured Blogs
+- Likes, Comments, Views & Share UI
 - About Page
 - Contact Page
 - Form Validation
 - Custom Toast Notifications
 - Custom Confirmation Modals
-- LocalStorage Authentication
+- LocalStorage-based frontend functionality
 - Password Visibility Toggle
-- Fully Responsive Design for Desktop, Tablet & Mobile
+- Responsive Design for Desktop, Tablet & Mobile
 
 ---
 
-## Module 2 – Backend Development
-
-### Day 5 – Backend Setup
+## Module 2 – Backend Development & Frontend Integration
 
 🟢 **Completed**
+
+Module 2 focused on developing the initial backend for Scriptora using Node.js and Express.js and connecting the core frontend operations with the backend REST APIs.
+
+### Backend Setup
 
 - Initialized Node.js backend
 - Configured Express.js server
@@ -68,22 +72,16 @@ A modern Full Stack Blogging Platform developed as part of my Full Stack Web Dev
 - Added dotenv for environment variables
 - Added Nodemon for development
 - Created REST API structure
-- Created API health-check endpoint
+- Added API health-check endpoint
 - Added 404 route handling
-- Tested APIs using Postman
+- Organized backend using routes and controllers
+- Tested backend APIs using Postman
 
-### API Endpoints
+### User Authentication APIs
 
-**GET /**
+Implemented backend APIs for user registration and login.
 
-Returns the backend server status.
+#### Registration
 
-**GET /api/test**
-
-Returns:
-
-```json
-{
-  "success": true,
-  "message": "API is working!"
-}
+```text
+POST /api/auth/register
