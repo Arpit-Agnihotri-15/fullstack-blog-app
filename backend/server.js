@@ -8,6 +8,9 @@ const testRoutes = require("./routes/testRoutes");
 const authRoutes = require("./routes/authRoutes");
 const blogRoutes = require("./routes/blogRoutes");
 const commentRoutes = require("./routes/commentRoutes");
+const userRoutes = require("./routes/userRoutes");
+const subscriberRoutes = require("./routes/subscriberRoutes");
+const contactRoutes = require("./routes/contactRoutes");
 
 const app = express();
 
@@ -32,6 +35,9 @@ app.use("/api", testRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/comments", commentRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/subscribers",subscriberRoutes);
+app.use("/api/contact",contactRoutes);
 
 // =============================
 // ROOT ROUTE

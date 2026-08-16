@@ -1,213 +1,429 @@
-/* =====================================================
-                SCRIPTORA CONTACT FORM
-===================================================== */
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-document.addEventListener("DOMContentLoaded", () => {
+        // ========================================
+        // DOM ELEMENTS
+        // ========================================
 
-    const form = document.getElementById("contactForm");
+        const form =
+            document.getElementById(
+                "contactForm"
+            );
 
-    if (!form) return;
+        const nameInput =
+            document.getElementById(
+                "contactName"
+            );
 
-    const nameInput = document.getElementById("contactName");
-    const emailInput = document.getElementById("contactEmail");
-    const subjectInput = document.getElementById("contactSubject");
-    const messageInput = document.getElementById("contactMessage");
+        const emailInput =
+            document.getElementById(
+                "contactEmail"
+            );
 
-    const submitBtn = document.getElementById("contactSubmitBtn");
-    const successBox = document.getElementById("contactSuccess");
-    const sendAnotherBtn = document.getElementById("sendAnotherBtn");
+        const subjectInput =
+            document.getElementById(
+                "contactSubject"
+            );
 
-    /* ==========================================
-            HELPERS
-    ========================================== */
+        const messageInput =
+            document.getElementById(
+                "contactMessage"
+            );
 
-    function validateEmail(mail) {
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return regex.test(mail);
-    }
+        const submitButton =
+            document.getElementById(
+                "contactSubmitBtn"
+            );
 
-    function setFieldError(input, errorId, message) {
+        const successBox =
+            document.getElementById(
+                "contactSuccess"
+            );
 
-        const errorEl = document.getElementById(errorId);
+        const sendAnotherButton =
+            document.getElementById(
+                "sendAnotherBtn"
+            );
 
-        if (message) {
 
-            input.classList.add("input-error");
-            input.classList.remove("input-success");
+        const API_URL =
+            "http://localhost:5000/api/contact";
 
-            if (errorEl) errorEl.textContent = message;
 
-        } else {
+        // ========================================
+        // EMAIL VALIDATION
+        // ========================================
 
-            input.classList.remove("input-error");
-            input.classList.add("input-success");
+        function validateEmail(email) {
 
-            if (errorEl) errorEl.textContent = "";
+            const regex =
+                /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/;
 
-        }
-
-    }
-
-    /* ==========================================
-            LIVE VALIDATION
-    ========================================== */
-
-    nameInput.addEventListener("input", () => {
-
-        if (nameInput.value.trim().length >= 3) {
-            setFieldError(nameInput, "contactNameError", "");
-        }
-
-    });
-
-    emailInput.addEventListener("input", () => {
-
-        if (validateEmail(emailInput.value.trim())) {
-            setFieldError(emailInput, "contactEmailError", "");
-        }
-
-    });
-
-    subjectInput.addEventListener("input", () => {
-
-        if (subjectInput.value.trim().length >= 4) {
-            setFieldError(subjectInput, "contactSubjectError", "");
-        }
-
-    });
-
-    messageInput.addEventListener("input", () => {
-
-        if (messageInput.value.trim().length >= 10) {
-            setFieldError(messageInput, "contactMessageError", "");
-        }
-
-    });
-
-    /* ==========================================
-            SUBMIT
-    ========================================== */
-
-    form.addEventListener("submit", (e) => {
-
-        e.preventDefault();
-
-        const name = nameInput.value.trim();
-        const email = emailInput.value.trim();
-        const subject = subjectInput.value.trim();
-        const message = messageInput.value.trim();
-
-        let isValid = true;
-
-        if (name.length < 3) {
-
-            setFieldError(nameInput, "contactNameError", "Full name must be at least 3 characters.");
-            isValid = false;
-
-        } else {
-
-            setFieldError(nameInput, "contactNameError", "");
+            return regex.test(email);
 
         }
 
-        if (!validateEmail(email)) {
 
-            setFieldError(emailInput, "contactEmailError", "Please enter a valid email address.");
-            isValid = false;
+        // ========================================
+        // FIELD ERROR
+        // ========================================
 
-        } else {
+        function setFieldError(
+            input,
+            errorId,
+            message
+        ) {
 
-            setFieldError(emailInput, "contactEmailError", "");
+            const error =
+                document.getElementById(
+                    errorId
+                );
+
+
+            if (message) {
+
+                input.classList.add(
+                    "input-error"
+                );
+
+                if (error) {
+
+                    error.textContent =
+                        message;
+
+                }
+
+            } else {
+
+                input.classList.remove(
+                    "input-error"
+                );
+
+                if (error) {
+
+                    error.textContent =
+                        "";
+
+                }
+
+            }
 
         }
 
-        if (subject.length < 4) {
 
-            setFieldError(subjectInput, "contactSubjectError", "Subject must be at least 4 characters.");
-            isValid = false;
+        // ========================================
+        // CLEAR ERRORS
+        // ========================================
 
-        } else {
+        function clearErrors() {
 
-            setFieldError(subjectInput, "contactSubjectError", "");
+            setFieldError(
+                nameInput,
+                "contactNameError",
+                ""
+            );
+
+            setFieldError(
+                emailInput,
+                "contactEmailError",
+                ""
+            );
+
+            setFieldError(
+                subjectInput,
+                "contactSubjectError",
+                ""
+            );
+
+            setFieldError(
+                messageInput,
+                "contactMessageError",
+                ""
+            );
 
         }
 
-        if (message.length < 10) {
 
-            setFieldError(messageInput, "contactMessageError", "Message must be at least 10 characters.");
-            isValid = false;
+        // ========================================
+        // FORM SUBMIT
+        // ========================================
 
-        } else {
+        form.addEventListener(
+            "submit",
+            async (event) => {
 
-            setFieldError(messageInput, "contactMessageError", "");
+                event.preventDefault();
 
-        }
 
-        if (!isValid) {
+                clearErrors();
 
-            showError("Please fix the highlighted fields.");
-            return;
 
-        }
+                const name =
+                    nameInput.value.trim();
 
-        /* ==========================================
-                SIMULATE SEND (Frontend Only)
-        ========================================== */
+                const email =
+                    emailInput.value
+                        .trim()
+                        .toLowerCase();
 
-        submitBtn.disabled = true;
-        submitBtn.innerHTML =
-            '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+                const subject =
+                    subjectInput.value.trim();
 
-        const messages =
-            JSON.parse(localStorage.getItem("contactMessages")) || [];
+                const message =
+                    messageInput.value.trim();
 
-        messages.push({
-            name,
-            email,
-            subject,
-            message,
-            date: new Date().toLocaleString()
-        });
 
-        localStorage.setItem(
-            "contactMessages",
-            JSON.stringify(messages)
+                let valid = true;
+
+
+                // ================================
+                // NAME
+                // ================================
+
+                if (name.length < 2) {
+
+                    setFieldError(
+                        nameInput,
+                        "contactNameError",
+                        "Please enter your full name."
+                    );
+
+                    valid = false;
+
+                }
+
+
+                // ================================
+                // EMAIL
+                // ================================
+
+                if (
+                    !validateEmail(email)
+                ) {
+
+                    setFieldError(
+                        emailInput,
+                        "contactEmailError",
+                        "Please enter a valid email address."
+                    );
+
+                    valid = false;
+
+                }
+
+
+                // ================================
+                // SUBJECT
+                // ================================
+
+                if (subject.length < 3) {
+
+                    setFieldError(
+                        subjectInput,
+                        "contactSubjectError",
+                        "Subject must contain at least 3 characters."
+                    );
+
+                    valid = false;
+
+                }
+
+
+                // ================================
+                // MESSAGE
+                // ================================
+
+                if (message.length < 10) {
+
+                    setFieldError(
+                        messageInput,
+                        "contactMessageError",
+                        "Message must contain at least 10 characters."
+                    );
+
+                    valid = false;
+
+                }
+
+
+                if (!valid) {
+
+                    if (
+                        typeof showError ===
+                        "function"
+                    ) {
+
+                        showError(
+                            "Please fix the highlighted fields."
+                        );
+
+                    }
+
+                    return;
+
+                }
+
+
+                // ========================================
+                // LOADING STATE
+                // ========================================
+
+                const originalButtonHTML =
+                    submitButton.innerHTML;
+
+
+                submitButton.disabled =
+                    true;
+
+
+                submitButton.innerHTML =
+                    `<i class="fa-solid fa-spinner fa-spin"></i> Sending...`;
+
+
+                try {
+
+                    // ========================================
+                    // SEND TO BACKEND
+                    // ========================================
+
+                    const response =
+                        await fetch(
+                            API_URL,
+                            {
+
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify({
+
+                                        name,
+
+                                        email,
+
+                                        subject,
+
+                                        message
+
+                                    })
+
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    // ========================================
+                    // HANDLE ERROR
+                    // ========================================
+
+                    if (
+                        !response.ok ||
+                        !data.success
+                    ) {
+
+                        throw new Error(
+                            data.message ||
+                            "Unable to send message."
+                        );
+
+                    }
+
+
+                    // ========================================
+                    // SUCCESS
+                    // ========================================
+
+                    form.style.display =
+                        "none";
+
+
+                    successBox.classList.add(
+                        "show"
+                    );
+
+
+                    if (
+                        typeof showSuccess ===
+                        "function"
+                    ) {
+
+                        showSuccess(
+                            "Message sent successfully!"
+                        );
+
+                    }
+
+
+                    form.reset();
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Contact form error:",
+                        error
+                    );
+
+
+                    if (
+                        typeof showError ===
+                        "function"
+                    ) {
+
+                        showError(
+                            error.message ||
+                            "Unable to send your message."
+                        );
+
+                    }
+
+                } finally {
+
+                    submitButton.disabled =
+                        false;
+
+                    submitButton.innerHTML =
+                        originalButtonHTML;
+
+                }
+
+            }
         );
 
-        setTimeout(() => {
 
-            form.reset();
+        // ========================================
+        // SEND ANOTHER MESSAGE
+        // ========================================
 
-            [nameInput, emailInput, subjectInput, messageInput].forEach(input => {
-                input.classList.remove("input-error", "input-success");
-            });
+        if (sendAnotherButton) {
 
-            form.style.display = "none";
-            successBox.classList.add("show");
+            sendAnotherButton.addEventListener(
+                "click",
+                () => {
 
-            submitBtn.disabled = false;
-            submitBtn.innerHTML =
-                '<i class="fa-solid fa-paper-plane"></i> Send Message';
+                    successBox.classList.remove(
+                        "show"
+                    );
 
-            showSuccess("Your message has been sent!");
+                    form.style.display =
+                        "block";
 
-        }, 1200);
+                    clearErrors();
 
-    });
+                    nameInput.focus();
 
-    /* ==========================================
-            SEND ANOTHER
-    ========================================== */
+                }
+            );
 
-    if (sendAnotherBtn) {
-
-        sendAnotherBtn.addEventListener("click", () => {
-
-            successBox.classList.remove("show");
-            form.style.display = "block";
-
-        });
+        }
 
     }
-
-});
+);

@@ -4,6 +4,7 @@ const {
     createBlog,
     getAllBlogs,
     getBlogById,
+    getFeaturedBlogs,
     likeBlog,
     incrementViews,
     updateBlog,
@@ -13,53 +14,28 @@ const {
 const router = express.Router();
 
 
-// =============================
-// CREATE BLOG
-// =============================
-
+// Create Blog
 router.post("/", createBlog);
 
-
-// =============================
-// GET ALL BLOGS
-// =============================
-
+// Get all blogs
 router.get("/", getAllBlogs);
 
+// Get featured blogs
+router.get("/featured", getFeaturedBlogs);
 
-// =============================
-// GET SINGLE BLOG
-// =============================
-
+// Get single blog
 router.get("/:id", getBlogById);
 
-
-// =============================
-// LIKE BLOG
-// =============================
-
+// Like Blog
 router.post("/:id/like", likeBlog);
 
-
-// =============================
-// INCREMENT BLOG VIEWS
-// =============================
-
+// Increment Blog Views
 router.post("/:id/view", incrementViews);
 
-
-// =============================
-// UPDATE BLOG
-// =============================
-
+// Update Blog
 router.put("/:id", updateBlog);
 
-
-// =============================
-// DELETE BLOG
-// =============================
-
+// Delete Blog
 router.delete("/:id", deleteBlog);
-
 
 module.exports = router;

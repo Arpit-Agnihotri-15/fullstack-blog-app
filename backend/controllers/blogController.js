@@ -1,4 +1,5 @@
 const Blog = require("../models/Blog");
+const Comment = require("../models/Comment");
 
 // =============================
 // CREATE BLOG
@@ -603,6 +604,76 @@ const deleteBlog = async (req, res) => {
 
 };
 
+// =============================
+// GET FEATURED BLOGS
+// =============================
+
+const getFeaturedBlogs = async (req, res) => {
+    try {
+
+        const blogs = await Blog.find()
+            .sort({
+                likes: -1,
+                views: -1,
+                createdAt: -1
+            })
+            .limit(10);
+
+        // Calculate comment count for each blog
+        const featuredBlogs = await Promise.all(
+            blogs.map(async (blog) => {
+
+                const commentCount =
+                    await Comment.countDocuments({
+                        blogId: blog._id
+                    });
+
+                const featuredScore =
+                    Number(blog.likes || 0) +
+                    Number(blog.views || 0) +
+                    commentCount;
+
+                return {
+                    ...blog.toObject(),
+                    commentCount,
+                    featuredScore
+                };
+
+            })
+        );
+
+        // Sort using actual engagement score
+        featuredBlogs.sort(
+            (a, b) =>
+                b.featuredScore -
+                a.featuredScore
+        );
+
+        // Only top 3
+        const topBlogs =
+            featuredBlogs.slice(0, 3);
+
+        return res.status(200).json({
+            success: true,
+            count: topBlogs.length,
+            blogs: topBlogs
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Get featured blogs error:",
+            error
+        );
+
+        return res.status(500).json({
+            success: false,
+            message: "Server error"
+        });
+
+    }
+};
+
 
 // =============================
 // EXPORT CONTROLLERS
@@ -622,6 +693,8 @@ module.exports = {
 
     updateBlog,
 
-    deleteBlog
+    deleteBlog,
+
+    getFeaturedBlogs
 
 };
