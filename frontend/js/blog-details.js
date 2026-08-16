@@ -1,396 +1,797 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
-    const blogId = Number(localStorage.getItem("selectedBlog"));
+    // ==========================
+    // GET BLOG ID FROM URL
+    // ==========================
 
-    const blogs =
-        JSON.parse(localStorage.getItem("blogs")) || [];
+    const params = new URLSearchParams(window.location.search);
+    const blogId = params.get("id");
 
-    const blog =
-        blogs.find(b => b.id === blogId);
-
-    if (!blog) {
-
+    if (!blogId) {
         window.location.href = "blogs.html";
         return;
+    }
+
+
+    // ==========================
+    // API
+    // ==========================
+
+    const BLOG_API =
+        `http://localhost:5000/api/blogs/${encodeURIComponent(blogId)}`;
+
+    const COMMENTS_API =
+        `http://localhost:5000/api/comments/${encodeURIComponent(blogId)}`;
+
+
+    let blog;
+
+
+    // ==========================
+    // LOAD BLOG
+    // ==========================
+
+    try {
+
+        const response = await fetch(BLOG_API);
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.message || "Blog not found"
+            );
+        }
+
+        blog = data.blog;
+
+    } catch (error) {
+
+        console.error("Load Blog Error:", error);
+
+        if (typeof showError === "function") {
+            showError("Unable to load this blog.");
+        }
+
+        setTimeout(() => {
+            window.location.href = "blogs.html";
+        }, 1500);
+
+        return;
+    }
+
+
+    // ==========================
+    // BASIC BLOG DETAILS
+    // ==========================
+
+    const image =
+        document.getElementById("blogImage");
+
+    image.src =
+        blog.image ||
+        "https://picsum.photos/1200/600";
+
+    image.onerror = function () {
+        this.src =
+            "https://picsum.photos/1200/600";
+    };
+
+
+    document.getElementById("blogCategory").textContent =
+        blog.category || "";
+
+
+    document.getElementById("blogTitle").textContent =
+        blog.title || "";
+
+
+    document.getElementById("blogDescription").textContent =
+        blog.description || "";
+
+
+    document.getElementById("blogContent").innerHTML =
+        (blog.content || "")
+            .replace(/\n/g, "<br>");
+
+
+    document.getElementById("blogAuthor").innerHTML =
+        `<i class="fa-solid fa-user"></i> ${
+            escapeHtml(blog.author || "Unknown")
+        }`;
+
+
+    // ==========================
+    // DATE
+    // ==========================
+
+    const formattedDate = blog.createdAt
+        ? new Date(blog.createdAt).toLocaleDateString(
+            "en-IN",
+            {
+                day: "numeric",
+                month: "short",
+                year: "numeric"
+            }
+        )
+        : "Unknown date";
+
+
+    document.getElementById("blogDate").innerHTML =
+        `<i class="fa-solid fa-calendar"></i> ${formattedDate}`;
+
+
+    // ==========================
+    // VIEWS
+    // ==========================
+
+    const viewCount =
+        document.getElementById("viewCount");
+
+
+    viewCount.innerHTML =
+        `<i class="fa-solid fa-eye"></i> ${
+            blog.views || 0
+        } Views`;
+
+
+    try {
+
+        const viewResponse = await fetch(
+            `${BLOG_API}/view`,
+            {
+                method: "POST"
+            }
+        );
+
+        const viewData =
+            await viewResponse.json();
+
+        if (viewResponse.ok) {
+
+            viewCount.innerHTML =
+                `<i class="fa-solid fa-eye"></i> ${
+                    viewData.views
+                } Views`;
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "View Count Error:",
+            error
+        );
 
     }
 
-    /* ===========================
-            VIEWS
-    =========================== */
 
-    blog.views = (blog.views || 0) + 1;
-
-    localStorage.setItem(
-
-        "blogs",
-
-        JSON.stringify(blogs)
-
-    );
-
-    /* ===========================
-        BASIC DETAILS
-    =========================== */
-
-    const image = document.getElementById("blogImage");
-
-    image.src = blog.image;
-
-    image.onerror = function () {
-
-        this.src = "https://picsum.photos/1200/600";
-
-    };
-
-    document.getElementById("blogCategory").textContent =
-        blog.category;
-
-    document.getElementById("blogTitle").textContent =
-        blog.title;
-
-    document.getElementById("blogDescription").textContent =
-        blog.description;
-
-    document.getElementById("blogContent").innerHTML =
-        blog.content.replace(/\n/g, "<br>");
-
-    document.getElementById("blogAuthor").innerHTML =
-
-        `<i class="fa-solid fa-user"></i> ${blog.author}`;
-
-    document.getElementById("blogDate").innerHTML =
-
-        `<i class="fa-solid fa-calendar"></i> ${blog.createdAt}`;
-
-    document.getElementById("viewCount").innerHTML =
-
-        `<i class="fa-solid fa-eye"></i> ${blog.views} Views`;
-
-    /* ===========================
-        READING TIME
-    =========================== */
+    // ==========================
+    // READING TIME
+    // ==========================
 
     const words =
-
-        blog.content
+        (blog.content || "")
             .trim()
             .split(/\s+/)
+            .filter(Boolean)
             .length;
 
-    const minutes =
 
-        Math.max(1, Math.ceil(words / 200));
+    const minutes =
+        Math.max(
+            1,
+            Math.ceil(words / 200)
+        );
+
 
     document.getElementById("readingTime").innerHTML =
+        `<i class="fa-solid fa-book-open-reader"></i> ${
+            minutes
+        } min read`;
 
-        `<i class="fa-solid fa-book-open-reader"></i> ${minutes} min read`;
 
-    /* ===========================
-            TAGS
-    =========================== */
+    // ==========================
+    // TAGS
+    // ==========================
 
     const tagBox =
         document.getElementById("blogTags");
 
     tagBox.innerHTML = "";
 
-    if (blog.tags && blog.tags.length > 0) {
+
+    if (
+        blog.tags &&
+        blog.tags.length > 0
+    ) {
 
         blog.tags.forEach(tag => {
 
-            tagBox.innerHTML +=
+            const tagElement =
+                document.createElement("span");
 
-                `<span>#${tag}</span>`;
+            tagElement.textContent =
+                `#${tag}`;
+
+            tagBox.appendChild(tagElement);
 
         });
 
     }
 
-    /* ===========================
-            LIKE
-    =========================== */
 
-    blog.likes = blog.likes || 0;
+    // ==========================
+    // LIKE COUNT
+    // ==========================
 
-    document.getElementById("likeCount").textContent =
+    const likeCount =
+        document.getElementById("likeCount");
 
-        blog.likes;
+    likeCount.textContent =
+        blog.likes || 0;
+
+
+    // ==========================
+    // LIKE BUTTON
+    // ==========================
 
     document
         .getElementById("likeBtn")
-        .addEventListener("click", () => {
+        .addEventListener(
+            "click",
+            async () => {
 
-            blog.likes++;
+                const likeBtn =
+                    document.getElementById("likeBtn");
 
-            localStorage.setItem(
+                if (likeBtn.disabled) {
+                    return;
+                }
 
-                "blogs",
+                try {
 
-                JSON.stringify(blogs)
+                    likeBtn.disabled = true;
 
-            );
+                    const response =
+                        await fetch(
+                            `${BLOG_API}/like`,
+                            {
+                                method: "POST"
+                            }
+                        );
 
-            document.getElementById("likeCount").textContent =
 
-                blog.likes;
+                    const data =
+                        await response.json();
 
-            if (typeof showSuccess === "function") {
 
-                showSuccess("Thanks for liking!");
+                    if (!response.ok) {
+
+                        throw new Error(
+                            data.message ||
+                            "Unable to like blog"
+                        );
+
+                    }
+
+
+                    likeCount.textContent =
+                        data.likes;
+
+
+                    if (
+                        typeof showSuccess ===
+                        "function"
+                    ) {
+
+                        showSuccess(
+                            "Thanks for liking!"
+                        );
+
+                    }
+
+                } catch (error) {
+
+                    console.error(
+                        "Like Blog Error:",
+                        error
+                    );
+
+
+                    if (
+                        typeof showError ===
+                        "function"
+                    ) {
+
+                        showError(
+                            "Unable to like this blog."
+                        );
+
+                    }
+
+                } finally {
+
+                    likeBtn.disabled = false;
+
+                }
+
+            }
+        );
+
+
+    // ==========================
+    // SHARE
+    // ==========================
+
+    document
+        .getElementById("shareBtn")
+        .addEventListener(
+            "click",
+            async () => {
+
+                const shareData = {
+
+                    title:
+                        blog.title,
+
+                    text:
+                        blog.description,
+
+                    url:
+                        window.location.href
+
+                };
+
+
+                if (navigator.share) {
+
+                    try {
+
+                        await navigator.share(
+                            shareData
+                        );
+
+
+                        if (
+                            typeof showSuccess ===
+                            "function"
+                        ) {
+
+                            showSuccess(
+                                "Blog shared successfully!"
+                            );
+
+                        }
+
+                    } catch (error) {
+
+                        console.log(
+                            "Share cancelled"
+                        );
+
+                    }
+
+                } else if (navigator.clipboard) {
+
+                    try {
+
+                        await navigator.clipboard.writeText(
+                            window.location.href
+                        );
+
+
+                        if (
+                            typeof showSuccess ===
+                            "function"
+                        ) {
+
+                            showSuccess(
+                                "Blog link copied to clipboard!"
+                            );
+
+                        }
+
+                    } catch {
+
+                        prompt(
+                            "Copy this link:",
+                            window.location.href
+                        );
+
+                    }
+
+                } else {
+
+                    prompt(
+                        "Copy this link:",
+                        window.location.href
+                    );
+
+                }
+
+            }
+        );
+
+
+    // ==========================
+    // COMMENTS
+    // ==========================
+
+    const commentsContainer =
+        document.getElementById(
+            "commentsContainer"
+        );
+
+
+    const commentCount =
+        document.getElementById(
+            "commentCount"
+        );
+
+
+    const commentName =
+        document.getElementById(
+            "commentName"
+        );
+
+
+    const commentText =
+        document.getElementById(
+            "commentText"
+        );
+
+
+    const commentBtn =
+        document.getElementById(
+            "commentBtn"
+        );
+
+
+    // ==========================
+    // ESCAPE HTML
+    // ==========================
+
+    function escapeHtml(text) {
+
+        const div =
+            document.createElement("div");
+
+        div.textContent =
+            text || "";
+
+        return div.innerHTML;
+
+    }
+
+
+    // ==========================
+    // LOAD COMMENTS
+    // ==========================
+
+    async function loadComments() {
+
+        try {
+
+            const response =
+                await fetch(COMMENTS_API);
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message ||
+                    "Unable to load comments"
+                );
 
             }
 
-        });
 
-    /* ===========================
-            SHARE
-    =========================== */
+            const comments =
+                data.comments || [];
 
-    document.getElementById("shareBtn").addEventListener("click", async () => {
 
-    const shareData = {
-        title: blog.title,
-        text: blog.description,
-        url: window.location.href
-    };
+            // Update actual comment count
+            commentCount.textContent =
+                comments.length;
 
-    // If browser supports native sharing
-    if (navigator.share) {
 
-        try {
+            // Clear previous comments
+            commentsContainer.innerHTML =
+                "";
 
-            await navigator.share(shareData);
 
-            showSuccess("Blog shared successfully!");
+            // ==========================
+            // NO COMMENTS
+            // ==========================
 
-        } catch (err) {
+            if (comments.length === 0) {
 
-            // User cancelled
-            console.log(err);
+                commentsContainer.innerHTML = `
+
+                    <div class="empty-comments">
+
+                        <i class="fa-regular fa-comments"></i>
+
+                        <p>No comments yet.</p>
+
+                        <small>
+                            Be the first to comment!
+                        </small>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            // ==========================
+            // DISPLAY COMMENTS
+            // ==========================
+
+            comments.forEach(comment => {
+
+                const commentElement =
+                    document.createElement("div");
+
+
+                commentElement.className =
+                    "comment";
+
+
+                const date =
+                    comment.createdAt
+                        ? new Date(
+                            comment.createdAt
+                        ).toLocaleDateString(
+                            "en-IN",
+                            {
+                                day: "numeric",
+                                month: "short",
+                                year: "numeric"
+                            }
+                        )
+                        : "";
+
+
+                commentElement.innerHTML = `
+
+                    <h4>
+                        ${escapeHtml(
+                            comment.name
+                        )}
+                    </h4>
+
+                    <small>
+                        <i class="fa-solid fa-calendar"></i>
+                        ${date}
+                    </small>
+
+                    <p>
+                        ${escapeHtml(
+                            comment.text
+                        )}
+                    </p>
+
+                `;
+
+
+                commentsContainer.appendChild(
+                    commentElement
+                );
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Load Comments Error:",
+                error
+            );
+
+
+            commentsContainer.innerHTML = `
+
+                <div class="empty-comments">
+
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+
+                    <p>
+                        Unable to load comments.
+                    </p>
+
+                </div>
+
+            `;
 
         }
 
     }
 
-    // Otherwise copy the link
-    else if (navigator.clipboard) {
 
-        try {
+    // ==========================
+    // SUBMIT COMMENT
+    // ==========================
 
-            await navigator.clipboard.writeText(window.location.href);
+    commentBtn.addEventListener(
+        "click",
+        async () => {
 
-            showSuccess("Blog link copied to clipboard!");
+            const name =
+                commentName.value.trim();
 
-        } catch {
 
-            prompt("Copy this link:", window.location.href);
+            const text =
+                commentText.value.trim();
+
+
+            // ==========================
+            // VALIDATION
+            // ==========================
+
+            if (!name) {
+
+                if (
+                    typeof showError ===
+                    "function"
+                ) {
+
+                    showError(
+                        "Please enter your name."
+                    );
+
+                }
+
+                commentName.focus();
+
+                return;
+
+            }
+
+
+            if (!text) {
+
+                if (
+                    typeof showError ===
+                    "function"
+                ) {
+
+                    showError(
+                        "Please write a comment."
+                    );
+
+                }
+
+                commentText.focus();
+
+                return;
+
+            }
+
+
+            try {
+
+                commentBtn.disabled = true;
+
+
+                commentBtn.innerHTML = `
+
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    Posting...
+
+                `;
+
+
+                const response =
+                    await fetch(
+                        "http://localhost:5000/api/comments",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+
+                                blogId:
+                                    blogId,
+
+                                name:
+                                    name,
+
+                                text:
+                                    text
+
+                            })
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Unable to add comment"
+                    );
+
+                }
+
+
+                // Clear form
+                commentName.value = "";
+                commentText.value = "";
+
+
+                if (
+                    typeof showSuccess ===
+                    "function"
+                ) {
+
+                    showSuccess(
+                        "Comment added successfully!"
+                    );
+
+                }
+
+
+                // Reload comments
+                await loadComments();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Add Comment Error:",
+                    error
+                );
+
+
+                if (
+                    typeof showError ===
+                    "function"
+                ) {
+
+                    showError(
+                        "Unable to add comment."
+                    );
+
+                }
+
+            } finally {
+
+                commentBtn.disabled = false;
+
+
+                commentBtn.innerHTML = `
+
+                    <i class="fa-solid fa-paper-plane"></i>
+                    Post Comment
+
+                `;
+
+            }
 
         }
-
-    }
-
-    // Final fallback
-    else {
-
-        prompt("Copy this link:", window.location.href);
-
-    }
-
-});
-    /* ===========================
-        COMMENTS
-=========================== */
-
-blog.comments = blog.comments || [];
-
-const commentsContainer =
-    document.getElementById("commentsContainer");
-
-const commentCount =
-    document.getElementById("commentCount");
-
-function renderComments() {
-
-    commentsContainer.innerHTML = "";
-
-    commentCount.textContent = blog.comments.length;
-
-    if (blog.comments.length === 0) {
-
-        commentsContainer.innerHTML = `
-
-            <div class="empty-comments">
-
-                <i class="fa-regular fa-comments"></i>
-
-                <p>No comments yet.</p>
-
-                <small>Be the first one to comment.</small>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-    blog.comments.forEach(comment => {
-
-        commentsContainer.innerHTML += `
-
-            <div class="comment">
-
-                <h4>
-
-                    <i class="fa-solid fa-user"></i>
-
-                    ${comment.name}
-
-                </h4>
-
-                <small>
-
-                    <i class="fa-solid fa-calendar"></i>
-
-                    ${comment.date}
-
-                </small>
-
-                <p>
-
-                    ${comment.text}
-
-                </p>
-
-            </div>
-
-        `;
-
-    });
-
-}
-
-renderComments();
-
-/* ===========================
-        POST COMMENT
-=========================== */
-
-document
-.getElementById("commentBtn")
-.addEventListener("click", () => {
-
-    const text =
-        document
-        .getElementById("commentText")
-        .value
-        .trim();
-
-    if (text === "") {
-
-        if (typeof showError === "function") {
-
-            showError("Comment cannot be empty.");
-
-        }
-
-        return;
-
-    }
-
-    const user =
-        JSON.parse(localStorage.getItem("loggedInUser"));
-
-    blog.comments.push({
-
-        name: user ? user.name : "Anonymous",
-
-        text: text,
-
-        date: new Date().toLocaleDateString()
-
-    });
-
-    localStorage.setItem(
-
-        "blogs",
-
-        JSON.stringify(blogs)
-
     );
 
-    document
-        .getElementById("commentText")
-        .value = "";
 
-    renderComments();
+    // ==========================
+    // INITIAL LOAD
+    // ==========================
 
-    if (typeof showSuccess === "function") {
-
-        showSuccess("Comment Added!");
-
-    }
-
-});
-
-/* ===========================
-    UPDATE DASHBOARD STATS
-=========================== */
-
-function updateDashboardStats() {
-
-    const loggedUser =
-        JSON.parse(localStorage.getItem("loggedInUser"));
-
-    if (!loggedUser) return;
-
-    const myBlogs =
-        blogs.filter(
-
-            b => b.author === loggedUser.name
-
-        );
-
-    localStorage.setItem(
-
-        "dashboardStats",
-
-        JSON.stringify({
-
-            blogs: myBlogs.length,
-
-            likes: myBlogs.reduce(
-
-                (sum, b) => sum + (b.likes || 0),
-
-                0
-
-            ),
-
-            comments: myBlogs.reduce(
-
-                (sum, b) => sum + ((b.comments || []).length),
-
-                0
-
-            ),
-
-            views: myBlogs.reduce(
-
-                (sum, b) => sum + (b.views || 0),
-
-                0
-
-            )
-
-        })
-
-    );
-
-}
-
-updateDashboardStats();
+    await loadComments();
 
 });

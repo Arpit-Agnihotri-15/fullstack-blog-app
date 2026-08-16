@@ -143,11 +143,11 @@ DELETE /api/blogs/:id
 
 ## Module 3 – Database Integration
 
-🟢 **Day 9 Completed**
+🟢 **Day 10 Completed**
 
-Module 3 started with integrating a persistent database into the Scriptora backend.
+Module 3 focused on integrating MongoDB Atlas with the Scriptora backend and implementing database-driven blog functionality.
 
-### Database Setup
+### Day 9 – Database Setup
 
 * Created MongoDB Atlas cluster
 * Created MongoDB database user
@@ -157,6 +157,97 @@ Module 3 started with integrating a persistent database into the Scriptora backe
 * Connected MongoDB Atlas with the Express.js backend
 * Successfully tested the database connection
 
+### Day 10 – MongoDB Blog Integration & CRUD
+
+Implemented complete database-backed blog management using MongoDB Atlas and Mongoose.
+
+### Blog Database Model
+
+* Created Mongoose Blog schema/model
+* Added fields for title, category, image, description, content, tags and author
+* Added likes, comments and views counters
+* Added automatic `createdAt` and `updatedAt` timestamps
+* Added `authorId` to associate each blog with its creator
+
+### Blog APIs
+
+Implemented and tested the following REST APIs:
+
+#### Create Blog
+
+```text
+POST /api/blogs
+```
+
+#### Get All Blogs
+
+```text
+GET /api/blogs
+```
+
+#### Get Blog by ID
+
+```text
+GET /api/blogs/:id
+```
+
+#### Update Blog
+
+```text
+PUT /api/blogs/:id
+```
+
+#### Delete Blog
+
+```text
+DELETE /api/blogs/:id
+```
+
+#### Like Blog
+
+```text
+POST /api/blogs/:id/like
+```
+
+#### Increment Blog Views
+
+```text
+POST /api/blogs/:id/view
+```
+
+### Comments
+
+Implemented database-backed blog comments.
+
+```text
+POST /api/comments
+GET /api/comments/:blogId
+```
+
+* Added comment creation and retrieval
+* Connected comments with individual blog IDs
+* Displayed stored comments on the blog details page
+
+### User-Specific Blogs
+
+Implemented account-based blog ownership using `authorId`.
+
+* Each newly created blog stores the logged-in user's ID
+* Public **Blogs** page displays all published blogs
+* **My Blogs** displays only blogs created by the currently logged-in user
+* Verified separation between personal and college accounts
+* Prevented blogs from one account from appearing in another account's **My Blogs**
+
+### CRUD & Database Testing
+
+* Tested Create, Read, Update and Delete operations using Postman
+* Verified likes and view counts update in MongoDB
+* Verified comments are stored and retrieved from MongoDB
+* Verified edited blog data is updated in MongoDB
+* Verified deleted blogs are removed from MongoDB
+* Verified `authorId` filtering with multiple user accounts
+* Verified frontend pages reflect database changes correctly
+
 ### Current Progress
 
 | Module                                    | Status       |
@@ -164,11 +255,9 @@ Module 3 started with integrating a persistent database into the Scriptora backe
 | Module 1 – Frontend Development           | 🟢 Completed |
 | Module 2 – Backend & Frontend Integration | 🟢 Completed |
 | Module 3 – Day 9: Database Setup          | 🟢 Completed |
-| Module 3 – Day 10: Database Models        | 🟡 Upcoming  |
+| Module 3 – Day 10: MongoDB & CRUD         | 🟢 Completed |
 | Module 3 – Day 11: Database Integration   | 🟡 Upcoming  |
 | Module 3 – Day 12: Testing & Finalization | 🟡 Upcoming  |
-
----
 
 ## ▶️ Run the Backend
 

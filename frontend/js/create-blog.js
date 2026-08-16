@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
     // =============================
     // DOM ELEMENTS
@@ -20,52 +20,172 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const wordCount = document.getElementById("wordCount");
 
-    const submitBtn = form.querySelector("button[type='submit']");
+    const submitBtn =
+        form.querySelector("button[type='submit']");
 
-    // Backend API
-    const API_URL = "http://localhost:5000/api/blogs";
+    // =============================
+    // API CONFIG
+    // =============================
+
+    const API_URL =
+        "http://localhost:5000/api/blogs";
 
 
     // =============================
     // EDIT MODE
     // =============================
 
-    const editBlogId = localStorage.getItem("editBlog");
+    const editBlogId =
+        localStorage.getItem("editBlog");
 
     let editingBlog = null;
 
+
+    // =============================
+    // LOAD BLOG FOR EDITING
+    // =============================
+
     if (editBlogId) {
 
-        const blogs =
-            JSON.parse(localStorage.getItem("blogs")) || [];
+        try {
 
-        editingBlog =
-            blogs.find(blog => blog.id == editBlogId);
+            submitBtn.disabled = true;
 
-        if (editingBlog) {
+            submitBtn.innerHTML =
+                '<i class="fa-solid fa-spinner fa-spin"></i> Loading...';
 
-            title.value = editingBlog.title;
 
-            category.value = editingBlog.category;
+            const response = await fetch(
+                `${API_URL}/${editBlogId}`
+            );
 
-            image.value = editingBlog.image;
 
-            description.value = editingBlog.description;
+            const data = await response.json();
 
-            content.value = editingBlog.content;
 
-            tags.value = editingBlog.tags.join(", ");
+            if (!response.ok || !data.success) {
+
+                throw new Error(
+                    data.message ||
+                    "Unable to load blog"
+                );
+
+            }
+
+
+            editingBlog = data.blog;
+
+
+            // =============================
+            // FILL FORM
+            // =============================
+
+            title.value =
+                editingBlog.title || "";
+
+            category.value =
+                editingBlog.category || "";
+
+            image.value =
+                editingBlog.image || "";
+
+            description.value =
+                editingBlog.description || "";
+
+            content.value =
+                editingBlog.content || "";
+
+            tags.value =
+                Array.isArray(editingBlog.tags)
+                    ? editingBlog.tags.join(", ")
+                    : "";
+
+
+            // =============================
+            // CHANGE PAGE TITLE
+            // =============================
+
+            const pageTitle =
+                document.querySelector(".page-header h1");
+
+            if (pageTitle) {
+
+                pageTitle.textContent =
+                    "Edit Blog";
+
+            }
+
+
+            const pageDescription =
+                document.querySelector(".page-header p");
+
+            if (pageDescription) {
+
+                pageDescription.textContent =
+                    "Update your blog and publish the latest version.";
+
+            }
+
+
+            // =============================
+            // CHANGE BUTTON
+            // =============================
 
             submitBtn.innerHTML =
                 '<i class="fa-solid fa-pen"></i> Update Blog';
 
-            const words =
-                editingBlog.content
-                    .trim()
-                    .split(/\s+/)
-                    .filter(word => word.length > 0);
 
-            wordCount.textContent = words.length;
+            // =============================
+            // UPDATE WORD COUNT
+            // =============================
+
+            updateWordCount();
+
+
+        } catch (error) {
+
+            console.error(
+                "Load blog for editing error:",
+                error
+            );
+
+
+            if (typeof showError === "function") {
+
+                showError(
+                    error.message ||
+                    "Unable to load blog."
+                );
+
+            } else {
+
+                alert(
+                    error.message ||
+                    "Unable to load blog."
+                );
+
+            }
+
+
+            // Remove invalid edit state
+
+            localStorage.removeItem("editBlog");
+
+
+            setTimeout(() => {
+
+                window.location.href =
+                    "my-blogs.html";
+
+            }, 1200);
+
+
+            return;
+
+
+        } finally {
+
+            submitBtn.disabled = false;
 
         }
 
@@ -76,20 +196,36 @@ document.addEventListener("DOMContentLoaded", () => {
     // WORD COUNTER
     // =============================
 
-    content.addEventListener("input", () => {
+    function updateWordCount() {
+
+        const text =
+            content.value.trim();
+
+        if (!text) {
+
+            wordCount.textContent = "0";
+
+            return;
+
+        }
+
 
         const words =
-            content.value
-                .trim()
+            text
                 .split(/\s+/)
                 .filter(word => word.length > 0);
 
-        wordCount.textContent =
-            content.value.trim() === ""
-                ? 0
-                : words.length;
 
-    });
+        wordCount.textContent =
+            words.length;
+
+    }
+
+
+    content.addEventListener(
+        "input",
+        updateWordCount
+    );
 
 
     // =============================
@@ -104,26 +240,43 @@ document.addEventListener("DOMContentLoaded", () => {
             content.value.trim() === ""
         ) {
 
-            showError("Please fill required fields.");
+            showError(
+                "Please fill required fields."
+            );
 
             return;
 
         }
 
-        document.getElementById("previewTitle").textContent =
-            title.value;
 
-        document.getElementById("previewDescription").textContent =
-            description.value;
+        document.getElementById(
+            "previewTitle"
+        ).textContent = title.value;
 
-        document.getElementById("previewContent").innerHTML =
-            content.value.replace(/\n/g, "<br>");
 
-        document.getElementById("previewImage").src =
-            image.value ||
+        document.getElementById(
+            "previewDescription"
+        ).textContent = description.value;
+
+
+        document.getElementById(
+            "previewContent"
+        ).innerHTML =
+            content.value.replace(
+                /\n/g,
+                "<br>"
+            );
+
+
+        document.getElementById(
+            "previewImage"
+        ).src =
+            image.value.trim() ||
             "https://placehold.co/900x400?text=Scriptora";
 
+
         previewBox.style.display = "block";
+
 
         previewBox.scrollIntoView({
             behavior: "smooth"
@@ -139,105 +292,15 @@ document.addEventListener("DOMContentLoaded", () => {
     draftBtn.addEventListener("click", () => {
 
         const loggedUser =
-            JSON.parse(localStorage.getItem("loggedInUser"));
+            JSON.parse(
+                localStorage.getItem("loggedInUser")
+            );
+
 
         if (!loggedUser) {
 
-            showError("Please login first.");
-
-            return;
-
-        }
-
-        const draft = {
-
-            title: title.value,
-
-            category: category.value,
-
-            image: image.value,
-
-            description: description.value,
-
-            content: content.value,
-
-            tags: tags.value,
-
-            author: loggedUser.name,
-
-            createdAt:
-                new Date().toLocaleString(),
-
-            status: "Draft"
-
-        };
-
-        let drafts =
-            JSON.parse(localStorage.getItem("draftBlogs")) || [];
-
-        drafts.push(draft);
-
-        localStorage.setItem(
-            "draftBlogs",
-            JSON.stringify(drafts)
-        );
-
-        showSuccess("Draft Saved Successfully!");
-
-    });
-
-
-    // =============================
-    // PUBLISH BLOG
-    // =============================
-
-    form.addEventListener("submit", async (e) => {
-
-        e.preventDefault();
-
-
-        // =============================
-        // VALIDATION
-        // =============================
-
-        if (
-            title.value.trim() === "" ||
-            category.value === "" ||
-            description.value.trim() === "" ||
-            content.value.trim() === ""
-        ) {
-
-            showError("Please fill all required fields.");
-
-            return;
-
-        }
-
-
-        // =============================
-        // CHECK LOGIN
-        // =============================
-
-        const loggedUser =
-            JSON.parse(localStorage.getItem("loggedInUser"));
-
-        if (!loggedUser) {
-
-            showError("Please login before publishing a blog.");
-
-            return;
-
-        }
-
-
-        // =============================
-        // EDIT MODE
-        // =============================
-
-        if (editingBlog) {
-
-            showInfo(
-                "Blog editing will be connected to the backend in the CRUD module."
+            showError(
+                "Please login first."
             );
 
             return;
@@ -245,15 +308,123 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        // =============================
-        // PREPARE BLOG DATA
-        // =============================
+        const draft = {
 
-        const blogData = {
+            title:
+                title.value.trim(),
 
-            title: title.value.trim(),
+            category:
+                category.value,
 
-            category: category.value,
+            image:
+                image.value.trim(),
+
+            description:
+                description.value.trim(),
+
+            content:
+                content.value.trim(),
+
+            tags:
+                tags.value,
+
+            author:
+                loggedUser.name,
+
+            createdAt:
+                new Date().toLocaleString(),
+
+            status:
+                "Draft"
+
+        };
+
+
+        let drafts =
+            JSON.parse(
+                localStorage.getItem("draftBlogs")
+            ) || [];
+
+
+        drafts.push(draft);
+
+
+        localStorage.setItem(
+            "draftBlogs",
+            JSON.stringify(drafts)
+        );
+
+
+        showSuccess(
+            "Draft Saved Successfully!"
+        );
+
+    });
+
+
+    // =============================
+    // CREATE / UPDATE BLOG
+    // =============================
+
+    form.addEventListener(
+        "submit",
+        async (e) => {
+
+            e.preventDefault();
+
+
+            // =============================
+            // VALIDATION
+            // =============================
+
+            if (
+                title.value.trim() === "" ||
+                category.value === "" ||
+                description.value.trim() === "" ||
+                content.value.trim() === ""
+            ) {
+
+                showError(
+                    "Please fill all required fields."
+                );
+
+                return;
+
+            }
+
+
+            // =============================
+            // CHECK LOGIN
+            // =============================
+
+            const loggedUser =
+                JSON.parse(
+                    localStorage.getItem("loggedInUser")
+                );
+
+
+            if (!loggedUser) {
+
+                showError(
+                    "Please login before publishing a blog."
+                );
+
+                return;
+
+            }
+
+
+            // =============================
+            // PREPARE BLOG DATA
+            // =============================
+
+            const blogData = {
+
+            title:
+                title.value.trim(),
+
+            category:
+                category.value,
 
             image:
                 image.value.trim() ||
@@ -265,129 +436,195 @@ document.addEventListener("DOMContentLoaded", () => {
             content:
                 content.value.trim(),
 
-            tags: tags.value
-                .split(",")
-                .map(tag => tag.trim())
-                .filter(tag => tag !== ""),
+            tags:
+                tags.value
+                    .split(",")
+                    .map(tag => tag.trim())
+                    .filter(tag => tag !== ""),
 
             author:
-                loggedUser.name
+                loggedUser.name,
+
+            authorId:
+                loggedUser.id
 
         };
 
 
-        // =============================
-        // LOADING STATE
-        // =============================
-
-        submitBtn.disabled = true;
-
-        submitBtn.innerHTML =
-            '<i class="fa-solid fa-spinner fa-spin"></i> Publishing...';
-
-
-        try {
-
             // =============================
-            // SEND TO BACKEND
+            // LOADING STATE
             // =============================
 
-            const response = await fetch(API_URL, {
+            submitBtn.disabled = true;
 
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json"
-                },
-
-                body: JSON.stringify(blogData)
-
-            });
-
-
-            const data = await response.json();
-
-
-            // =============================
-            // HANDLE ERROR
-            // =============================
-
-            if (!response.ok) {
-
-                showError(
-                    data.message ||
-                    "Unable to publish blog."
-                );
-
-                return;
-
-            }
-
-
-            // =============================
-            // SUCCESS
-            // =============================
-
-            console.log(
-                "Blog created successfully:",
-                data
-            );
-
-            showSuccess(
-                "Blog Published Successfully!"
-            );
-
-
-            // =============================
-            // RESET FORM
-            // =============================
-
-            form.reset();
-
-            previewBox.style.display = "none";
-
-            wordCount.textContent = 0;
 
             submitBtn.innerHTML =
-                '<i class="fa-solid fa-paper-plane"></i> Publish Blog';
+                '<i class="fa-solid fa-spinner fa-spin"></i> ' +
+                (editingBlog
+                    ? "Updating..."
+                    : "Publishing...");
 
 
-            // =============================
-            // REDIRECT
-            // =============================
+            try {
 
-            setTimeout(() => {
-
-                window.location.href =
-                    "my-blogs.html";
-
-            }, 1500);
+                let response;
 
 
-        } catch (error) {
+                // =================================================
+                // UPDATE EXISTING BLOG
+                // =================================================
 
-            console.error(
-                "Create Blog Error:",
-                error
-            );
+                if (editingBlog) {
 
-            showError(
-                "Unable to connect to the backend server."
-            );
+                    response = await fetch(
+                        `${API_URL}/${editingBlog._id}`,
+                        {
+                            method: "PUT",
 
-        } finally {
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
 
-            submitBtn.disabled = false;
+                            body:
+                                JSON.stringify(blogData)
+                        }
+                    );
 
-            if (!editingBlog) {
+                }
+
+
+                // =================================================
+                // CREATE NEW BLOG
+                // =================================================
+
+                else {
+
+                    response = await fetch(
+                        API_URL,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify(blogData)
+                        }
+                    );
+
+                }
+
+
+                // =============================
+                // RESPONSE
+                // =============================
+
+                const data =
+                    await response.json();
+
+
+                // =============================
+                // HANDLE ERROR
+                // =============================
+
+                if (
+                    !response.ok ||
+                    !data.success
+                ) {
+
+                    throw new Error(
+                        data.message ||
+                        (
+                            editingBlog
+                                ? "Unable to update blog."
+                                : "Unable to publish blog."
+                        )
+                    );
+
+                }
+
+
+                // =============================
+                // SUCCESS
+                // =============================
+
+                console.log(
+                    editingBlog
+                        ? "Blog updated successfully:"
+                        : "Blog created successfully:",
+                    data
+                );
+
+
+                if (editingBlog) {
+
+                    showSuccess(
+                        "Blog Updated Successfully!"
+                    );
+
+                } else {
+
+                    showSuccess(
+                        "Blog Published Successfully!"
+                    );
+
+                }
+
+
+                // =============================
+                // CLEAR EDIT MODE
+                // =============================
+
+                localStorage.removeItem(
+                    "editBlog"
+                );
+
+
+                // =============================
+                // REDIRECT
+                // =============================
+
+                setTimeout(() => {
+
+                    window.location.href =
+                        "my-blogs.html";
+
+                }, 1200);
+
+
+            } catch (error) {
+
+                console.error(
+                    "Create/Update Blog Error:",
+                    error
+                );
+
+
+                showError(
+                    error.message ||
+                    "Unable to connect to the backend server."
+                );
+
+
+                // Re-enable button
+
+                submitBtn.disabled = false;
+
 
                 submitBtn.innerHTML =
-                    '<i class="fa-solid fa-paper-plane"></i> Publish Blog';
+                    editingBlog
+
+                        ? '<i class="fa-solid fa-pen"></i> Update Blog'
+
+                        : '<i class="fa-solid fa-paper-plane"></i> Publish Blog';
 
             }
 
         }
 
-    });
+    );
 
 });

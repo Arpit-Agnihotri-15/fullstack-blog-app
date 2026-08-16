@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
     const blogsContainer = document.getElementById("blogsContainer");
     const emptyState = document.getElementById("emptyState");
@@ -7,10 +7,77 @@ document.addEventListener("DOMContentLoaded", () => {
     const categoryFilter = document.getElementById("categoryFilter");
 
     // ==========================
-    // LOAD BLOGS
+    // BACKEND API
     // ==========================
 
-    const blogs = JSON.parse(localStorage.getItem("blogs")) || [];
+    const API_URL = "http://localhost:5000/api/blogs";
+
+    let blogs = [];
+
+    // ==========================
+    // LOAD BLOGS FROM DATABASE
+    // ==========================
+
+    async function loadBlogs() {
+
+        try {
+
+            const response = await fetch(API_URL);
+
+            const data = await response.json();
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data.message || "Unable to load blogs"
+                );
+
+            }
+
+            blogs = data.blogs || [];
+
+            renderBlogs(blogs);
+
+        } catch (error) {
+
+            console.error("Load Blogs Error:", error);
+
+            blogsContainer.innerHTML = "";
+
+            blogsContainer.style.display = "none";
+
+            emptyState.style.display = "flex";
+
+            showError(
+                "Unable to load blogs. Please make sure the backend server is running."
+            );
+
+        }
+
+    }
+
+
+    // ==========================
+    // FORMAT DATE
+    // ==========================
+
+    function formatDate(date) {
+
+        if (!date) {
+            return "Unknown date";
+        }
+
+        return new Date(date).toLocaleDateString(
+            "en-IN",
+            {
+                day: "numeric",
+                month: "short",
+                year: "numeric"
+            }
+        );
+
+    }
+
 
     // ==========================
     // RENDER BLOGS
@@ -23,6 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (blogList.length === 0) {
 
             blogsContainer.style.display = "none";
+
             emptyState.style.display = "flex";
 
             return;
@@ -30,7 +98,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         blogsContainer.style.display = "grid";
+
         emptyState.style.display = "none";
+
 
         blogList.forEach(blog => {
 
@@ -41,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
             card.innerHTML = `
 
                 <img
-                    src="${blog.image}"
+                    src="${blog.image || "https://placehold.co/900x400?text=Scriptora"}"
                     alt="${blog.title}"
                     class="blog-image">
 
@@ -79,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                             <i class="fa-solid fa-calendar"></i>
 
-                            ${blog.createdAt}
+                            ${formatDate(blog.createdAt)}
 
                         </span>
 
@@ -87,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     <button
                         class="btn btn-primary read-more-btn"
-                        onclick="openBlog(${blog.id})">
+                        onclick="openBlog('${blog._id}')">
 
                         Read More
 
@@ -103,15 +173,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
+
     // ==========================
     // OPEN BLOG
     // ==========================
 
     function openBlog(id) {
 
-        localStorage.setItem("selectedBlog", id);
-
-        window.location.href = "blog-details.html";
+    window.location.href =
+        `blog-details.html?id=${encodeURIComponent(id)}`;
 
     }
 
@@ -119,54 +189,83 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.openBlog = openBlog;
 
+
     // ==========================
     // SEARCH + FILTER
     // ==========================
 
     function filterBlogs() {
 
-        const search = searchInput.value.toLowerCase().trim();
+        const search =
+            searchInput.value
+                .toLowerCase()
+                .trim();
 
-        const category = categoryFilter.value;
+        const category =
+            categoryFilter.value;
 
-        const filteredBlogs = blogs.filter(blog => {
 
-            const matchesSearch =
+        const filteredBlogs =
+            blogs.filter(blog => {
 
-                blog.title.toLowerCase().includes(search) ||
+                const matchesSearch =
 
-                blog.description.toLowerCase().includes(search) ||
+                    blog.title
+                        .toLowerCase()
+                        .includes(search) ||
 
-                blog.author.toLowerCase().includes(search) ||
+                    blog.description
+                        .toLowerCase()
+                        .includes(search) ||
 
-                blog.category.toLowerCase().includes(search);
+                    blog.author
+                        .toLowerCase()
+                        .includes(search) ||
 
-            const matchesCategory =
+                    blog.category
+                        .toLowerCase()
+                        .includes(search);
 
-                category === "all" ||
 
-                blog.category === category;
+                const matchesCategory =
 
-            return matchesSearch && matchesCategory;
+                    category === "all" ||
 
-        });
+                    blog.category === category;
+
+
+                return (
+                    matchesSearch &&
+                    matchesCategory
+                );
+
+            });
+
 
         renderBlogs(filteredBlogs);
 
     }
 
+
     // ==========================
     // EVENTS
     // ==========================
 
-    searchInput.addEventListener("input", filterBlogs);
+    searchInput.addEventListener(
+        "input",
+        filterBlogs
+    );
 
-    categoryFilter.addEventListener("change", filterBlogs);
+    categoryFilter.addEventListener(
+        "change",
+        filterBlogs
+    );
+
 
     // ==========================
     // INITIAL LOAD
     // ==========================
 
-    renderBlogs(blogs);
+    await loadBlogs();
 
 });

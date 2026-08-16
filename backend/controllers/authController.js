@@ -1,9 +1,10 @@
 const bcrypt = require("bcryptjs");
+const User = require("../models/User");
 
-// Temporary user storage
-const users = [];
+// =============================
+// REGISTER USER
+// =============================
 
-// Register user
 const registerUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -25,10 +26,11 @@ const registerUser = async (req, res) => {
                 message: "Please provide a valid email address"
             });
         }
+
         // Check if user already exists
-        const existingUser = users.find(
-            user => user.email.toLowerCase() === email.toLowerCase()
-        );
+        const existingUser = await User.findOne({
+            email: email.toLowerCase()
+        });
 
         if (existingUser) {
             return res.status(409).json({
@@ -40,28 +42,25 @@ const registerUser = async (req, res) => {
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create user
-        const newUser = {
-            id: users.length + 1,
+        // Create user in MongoDB
+        const newUser = await User.create({
             name,
             email: email.toLowerCase(),
             password: hashedPassword
-        };
-
-        users.push(newUser);
+        });
 
         return res.status(201).json({
             success: true,
             message: "User registered successfully",
             user: {
-                id: newUser.id,
+                id: newUser._id,
                 name: newUser.name,
                 email: newUser.email
             }
         });
 
     } catch (error) {
-        console.error(error);
+        console.error("Registration error:", error);
 
         return res.status(500).json({
             success: false,
@@ -70,7 +69,11 @@ const registerUser = async (req, res) => {
     }
 };
 
-// Login user
+
+// =============================
+// LOGIN USER
+// =============================
+
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -83,10 +86,10 @@ const loginUser = async (req, res) => {
             });
         }
 
-        // Find user
-        const user = users.find(
-            user => user.email === email.toLowerCase()
-        );
+        // Find user in MongoDB
+        const user = await User.findOne({
+            email: email.toLowerCase()
+        });
 
         if (!user) {
             return res.status(401).json({
@@ -112,14 +115,14 @@ const loginUser = async (req, res) => {
             success: true,
             message: "Login successful",
             user: {
-                id: user.id,
+                id: user._id,
                 name: user.name,
                 email: user.email
             }
         });
 
     } catch (error) {
-        console.error(error);
+        console.error("Login error:", error);
 
         return res.status(500).json({
             success: false,
@@ -127,6 +130,7 @@ const loginUser = async (req, res) => {
         });
     }
 };
+
 
 module.exports = {
     registerUser,

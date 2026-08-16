@@ -1,9 +1,12 @@
-// Temporary blog storage
-const blogs = [];
+const Blog = require("../models/Blog");
 
-// Create Blog
-const createBlog = (req, res) => {
+// =============================
+// CREATE BLOG
+// =============================
+
+const createBlog = async (req, res) => {
     try {
+
         const {
             title,
             category,
@@ -11,8 +14,10 @@ const createBlog = (req, res) => {
             description,
             content,
             tags,
-            author
+            author,
+            authorId
         } = req.body;
+
 
         // Validate required fields
         if (
@@ -20,64 +25,603 @@ const createBlog = (req, res) => {
             !category ||
             !description ||
             !content ||
-            !author
+            !author ||
+            !authorId
         ) {
             return res.status(400).json({
                 success: false,
                 message:
-                    "Title, category, description, content and author are required"
+                    "Title, category, description, content, author and authorId are required"
             });
         }
+
 
         // Process tags
         let processedTags = [];
 
+
         if (Array.isArray(tags)) {
-            processedTags = tags
-                .map(tag => String(tag).trim())
-                .filter(tag => tag !== "");
+
+            processedTags =
+                tags
+                    .map(tag => String(tag).trim())
+                    .filter(tag => tag !== "");
+
         } else if (typeof tags === "string") {
-            processedTags = tags
-                .split(",")
-                .map(tag => tag.trim())
-                .filter(tag => tag !== "");
+
+            processedTags =
+                tags
+                    .split(",")
+                    .map(tag => tag.trim())
+                    .filter(tag => tag !== "");
+
         }
 
-        // Create blog
-        const newBlog = {
-            id: blogs.length + 1,
-            title: title.trim(),
-            category: category.trim(),
-            image:
-                image && image.trim()
-                    ? image.trim()
-                    : "https://placehold.co/900x400?text=Scriptora",
-            description: description.trim(),
-            content: content.trim(),
-            tags: processedTags,
-            author: author.trim(),
-            createdAt: new Date().toISOString(),
-            status: "Published"
-        };
 
-        blogs.push(newBlog);
+        // Create blog
+        const newBlog =
+            await Blog.create({
+
+                title:
+                    title.trim(),
+
+                category:
+                    category.trim(),
+
+                image:
+                    image && image.trim()
+                        ? image.trim()
+                        : "https://placehold.co/900x400?text=Scriptora",
+
+                description:
+                    description.trim(),
+
+                content:
+                    content.trim(),
+
+                tags:
+                    processedTags,
+
+                author:
+                    author.trim(),
+
+                authorId
+
+            });
+
 
         return res.status(201).json({
+
             success: true,
-            message: "Blog created successfully",
-            blog: newBlog
+
+            message:
+                "Blog created successfully",
+
+            blog:
+                newBlog
+
         });
+
 
     } catch (error) {
-        console.error(error);
+
+        console.error(
+            "Create blog error:",
+            error
+        );
+
 
         return res.status(500).json({
+
             success: false,
-            message: "Server error"
+
+            message:
+                "Server error"
+
         });
+
     }
 };
 
+
+// =============================
+// GET ALL BLOGS
+// =============================
+
+const getAllBlogs = async (req, res) => {
+
+    try {
+
+        const blogs =
+            await Blog
+                .find()
+                .sort({
+                    createdAt: -1
+                });
+
+
+        return res.status(200).json({
+
+            success: true,
+
+            count:
+                blogs.length,
+
+            blogs
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Get all blogs error:",
+            error
+        );
+
+
+        return res.status(500).json({
+
+            success: false,
+
+            message:
+                "Server error"
+
+        });
+
+    }
+
+};
+
+
+// =============================
+// GET SINGLE BLOG
+// =============================
+
+const getBlogById = async (req, res) => {
+
+    try {
+
+        const blog =
+            await Blog.findById(
+                req.params.id
+            );
+
+
+        if (!blog) {
+
+            return res.status(404).json({
+
+                success: false,
+
+                message:
+                    "Blog not found"
+
+            });
+
+        }
+
+
+        return res.status(200).json({
+
+            success: true,
+
+            blog
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Get blog error:",
+            error
+        );
+
+
+        return res.status(500).json({
+
+            success: false,
+
+            message:
+                "Server error"
+
+        });
+
+    }
+
+};
+
+
+// =============================
+// LIKE BLOG
+// =============================
+
+const likeBlog = async (req, res) => {
+
+    try {
+
+        const blog =
+            await Blog.findByIdAndUpdate(
+
+                req.params.id,
+
+                {
+                    $inc: {
+                        likes: 1
+                    }
+                },
+
+                {
+                    new: true
+                }
+
+            );
+
+
+        if (!blog) {
+
+            return res.status(404).json({
+
+                success: false,
+
+                message:
+                    "Blog not found"
+
+            });
+
+        }
+
+
+        return res.status(200).json({
+
+            success: true,
+
+            message:
+                "Blog liked successfully",
+
+            likes:
+                blog.likes
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Like blog error:",
+            error
+        );
+
+
+        return res.status(500).json({
+
+            success: false,
+
+            message:
+                "Server error"
+
+        });
+
+    }
+
+};
+
+
+// =============================
+// INCREMENT BLOG VIEWS
+// =============================
+
+const incrementViews = async (req, res) => {
+
+    try {
+
+        const blog =
+            await Blog.findByIdAndUpdate(
+
+                req.params.id,
+
+                {
+                    $inc: {
+                        views: 1
+                    }
+                },
+
+                {
+                    new: true
+                }
+
+            );
+
+
+        if (!blog) {
+
+            return res.status(404).json({
+
+                success: false,
+
+                message:
+                    "Blog not found"
+
+            });
+
+        }
+
+
+        return res.status(200).json({
+
+            success: true,
+
+            message:
+                "View count updated",
+
+            views:
+                blog.views
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Increment views error:",
+            error
+        );
+
+
+        return res.status(500).json({
+
+            success: false,
+
+            message:
+                "Server error"
+
+        });
+
+    }
+
+};
+
+
+// =============================
+// UPDATE BLOG
+// =============================
+
+const updateBlog = async (req, res) => {
+
+    try {
+
+        const {
+            title,
+            category,
+            image,
+            description,
+            content,
+            tags,
+            author,
+            authorId
+        } = req.body;
+
+
+        // Validate required fields
+        if (
+            !title ||
+            !category ||
+            !description ||
+            !content ||
+            !author ||
+            !authorId
+        ) {
+
+            return res.status(400).json({
+
+                success: false,
+
+                message:
+                    "Title, category, description, content, author and authorId are required"
+
+            });
+
+        }
+
+
+        // Process tags
+        let processedTags = [];
+
+
+        if (Array.isArray(tags)) {
+
+            processedTags =
+                tags
+                    .map(tag => String(tag).trim())
+                    .filter(tag => tag !== "");
+
+        } else if (typeof tags === "string") {
+
+            processedTags =
+                tags
+                    .split(",")
+                    .map(tag => tag.trim())
+                    .filter(tag => tag !== "");
+
+        }
+
+
+        // Update blog
+        const updatedBlog =
+            await Blog.findByIdAndUpdate(
+
+                req.params.id,
+
+                {
+
+                    title:
+                        title.trim(),
+
+                    category:
+                        category.trim(),
+
+                    image:
+                        image && image.trim()
+                            ? image.trim()
+                            : "https://placehold.co/900x400?text=Scriptora",
+
+                    description:
+                        description.trim(),
+
+                    content:
+                        content.trim(),
+
+                    tags:
+                        processedTags,
+
+                    author:
+                        author.trim(),
+
+                    authorId
+
+                },
+
+                {
+                    new: true,
+                    runValidators: true
+                }
+
+            );
+
+
+        // Blog not found
+        if (!updatedBlog) {
+
+            return res.status(404).json({
+
+                success: false,
+
+                message:
+                    "Blog not found"
+
+            });
+
+        }
+
+
+        return res.status(200).json({
+
+            success: true,
+
+            message:
+                "Blog updated successfully",
+
+            blog:
+                updatedBlog
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Update blog error:",
+            error
+        );
+
+
+        return res.status(500).json({
+
+            success: false,
+
+            message:
+                "Server error"
+
+        });
+
+    }
+
+};
+
+
+// =============================
+// DELETE BLOG
+// =============================
+
+const deleteBlog = async (req, res) => {
+
+    try {
+
+        const deletedBlog =
+            await Blog.findByIdAndDelete(
+                req.params.id
+            );
+
+
+        // Blog not found
+        if (!deletedBlog) {
+
+            return res.status(404).json({
+
+                success: false,
+
+                message:
+                    "Blog not found"
+
+            });
+
+        }
+
+
+        return res.status(200).json({
+
+            success: true,
+
+            message:
+                "Blog deleted successfully",
+
+            blog:
+                deletedBlog
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Delete blog error:",
+            error
+        );
+
+
+        return res.status(500).json({
+
+            success: false,
+
+            message:
+                "Server error"
+
+        });
+
+    }
+
+};
+
+
+// =============================
+// EXPORT CONTROLLERS
+// =============================
+
 module.exports = {
-    createBlog
+
+    createBlog,
+
+    getAllBlogs,
+
+    getBlogById,
+
+    likeBlog,
+
+    incrementViews,
+
+    updateBlog,
+
+    deleteBlog
+
 };
