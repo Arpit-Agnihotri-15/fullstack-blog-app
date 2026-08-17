@@ -254,16 +254,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const loggedInUser = {
 
-                    id:
-                        data.user.id,
+                id:
+                    data.user.id,
 
-                    name:
-                        data.user.name,
+                name:
+                    data.user.name,
 
-                    email:
-                        data.user.email
+                email:
+                    data.user.email,
 
-                };
+                token:
+                    data.token
+
+            };
 
 
                 localStorage.setItem(

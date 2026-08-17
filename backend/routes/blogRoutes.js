@@ -1,3 +1,6 @@
+const authMiddleware =
+    require("../middleware/authMiddleware");
+
 const express = require("express");
 
 const {
@@ -14,8 +17,23 @@ const {
 const router = express.Router();
 
 
-// Create Blog
-router.post("/", createBlog);
+router.post(
+    "/",
+    authMiddleware,
+    createBlog
+);
+
+router.put(
+    "/:id",
+    authMiddleware,
+    updateBlog
+);
+
+router.delete(
+    "/:id",
+    authMiddleware,
+    deleteBlog
+);
 
 // Get all blogs
 router.get("/", getAllBlogs);
@@ -31,11 +49,5 @@ router.post("/:id/like", likeBlog);
 
 // Increment Blog Views
 router.post("/:id/view", incrementViews);
-
-// Update Blog
-router.put("/:id", updateBlog);
-
-// Delete Blog
-router.delete("/:id", deleteBlog);
 
 module.exports = router;

@@ -1,27 +1,89 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
     // =============================
+    // AUTHENTICATION CHECK
+    // =============================
+
+    const loggedUser =
+        JSON.parse(
+            localStorage.getItem("loggedInUser")
+        );
+
+    // If user is not logged in,
+    // redirect immediately to login page
+    if (!loggedUser) {
+
+        window.location.href = "login.html";
+
+        return;
+
+    }
+
+
+    // =============================
     // DOM ELEMENTS
     // =============================
 
-    const form = document.getElementById("createBlogForm");
+    const form =
+        document.getElementById(
+            "createBlogForm"
+        );
 
-    const title = document.getElementById("blogTitle");
-    const category = document.getElementById("blogCategory");
-    const image = document.getElementById("blogImage");
-    const description = document.getElementById("blogDescription");
-    const content = document.getElementById("blogContent");
-    const tags = document.getElementById("blogTags");
+    const title =
+        document.getElementById(
+            "blogTitle"
+        );
 
-    const previewBtn = document.getElementById("previewBtn");
-    const draftBtn = document.getElementById("draftBtn");
+    const category =
+        document.getElementById(
+            "blogCategory"
+        );
 
-    const previewBox = document.getElementById("previewBox");
+    const image =
+        document.getElementById(
+            "blogImage"
+        );
 
-    const wordCount = document.getElementById("wordCount");
+    const description =
+        document.getElementById(
+            "blogDescription"
+        );
+
+    const content =
+        document.getElementById(
+            "blogContent"
+        );
+
+    const tags =
+        document.getElementById(
+            "blogTags"
+        );
+
+    const previewBtn =
+        document.getElementById(
+            "previewBtn"
+        );
+
+    const draftBtn =
+        document.getElementById(
+            "draftBtn"
+        );
+
+    const previewBox =
+        document.getElementById(
+            "previewBox"
+        );
+
+    const wordCount =
+        document.getElementById(
+            "wordCount"
+        );
 
     const submitBtn =
-        form.querySelector("button[type='submit']");
+        form.querySelector(
+            "button[type='submit']"
+        );
+
 
     // =============================
     // API CONFIG
@@ -36,7 +98,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     // =============================
 
     const editBlogId =
-        localStorage.getItem("editBlog");
+        localStorage.getItem(
+            "editBlog"
+        );
 
     let editingBlog = null;
 
@@ -55,15 +119,20 @@ document.addEventListener("DOMContentLoaded", async () => {
                 '<i class="fa-solid fa-spinner fa-spin"></i> Loading...';
 
 
-            const response = await fetch(
-                `${API_URL}/${editBlogId}`
-            );
+            const response =
+                await fetch(
+                    `${API_URL}/${editBlogId}`
+                );
 
 
-            const data = await response.json();
+            const data =
+                await response.json();
 
 
-            if (!response.ok || !data.success) {
+            if (
+                !response.ok ||
+                !data.success
+            ) {
 
                 throw new Error(
                     data.message ||
@@ -73,7 +142,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
 
-            editingBlog = data.blog;
+            editingBlog =
+                data.blog;
 
 
             // =============================
@@ -96,7 +166,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 editingBlog.content || "";
 
             tags.value =
-                Array.isArray(editingBlog.tags)
+                Array.isArray(
+                    editingBlog.tags
+                )
                     ? editingBlog.tags.join(", ")
                     : "";
 
@@ -106,7 +178,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             // =============================
 
             const pageTitle =
-                document.querySelector(".page-header h1");
+                document.querySelector(
+                    ".page-header h1"
+                );
+
 
             if (pageTitle) {
 
@@ -117,7 +192,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
             const pageDescription =
-                document.querySelector(".page-header p");
+                document.querySelector(
+                    ".page-header p"
+                );
+
 
             if (pageDescription) {
 
@@ -150,7 +228,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             );
 
 
-            if (typeof showError === "function") {
+            if (
+                typeof showError ===
+                "function"
+            ) {
 
                 showError(
                     error.message ||
@@ -169,7 +250,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             // Remove invalid edit state
 
-            localStorage.removeItem("editBlog");
+            localStorage.removeItem(
+                "editBlog"
+            );
 
 
             setTimeout(() => {
@@ -185,7 +268,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         } finally {
 
-            submitBtn.disabled = false;
+            submitBtn.disabled =
+                false;
 
         }
 
@@ -201,9 +285,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         const text =
             content.value.trim();
 
+
         if (!text) {
 
-            wordCount.textContent = "0";
+            wordCount.textContent =
+                "0";
 
             return;
 
@@ -213,7 +299,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         const words =
             text
                 .split(/\s+/)
-                .filter(word => word.length > 0);
+                .filter(
+                    word =>
+                        word.length > 0
+                );
 
 
         wordCount.textContent =
@@ -232,134 +321,138 @@ document.addEventListener("DOMContentLoaded", async () => {
     // PREVIEW
     // =============================
 
-    previewBtn.addEventListener("click", () => {
+    previewBtn.addEventListener(
+        "click",
+        () => {
 
-        if (
-            title.value.trim() === "" ||
-            description.value.trim() === "" ||
-            content.value.trim() === ""
-        ) {
+            if (
+                title.value.trim() === "" ||
+                description.value.trim() === "" ||
+                content.value.trim() === ""
+            ) {
 
-            showError(
-                "Please fill required fields."
-            );
+                showError(
+                    "Please fill required fields."
+                );
 
-            return;
+                return;
+
+            }
+
+
+            document.getElementById(
+                "previewTitle"
+            ).textContent =
+                title.value;
+
+
+            document.getElementById(
+                "previewDescription"
+            ).textContent =
+                description.value;
+
+
+            document.getElementById(
+                "previewContent"
+            ).innerHTML =
+                content.value.replace(
+                    /\n/g,
+                    "<br>"
+                );
+
+
+            document.getElementById(
+                "previewImage"
+            ).src =
+                image.value.trim() ||
+                "https://placehold.co/900x400?text=Scriptora";
+
+
+            previewBox.style.display =
+                "block";
+
+
+            previewBox.scrollIntoView({
+                behavior: "smooth"
+            });
 
         }
-
-
-        document.getElementById(
-            "previewTitle"
-        ).textContent = title.value;
-
-
-        document.getElementById(
-            "previewDescription"
-        ).textContent = description.value;
-
-
-        document.getElementById(
-            "previewContent"
-        ).innerHTML =
-            content.value.replace(
-                /\n/g,
-                "<br>"
-            );
-
-
-        document.getElementById(
-            "previewImage"
-        ).src =
-            image.value.trim() ||
-            "https://placehold.co/900x400?text=Scriptora";
-
-
-        previewBox.style.display = "block";
-
-
-        previewBox.scrollIntoView({
-            behavior: "smooth"
-        });
-
-    });
+    );
 
 
     // =============================
     // SAVE DRAFT
     // =============================
 
-    draftBtn.addEventListener("click", () => {
+    draftBtn.addEventListener(
+        "click",
+        () => {
 
-        const loggedUser =
-            JSON.parse(
-                localStorage.getItem("loggedInUser")
+            // loggedUser is already checked
+            // when the page loads
+
+            const draft = {
+
+                title:
+                    title.value.trim(),
+
+                category:
+                    category.value,
+
+                image:
+                    image.value.trim(),
+
+                description:
+                    description.value.trim(),
+
+                content:
+                    content.value.trim(),
+
+                tags:
+                    tags.value,
+
+                author:
+                    loggedUser.name,
+
+                authorId:
+                    loggedUser.id,
+
+                createdAt:
+                    new Date().toLocaleString(),
+
+                status:
+                    "Draft"
+
+            };
+
+
+            let drafts =
+                JSON.parse(
+                    localStorage.getItem(
+                        "draftBlogs"
+                    )
+                ) || [];
+
+
+            drafts.push(
+                draft
             );
 
 
-        if (!loggedUser) {
-
-            showError(
-                "Please login first."
+            localStorage.setItem(
+                "draftBlogs",
+                JSON.stringify(
+                    drafts
+                )
             );
 
-            return;
+
+            showSuccess(
+                "Draft Saved Successfully!"
+            );
 
         }
-
-
-        const draft = {
-
-            title:
-                title.value.trim(),
-
-            category:
-                category.value,
-
-            image:
-                image.value.trim(),
-
-            description:
-                description.value.trim(),
-
-            content:
-                content.value.trim(),
-
-            tags:
-                tags.value,
-
-            author:
-                loggedUser.name,
-
-            createdAt:
-                new Date().toLocaleString(),
-
-            status:
-                "Draft"
-
-        };
-
-
-        let drafts =
-            JSON.parse(
-                localStorage.getItem("draftBlogs")
-            ) || [];
-
-
-        drafts.push(draft);
-
-
-        localStorage.setItem(
-            "draftBlogs",
-            JSON.stringify(drafts)
-        );
-
-
-        showSuccess(
-            "Draft Saved Successfully!"
-        );
-
-    });
+    );
 
 
     // =============================
@@ -394,20 +487,33 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
             // =============================
-            // CHECK LOGIN
+            // LOGIN CHECK
             // =============================
 
-            const loggedUser =
+            // Keep this second check as
+            // protection in case login state
+            // changes while page is open.
+
+            const currentUser =
                 JSON.parse(
-                    localStorage.getItem("loggedInUser")
+                    localStorage.getItem(
+                        "loggedInUser"
+                    )
                 );
 
 
-            if (!loggedUser) {
+            if (!currentUser) {
 
                 showError(
                     "Please login before publishing a blog."
                 );
+
+                setTimeout(() => {
+
+                    window.location.href =
+                        "login.html";
+
+                }, 1000);
 
                 return;
 
@@ -420,49 +526,58 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             const blogData = {
 
-            title:
-                title.value.trim(),
+                title:
+                    title.value.trim(),
 
-            category:
-                category.value,
+                category:
+                    category.value,
 
-            image:
-                image.value.trim() ||
-                "https://placehold.co/900x400?text=Scriptora",
+                image:
+                    image.value.trim() ||
+                    "https://placehold.co/900x400?text=Scriptora",
 
-            description:
-                description.value.trim(),
+                description:
+                    description.value.trim(),
 
-            content:
-                content.value.trim(),
+                content:
+                    content.value.trim(),
 
-            tags:
-                tags.value
-                    .split(",")
-                    .map(tag => tag.trim())
-                    .filter(tag => tag !== ""),
+                tags:
+                    tags.value
+                        .split(",")
+                        .map(
+                            tag =>
+                                tag.trim()
+                        )
+                        .filter(
+                            tag =>
+                                tag !== ""
+                        ),
 
-            author:
-                loggedUser.name,
+                author:
+                    currentUser.name,
 
-            authorId:
-                loggedUser.id
+                authorId:
+                    currentUser.id
 
-        };
+            };
 
 
             // =============================
             // LOADING STATE
             // =============================
 
-            submitBtn.disabled = true;
+            submitBtn.disabled =
+                true;
 
 
             submitBtn.innerHTML =
                 '<i class="fa-solid fa-spinner fa-spin"></i> ' +
-                (editingBlog
-                    ? "Updating..."
-                    : "Publishing...");
+                (
+                    editingBlog
+                        ? "Updating..."
+                        : "Publishing..."
+                );
 
 
             try {
@@ -476,18 +591,27 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 if (editingBlog) {
 
-                    response = await fetch(
+                    response =
+                    await fetch(
                         `${API_URL}/${editingBlog._id}`,
                         {
-                            method: "PUT",
+
+                            method:
+                                "PUT",
 
                             headers: {
                                 "Content-Type":
-                                    "application/json"
+                                    "application/json",
+
+                                "Authorization":
+                                    `Bearer ${currentUser.token}`
                             },
 
                             body:
-                                JSON.stringify(blogData)
+                                JSON.stringify(
+                                    blogData
+                                )
+
                         }
                     );
 
@@ -500,18 +624,27 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 else {
 
-                    response = await fetch(
+                    response =
+                    await fetch(
                         API_URL,
                         {
-                            method: "POST",
+
+                            method:
+                                "POST",
 
                             headers: {
                                 "Content-Type":
-                                    "application/json"
+                                    "application/json",
+
+                                "Authorization":
+                                    `Bearer ${currentUser.token}`
                             },
 
                             body:
-                                JSON.stringify(blogData)
+                                JSON.stringify(
+                                    blogData
+                                )
+
                         }
                     );
 
@@ -611,7 +744,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 // Re-enable button
 
-                submitBtn.disabled = false;
+                submitBtn.disabled =
+                    false;
 
 
                 submitBtn.innerHTML =
@@ -624,7 +758,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
         }
-
     );
 
 });

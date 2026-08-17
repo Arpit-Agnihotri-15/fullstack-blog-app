@@ -392,96 +392,52 @@ const updateBlog = async (req, res) => {
 
     try {
 
-        const {
-            title,
-            category,
-            image,
-            description,
-            content,
-            tags,
-            author,
-            authorId
-        } = req.body;
+        // Find the blog first
+        const blog =
+            await Blog.findById(
+                req.params.id
+            );
 
 
-        // Validate required fields
-        if (
-            !title ||
-            !category ||
-            !description ||
-            !content ||
-            !author ||
-            !authorId
-        ) {
+        // Blog doesn't exist
+        if (!blog) {
 
-            return res.status(400).json({
-
+            return res.status(404).json({
                 success: false,
-
-                message:
-                    "Title, category, description, content, author and authorId are required"
-
+                message: "Blog not found"
             });
 
         }
 
 
-        // Process tags
-        let processedTags = [];
+        // =============================
+        // OWNERSHIP CHECK
+        // =============================
 
+        if (
+            blog.authorId.toString() !==
+            req.user.id.toString()
+        ) {
 
-        if (Array.isArray(tags)) {
-
-            processedTags =
-                tags
-                    .map(tag => String(tag).trim())
-                    .filter(tag => tag !== "");
-
-        } else if (typeof tags === "string") {
-
-            processedTags =
-                tags
-                    .split(",")
-                    .map(tag => tag.trim())
-                    .filter(tag => tag !== "");
+            return res.status(403).json({
+                success: false,
+                message:
+                    "You are not authorized to update this blog"
+            });
 
         }
 
 
-        // Update blog
+        // =============================
+        // UPDATE BLOG
+        // =============================
+
         const updatedBlog =
             await Blog.findByIdAndUpdate(
 
                 req.params.id,
 
-                {
-
-                    title:
-                        title.trim(),
-
-                    category:
-                        category.trim(),
-
-                    image:
-                        image && image.trim()
-                            ? image.trim()
-                            : "https://placehold.co/900x400?text=Scriptora",
-
-                    description:
-                        description.trim(),
-
-                    content:
-                        content.trim(),
-
-                    tags:
-                        processedTags,
-
-                    author:
-                        author.trim(),
-
-                    authorId
-
-                },
+                req.body,
 
                 {
                     new: true,
@@ -489,21 +445,6 @@ const updateBlog = async (req, res) => {
                 }
 
             );
-
-
-        // Blog not found
-        if (!updatedBlog) {
-
-            return res.status(404).json({
-
-                success: false,
-
-                message:
-                    "Blog not found"
-
-            });
-
-        }
 
 
         return res.status(200).json({
@@ -518,7 +459,6 @@ const updateBlog = async (req, res) => {
 
         });
 
-
     } catch (error) {
 
         console.error(
@@ -528,18 +468,13 @@ const updateBlog = async (req, res) => {
 
 
         return res.status(500).json({
-
             success: false,
-
-            message:
-                "Server error"
-
+            message: "Server error"
         });
 
     }
 
 };
-
 
 // =============================
 // DELETE BLOG
@@ -549,39 +484,56 @@ const deleteBlog = async (req, res) => {
 
     try {
 
-        const deletedBlog =
-            await Blog.findByIdAndDelete(
+        // Find the blog first
+        const blog =
+            await Blog.findById(
                 req.params.id
             );
 
 
-        // Blog not found
-        if (!deletedBlog) {
+        // Blog doesn't exist
+        if (!blog) {
 
             return res.status(404).json({
-
                 success: false,
-
-                message:
-                    "Blog not found"
-
+                message: "Blog not found"
             });
 
         }
 
 
+        // =============================
+        // OWNERSHIP CHECK
+        // =============================
+
+        if (
+            blog.authorId.toString() !==
+            req.user.id.toString()
+        ) {
+
+            return res.status(403).json({
+                success: false,
+                message:
+                    "You are not authorized to delete this blog"
+            });
+
+        }
+
+
+        // =============================
+        // DELETE BLOG
+        // =============================
+
+        await Blog.findByIdAndDelete(
+            req.params.id
+        );
+
+
         return res.status(200).json({
-
             success: true,
-
             message:
-                "Blog deleted successfully",
-
-            blog:
-                deletedBlog
-
+                "Blog deleted successfully"
         });
-
 
     } catch (error) {
 
@@ -592,12 +544,8 @@ const deleteBlog = async (req, res) => {
 
 
         return res.status(500).json({
-
             success: false,
-
-            message:
-                "Server error"
-
+            message: "Server error"
         });
 
     }

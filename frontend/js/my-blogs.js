@@ -606,14 +606,18 @@ async function deleteBlog(id) {
     try {
 
         const response =
-            await fetch(
-                `${API_URL}/${id}`,
-                {
-                    method:
-                        "DELETE"
-                }
-            );
+        await fetch(
+            `${API_URL}/${id}`,
+            {
+                method:
+                    "DELETE",
 
+                headers: {
+                    "Authorization":
+                        `Bearer ${JSON.parse(localStorage.getItem("loggedInUser")).token}`
+                }
+            }
+        );
 
         const data =
             await response.json();
