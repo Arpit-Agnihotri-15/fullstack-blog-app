@@ -6,10 +6,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const params = new URLSearchParams(window.location.search);
     const blogId = params.get("id");
+    const from = params.get("from");
 
     if (!blogId) {
         window.location.href = "blogs.html";
         return;
+    }
+
+    const backButton =
+        document.querySelector(".back-btn a");
+
+    if (backButton && from === "my-blogs") {
+
+        backButton.href = "my-blogs.html";
+
+        backButton.innerHTML = `
+            <i class="fa-solid fa-arrow-left"></i>
+            Back to My Blogs
+        `;
+
     }
 
 

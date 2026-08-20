@@ -120,6 +120,36 @@ Frontend can be opened using VS Code Live Server.
 
 ---
 
-# Next Step
+# Module 4 – CRUD Operations
 
-Final deployment and production configuration, including MongoDB network access, environment variables, CORS and deployment testing.
+🟡 **In Progress**
+
+### Day 13 – Create & Read
+- Create and publish new blogs
+- Fetch and display all blogs
+- View individual blog details
+- Search and category filtering
+- Tested image URL handling and invalid blog cases
+
+### Day 14 – Update
+- Edit existing blogs
+- Update title, content, category, image and tags
+- Verified updated data in MongoDB and Blog Details
+- Tested user ownership protection for editing
+
+### Day 15 – Delete
+- Delete blogs with confirmation
+- Verified deletion from database and UI
+- Tested delete ownership protection using multiple accounts
+- Fixed Create/Edit mode navigation issue
+- Improved Blog Details back navigation
+- Verified complete CRUD functionality
+
+### Current Progress
+
+| Module | Status |
+|---|---|
+| Module 1 – Frontend | 🟢 Completed |
+| Module 2 – Backend | 🟢 Completed |
+| Module 3 – Database & Full Stack Integration | 🟢 Completed |
+| Module 4 – CRUD Operations | 🟡 In Progress |

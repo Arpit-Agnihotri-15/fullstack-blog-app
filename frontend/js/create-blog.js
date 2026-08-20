@@ -94,15 +94,36 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     // =============================
-    // EDIT MODE
+    // CREATE / EDIT MODE
     // =============================
 
-    const editBlogId =
-        localStorage.getItem(
+    const urlParams =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const isCreateMode =
+        urlParams.get("mode") === "create";
+
+
+    // If this is explicitly Create mode,
+    // remove any previous edit state.
+
+    if (isCreateMode) {
+
+        localStorage.removeItem(
             "editBlog"
         );
 
-    let editingBlog = null;
+    }
+
+
+    const editBlogId =
+        isCreateMode
+            ? null
+            : localStorage.getItem(
+                "editBlog"
+            );
 
 
     // =============================

@@ -513,7 +513,7 @@ function viewBlog(id) {
 
 
     window.location.href =
-        `blog-details.html?id=${encodeURIComponent(id)}`;
+    `blog-details.html?id=${encodeURIComponent(id)}&from=my-blogs`;
 
 }
 
