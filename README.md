@@ -69,6 +69,31 @@ A modern Full Stack Blogging Platform developed during my **Full Stack Web Devel
 
 ---
 
+# Module 4 – CRUD Operations
+
+🟢 **Completed**
+
+- Complete Blog CRUD functionality using REST APIs
+- Create and publish blogs with MongoDB persistence
+- Read all blogs and individual blog details
+- Update existing blogs with ownership authorization
+- Delete blogs with confirmation and ownership protection
+- Verified CRUD operations directly with MongoDB
+- Search and category filtering for blogs
+- Image URL handling and fallback images
+- Create/Edit mode and Blog Details navigation fixes
+- Multi-account ownership and security testing
+- End-to-end CRUD testing from Create → Read → Update → Delete
+
+### Current Progress
+
+| Module | Status |
+|---|---|
+| Module 1 – Frontend | 🟢 Completed |
+| Module 2 – Backend | 🟢 Completed |
+| Module 3 – Database & Full Stack Integration | 🟢 Completed |
+| Module 4 – CRUD Operations | 🟢 Completed |
+
 # Project Structure
 
 ```text
@@ -92,16 +117,6 @@ Scriptora/
 
 ---
 
-# Current Progress
-
-| Module | Status |
-|---|---|
-| Module 1 – Frontend | 🟢 Completed |
-| Module 2 – Backend | 🟢 Completed |
-| Module 3 – Database & Full Stack Integration | 🟢 Completed |
-
----
-
 # Run Locally
 
 ```bash
@@ -119,37 +134,3 @@ http://localhost:5000
 Frontend can be opened using VS Code Live Server.
 
 ---
-
-# Module 4 – CRUD Operations
-
-🟡 **In Progress**
-
-### Day 13 – Create & Read
-- Create and publish new blogs
-- Fetch and display all blogs
-- View individual blog details
-- Search and category filtering
-- Tested image URL handling and invalid blog cases
-
-### Day 14 – Update
-- Edit existing blogs
-- Update title, content, category, image and tags
-- Verified updated data in MongoDB and Blog Details
-- Tested user ownership protection for editing
-
-### Day 15 – Delete
-- Delete blogs with confirmation
-- Verified deletion from database and UI
-- Tested delete ownership protection using multiple accounts
-- Fixed Create/Edit mode navigation issue
-- Improved Blog Details back navigation
-- Verified complete CRUD functionality
-
-### Current Progress
-
-| Module | Status |
-|---|---|
-| Module 1 – Frontend | 🟢 Completed |
-| Module 2 – Backend | 🟢 Completed |
-| Module 3 – Database & Full Stack Integration | 🟢 Completed |
-| Module 4 – CRUD Operations | 🟡 In Progress |

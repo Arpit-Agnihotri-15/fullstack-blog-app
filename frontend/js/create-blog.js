@@ -119,11 +119,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     const editBlogId =
-        isCreateMode
-            ? null
-            : localStorage.getItem(
-                "editBlog"
-            );
+    isCreateMode
+        ? null
+        : localStorage.getItem(
+            "editBlog"
+        );
+
+    let editingBlog = null;
+
 
 
     // =============================
