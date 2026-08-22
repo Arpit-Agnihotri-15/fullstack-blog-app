@@ -85,6 +85,23 @@ A modern Full Stack Blogging Platform developed during my **Full Stack Web Devel
 - Multi-account ownership and security testing
 - End-to-end CRUD testing from Create → Read → Update → Delete
 
+# Module 5 – Authentication & Security
+
+🟡 **Under Progress**
+
+🟢 **Day 17 – Completed**
+
+- Implemented secure JWT-based authentication
+- Added JWT authentication middleware
+- Added protected `GET /api/auth/me` endpoint
+- Retrieve current logged-in user from verified JWT
+- Added Bearer token validation
+- Protected authentication requests against missing tokens
+- Protected authentication requests against invalid or expired tokens
+- Excluded user passwords from authenticated user responses
+- Tested authentication flow using Postman
+- Verified successful authentication and unauthorized access handling
+
 ### Current Progress
 
 | Module | Status |
@@ -93,11 +110,12 @@ A modern Full Stack Blogging Platform developed during my **Full Stack Web Devel
 | Module 2 – Backend | 🟢 Completed |
 | Module 3 – Database & Full Stack Integration | 🟢 Completed |
 | Module 4 – CRUD Operations | 🟢 Completed |
+| Module 5 – Authentication & Security | 🟢 Day 17 Completed |
 
 # Project Structure
 
 ```text
-Scriptora/
+Blog-App(Scriptora)/
 ├── backend/
 │   ├── controllers/
 │   ├── models/

@@ -276,8 +276,63 @@ const loginUser = async (req, res) => {
 
 };
 
+// =============================
+// GET CURRENT LOGGED-IN USER
+// =============================
+
+const getCurrentUser = async (req, res) => {
+
+    try {
+
+        // User ID comes from verified JWT
+        const userId = req.user.id;
+
+        const user =
+            await User.findById(userId)
+                .select("-password");
+
+        if (!user) {
+
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+
+        }
+
+        return res.status(200).json({
+
+            success: true,
+
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                bio: user.bio || "",
+                createdAt: user.createdAt
+            }
+
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Get current user error:",
+            error
+        );
+
+        return res.status(500).json({
+            success: false,
+            message: "Server error"
+        });
+
+    }
+
+};
+
 
 module.exports = {
     registerUser,
-    loginUser
+    loginUser,
+    getCurrentUser
 };

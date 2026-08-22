@@ -4,11 +4,32 @@ const authMiddleware = (req, res, next) => {
 
     try {
 
-        // Get Authorization header
+        // =============================
+        // CHECK JWT SECRET
+        // =============================
+
+        if (!process.env.JWT_SECRET) {
+
+            console.error(
+                "JWT_SECRET is not configured"
+            );
+
+            return res.status(500).json({
+                success: false,
+                message: "Authentication configuration error"
+            });
+
+        }
+
+
+        // =============================
+        // GET AUTHORIZATION HEADER
+        // =============================
+
         const authHeader =
             req.headers.authorization;
 
-        // Check if token exists
+
         if (!authHeader) {
 
             return res.status(401).json({
@@ -18,35 +39,46 @@ const authMiddleware = (req, res, next) => {
 
         }
 
-        // Expected format:
-        // Bearer TOKEN
-        const parts =
+
+        // =============================
+        // CHECK BEARER FORMAT
+        // =============================
+
+        const [scheme, token] =
             authHeader.split(" ");
 
+
         if (
-            parts.length !== 2 ||
-            parts[0] !== "Bearer"
+            scheme !== "Bearer" ||
+            !token
         ) {
 
             return res.status(401).json({
                 success: false,
-                message: "Invalid authentication format"
+                message:
+                    "Invalid authentication format. Use Bearer token."
             });
 
         }
 
-        const token =
-            parts[1];
 
-        // Verify token
+        // =============================
+        // VERIFY TOKEN
+        // =============================
+
         const decoded =
             jwt.verify(
                 token,
                 process.env.JWT_SECRET
             );
 
-        // Store authenticated user
+
+        // =============================
+        // STORE USER IN REQUEST
+        // =============================
+
         req.user = decoded;
+
 
         next();
 
@@ -65,6 +97,7 @@ const authMiddleware = (req, res, next) => {
     }
 
 };
+
 
 module.exports =
     authMiddleware;
