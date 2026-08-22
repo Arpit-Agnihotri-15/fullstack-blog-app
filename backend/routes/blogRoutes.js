@@ -7,11 +7,12 @@ const {
     createBlog,
     getAllBlogs,
     getBlogById,
-    getFeaturedBlogs,
     likeBlog,
     incrementViews,
     updateBlog,
-    deleteBlog
+    deleteBlog,
+    getFeaturedBlogs,
+    getMyBlogs
 } = require("../controllers/blogController");
 
 const router = express.Router();
@@ -21,6 +22,12 @@ router.post(
     "/",
     authMiddleware,
     createBlog
+);
+
+router.get(
+    "/my",
+    authMiddleware,
+    getMyBlogs
 );
 
 router.put(

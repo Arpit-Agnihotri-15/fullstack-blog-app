@@ -102,6 +102,22 @@ A modern Full Stack Blogging Platform developed during my **Full Stack Web Devel
 - Tested authentication flow using Postman
 - Verified successful authentication and unauthorized access handling
 
+### 🟢 Day 18 – Protected Dashboard & User-Specific Blogs
+
+- Added protected `GET /api/blogs/my` endpoint
+- Used JWT authentication middleware to identify the logged-in user
+- Fetch only blogs belonging to the authenticated user
+- Removed frontend-side filtering of all blogs by `authorId`
+- Connected Dashboard to the secure `/api/blogs/my` endpoint
+- Connected My Blogs page to the secure `/api/blogs/my` endpoint
+- Added Bearer JWT token to protected frontend requests
+- Added authentication handling for missing, empty and invalid tokens
+- Verified Personal and College account blog isolation
+- Tested Dashboard and My Blogs with multiple user accounts
+- Verified zero-blog accounts show `0` dashboard statistics and **No Blogs Yet**
+- Verified secure API requests through browser Network testing
+- Completed end-to-end user-specific blog access testing
+
 ### Current Progress
 
 | Module | Status |
@@ -110,7 +126,7 @@ A modern Full Stack Blogging Platform developed during my **Full Stack Web Devel
 | Module 2 – Backend | 🟢 Completed |
 | Module 3 – Database & Full Stack Integration | 🟢 Completed |
 | Module 4 – CRUD Operations | 🟢 Completed |
-| Module 5 – Authentication & Security | 🟢 Day 17 Completed |
+| Module 5 – Authentication & Security | 🟢 Day 18 Completed |
 
 # Project Structure
 

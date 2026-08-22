@@ -2,6 +2,64 @@ const API_URL =
     "http://localhost:5000/api/blogs";
 
 
+// ========================================
+// AUTHENTICATION GUARD
+// ========================================
+
+const storedUser =
+    localStorage.getItem("loggedInUser");
+
+let loggedInUser = null;
+
+try {
+
+    loggedInUser =
+        storedUser
+            ? JSON.parse(storedUser)
+            : null;
+
+} catch (error) {
+
+    console.error(
+        "Invalid logged-in user data."
+    );
+
+    localStorage.removeItem(
+        "loggedInUser"
+    );
+
+    window.location.replace(
+        "login.html"
+    );
+
+}
+
+
+const token =
+    loggedInUser?.token;
+
+
+if (
+    !loggedInUser ||
+    typeof token !== "string" ||
+    token.trim() === ""
+) {
+
+    localStorage.removeItem(
+        "loggedInUser"
+    );
+
+    window.location.replace(
+        "login.html"
+    );
+
+}
+
+
+// ========================================
+// MY BLOGS
+// ========================================
+
 document.addEventListener(
     "DOMContentLoaded",
     async () => {
@@ -17,107 +75,57 @@ document.addEventListener(
             );
 
 
-        // =========================
-        // LOGGED-IN USER
-        // =========================
-
-        const loggedInUser =
-            JSON.parse(
-                localStorage.getItem(
-                    "loggedInUser"
-                )
-            );
-
-
-        if (!loggedInUser) {
-
-            window.location.href =
-                "login.html";
-
-            return;
-
-        }
-
-
-        // =========================
-        // CHECK USER ID
-        // =========================
-
-        const loggedInUserId =
-            String(
-                loggedInUser.id || ""
-            ).trim();
-
-
-        if (!loggedInUserId) {
-
-            console.error(
-                "Logged-in user ID is missing:",
-                loggedInUser
-            );
-
-
-            container.innerHTML = "";
-
-            container.style.display =
-                "none";
-
-
-            emptyState.style.display =
-                "flex";
-
-
-            emptyState.innerHTML = `
-
-                <i class="fa-solid fa-circle-exclamation"></i>
-
-                <h2>
-                    Unable to Identify Account
-                </h2>
-
-                <p>
-                    Please logout and login again.
-                </p>
-
-                <button
-                    class="btn btn-primary"
-                    onclick="window.location.href='login.html'"
-                >
-                    Login Again
-                </button>
-
-            `;
-
-            return;
-
-        }
-
-
         console.log(
             "Logged-in user:",
             loggedInUser
         );
 
-        console.log(
-            "Logged-in user ID:",
-            loggedInUserId
-        );
-
 
         // =========================
-        // LOAD BLOGS
+        // LOAD USER'S BLOGS
         // =========================
 
         try {
 
             const response =
-                await fetch(API_URL);
+                await fetch(
+                    `${API_URL}/my`,
+                    {
+                        method: "GET",
+
+                        headers: {
+                            "Authorization":
+                                `Bearer ${token.trim()}`
+                        }
+                    }
+                );
+
+
+            // =========================
+            // AUTHENTICATION FAILURE
+            // =========================
+
+            if (
+                response.status === 401
+            ) {
+
+                localStorage.removeItem(
+                    "loggedInUser"
+                );
+
+                window.location.replace(
+                    "login.html"
+                );
+
+                return;
+
+            }
 
 
             if (!response.ok) {
 
                 throw new Error(
-                    `Failed to fetch blogs. Status: ${response.status}`
+                    `Failed to fetch your blogs. Status: ${response.status}`
                 );
 
             }
@@ -137,48 +145,15 @@ document.addEventListener(
             }
 
 
-            const blogs =
+            // Backend already returns
+            // only the logged-in user's blogs
+
+            const myBlogs =
                 data.blogs || [];
 
 
             console.log(
-                "All blogs from MongoDB:",
-                blogs
-            );
-
-
-            // =========================
-            // FILTER BY AUTHOR ID
-            // =========================
-
-            const myBlogs =
-                blogs.filter(blog => {
-
-                    const blogAuthorId =
-                        String(
-                            blog.authorId || ""
-                        ).trim();
-
-
-                    console.log(
-                        "Blog:",
-                        blog.title,
-                        "| authorId:",
-                        blogAuthorId
-                    );
-
-
-                    return (
-                        blogAuthorId !== "" &&
-                        blogAuthorId ===
-                        loggedInUserId
-                    );
-
-                });
-
-
-            console.log(
-                "My blogs:",
+                "My blogs from secure API:",
                 myBlogs
             );
 
@@ -199,7 +174,6 @@ document.addEventListener(
 
                 emptyState.style.display =
                     "flex";
-
 
                 return;
 
@@ -307,9 +281,7 @@ document.addEventListener(
                             "
                         >
 
-
                         <div class="blog-content">
-
 
                             <span
                                 class="blog-category"
@@ -320,7 +292,6 @@ document.addEventListener(
                                 }
                             </span>
 
-
                             <h2>
                                 ${
                                     blog.title ||
@@ -328,14 +299,12 @@ document.addEventListener(
                                 }
                             </h2>
 
-
                             <p>
                                 ${
                                     blog.description ||
                                     ""
                                 }
                             </p>
-
 
                             <div
                                 class="blog-info"
@@ -354,7 +323,6 @@ document.addEventListener(
 
                                 </span>
 
-
                                 <span>
 
                                     <i
@@ -369,12 +337,9 @@ document.addEventListener(
 
                             </div>
 
-
                             <div
                                 class="blog-actions"
                             >
-
-                                <!-- VIEW -->
 
                                 <button
                                     class="btn btn-outline"
@@ -391,9 +356,6 @@ document.addEventListener(
 
                                 </button>
 
-
-                                <!-- EDIT -->
-
                                 <button
                                     class="btn btn-secondary"
                                     onclick="
@@ -409,9 +371,6 @@ document.addEventListener(
 
                                 </button>
 
-
-                                <!-- DELETE -->
-
                                 <button
                                     class="btn btn-danger"
                                     onclick="
@@ -426,7 +385,6 @@ document.addEventListener(
                                     Delete
 
                                 </button>
-
 
                             </div>
 
@@ -468,17 +426,14 @@ document.addEventListener(
                     class="fa-solid fa-circle-exclamation"
                 ></i>
 
-
                 <h2>
                     Unable to Load Blogs
                 </h2>
-
 
                 <p>
                     Please make sure the backend
                     server is running.
                 </p>
-
 
                 <button
                     class="btn btn-primary"
@@ -513,7 +468,7 @@ function viewBlog(id) {
 
 
     window.location.href =
-    `blog-details.html?id=${encodeURIComponent(id)}&from=my-blogs`;
+        `blog-details.html?id=${encodeURIComponent(id)}&from=my-blogs`;
 
 }
 
@@ -605,19 +560,68 @@ async function deleteBlog(id) {
 
     try {
 
-        const response =
-        await fetch(
-            `${API_URL}/${id}`,
-            {
-                method:
-                    "DELETE",
+        const currentUser =
+            JSON.parse(
+                localStorage.getItem(
+                    "loggedInUser"
+                )
+            );
 
-                headers: {
-                    "Authorization":
-                        `Bearer ${JSON.parse(localStorage.getItem("loggedInUser")).token}`
+
+        const currentToken =
+            currentUser?.token;
+
+
+        if (
+            !currentUser ||
+            typeof currentToken !== "string" ||
+            currentToken.trim() === ""
+        ) {
+
+            localStorage.removeItem(
+                "loggedInUser"
+            );
+
+            window.location.replace(
+                "login.html"
+            );
+
+            return;
+
+        }
+
+
+        const response =
+            await fetch(
+                `${API_URL}/${id}`,
+                {
+                    method:
+                        "DELETE",
+
+                    headers: {
+                        "Authorization":
+                            `Bearer ${currentToken.trim()}`
+                    }
                 }
-            }
-        );
+            );
+
+
+        if (
+            response.status === 401
+        ) {
+
+            localStorage.removeItem(
+                "loggedInUser"
+            );
+
+            window.location.replace(
+                "login.html"
+            );
+
+            return;
+
+        }
+
 
         const data =
             await response.json();

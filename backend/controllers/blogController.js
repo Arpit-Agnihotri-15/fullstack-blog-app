@@ -622,6 +622,45 @@ const getFeaturedBlogs = async (req, res) => {
     }
 };
 
+// =============================
+// GET LOGGED-IN USER'S BLOGS
+// =============================
+
+const getMyBlogs = async (req, res) => {
+
+    try {
+
+        // User ID comes from the verified JWT
+        const userId = req.user.id;
+
+        const blogs = await Blog.find({
+            authorId: userId
+        }).sort({
+            createdAt: -1
+        });
+
+        return res.status(200).json({
+            success: true,
+            count: blogs.length,
+            blogs
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Get my blogs error:",
+            error
+        );
+
+        return res.status(500).json({
+            success: false,
+            message: "Server error"
+        });
+
+    }
+
+};
+
 
 // =============================
 // EXPORT CONTROLLERS
@@ -643,6 +682,8 @@ module.exports = {
 
     deleteBlog,
 
-    getFeaturedBlogs
+    getFeaturedBlogs,
+
+    getMyBlogs
 
 };

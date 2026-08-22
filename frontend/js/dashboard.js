@@ -5,48 +5,68 @@ const COMMENTS_API =
     "http://localhost:5000/api/comments";
 
 
+// ========================================
+// AUTHENTICATION GUARD
+// ========================================
+
+const storedUser =
+    localStorage.getItem("loggedInUser");
+
+let loggedUser = null;
+
+try {
+
+    loggedUser =
+        storedUser
+            ? JSON.parse(storedUser)
+            : null;
+
+} catch (error) {
+
+    console.error(
+        "Invalid logged-in user data."
+    );
+
+    localStorage.removeItem(
+        "loggedInUser"
+    );
+
+    window.location.replace(
+        "login.html"
+    );
+
+}
+
+
+// Check whether user and token are valid
+
+const token =
+    loggedUser?.token;
+
+if (
+    !loggedUser ||
+    typeof token !== "string" ||
+    token.trim() === ""
+) {
+
+    localStorage.removeItem(
+        "loggedInUser"
+    );
+
+    window.location.replace(
+        "login.html"
+    );
+
+}
+
+
+// ========================================
+// DASHBOARD
+// ========================================
+
 document.addEventListener(
     "DOMContentLoaded",
     async () => {
-
-        // =========================
-        // LOGGED-IN USER
-        // =========================
-
-        const loggedUser =
-            JSON.parse(
-                localStorage.getItem(
-                    "loggedInUser"
-                )
-            );
-
-
-        if (!loggedUser) {
-
-            window.location.href =
-                "login.html";
-
-            return;
-
-        }
-
-
-        const loggedUserId =
-            String(
-                loggedUser.id || ""
-            ).trim();
-
-
-        if (!loggedUserId) {
-
-            console.error(
-                "Logged-in user ID is missing."
-            );
-
-            return;
-
-        }
-
 
         // =========================
         // USER NAME
@@ -67,21 +87,50 @@ document.addEventListener(
 
 
         // =========================
-        // FETCH BLOGS
+        // FETCH USER'S BLOGS
         // =========================
 
         try {
 
             const response =
                 await fetch(
-                    BLOGS_API
+                    `${BLOGS_API}/my`,
+                    {
+                        method: "GET",
+
+                        headers: {
+                            "Authorization":
+                                `Bearer ${token.trim()}`
+                        }
+                    }
                 );
+
+
+            // =========================
+            // AUTHENTICATION FAILURE
+            // =========================
+
+            if (
+                response.status === 401
+            ) {
+
+                localStorage.removeItem(
+                    "loggedInUser"
+                );
+
+                window.location.replace(
+                    "login.html"
+                );
+
+                return;
+
+            }
 
 
             if (!response.ok) {
 
                 throw new Error(
-                    "Failed to fetch blogs"
+                    "Failed to fetch your blogs"
                 );
 
             }
@@ -101,30 +150,11 @@ document.addEventListener(
             }
 
 
-            const blogs =
-                data.blogs || [];
-
-
-            // =========================
-            // USER'S BLOGS
-            // =========================
+            // Backend already returns
+            // only the logged-in user's blogs
 
             const myBlogs =
-                blogs.filter(blog => {
-
-                    const blogAuthorId =
-                        String(
-                            blog.authorId || ""
-                        ).trim();
-
-
-                    return (
-                        blogAuthorId !== "" &&
-                        blogAuthorId ===
-                        loggedUserId
-                    );
-
-                });
+                data.blogs || [];
 
 
             console.log(
@@ -134,7 +164,7 @@ document.addEventListener(
 
 
             console.log(
-                "Dashboard - My blogs:",
+                "Dashboard - My blogs from secure API:",
                 myBlogs
             );
 
@@ -143,10 +173,18 @@ document.addEventListener(
             // TOTAL BLOGS
             // =========================
 
-            document.getElementById(
-                "totalBlogs"
-            ).textContent =
-                myBlogs.length;
+            const totalBlogs =
+                document.getElementById(
+                    "totalBlogs"
+                );
+
+
+            if (totalBlogs) {
+
+                totalBlogs.textContent =
+                    myBlogs.length;
+
+            }
 
 
             // =========================
@@ -169,10 +207,18 @@ document.addEventListener(
                 );
 
 
-            document.getElementById(
-                "totalLikes"
-            ).textContent =
-                totalLikes;
+            const totalLikesElement =
+                document.getElementById(
+                    "totalLikes"
+                );
+
+
+            if (totalLikesElement) {
+
+                totalLikesElement.textContent =
+                    totalLikes;
+
+            }
 
 
             // =========================
@@ -195,10 +241,18 @@ document.addEventListener(
                 );
 
 
-            document.getElementById(
-                "totalViews"
-            ).textContent =
-                totalViews;
+            const totalViewsElement =
+                document.getElementById(
+                    "totalViews"
+                );
+
+
+            if (totalViewsElement) {
+
+                totalViewsElement.textContent =
+                    totalViews;
+
+            }
 
 
             // =========================
@@ -257,10 +311,18 @@ document.addEventListener(
             }
 
 
-            document.getElementById(
-                "totalComments"
-            ).textContent =
-                totalComments;
+            const totalCommentsElement =
+                document.getElementById(
+                    "totalComments"
+                );
+
+
+            if (totalCommentsElement) {
+
+                totalCommentsElement.textContent =
+                    totalComments;
+
+            }
 
 
             // =========================
@@ -339,9 +401,8 @@ document.addEventListener(
                     .slice(0, 3);
 
 
-            // Clear container
-
-            container.innerHTML = "";
+            container.innerHTML =
+                "";
 
 
             // =========================
@@ -403,16 +464,13 @@ document.addEventListener(
                                 ${category}
                             </span>
 
-
                             <h3>
                                 ${title}
                             </h3>
 
-
                             <p>
                                 ${description}
                             </p>
-
 
                             <a
                                 href="blog-details.html?id=${encodeURIComponent(blogId)}"
@@ -441,10 +499,6 @@ document.addEventListener(
                 error
             );
 
-
-            // =========================
-            // FALLBACK ERROR STATE
-            // =========================
 
             const container =
                 document.getElementById(
