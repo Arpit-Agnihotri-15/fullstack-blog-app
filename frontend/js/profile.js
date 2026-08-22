@@ -1,602 +1,481 @@
 /* =====================================================
                 SCRIPTORA PROFILE PAGE
-                DATABASE CONNECTED VERSION
+                JWT AUTHENTICATED VERSION
 ===================================================== */
 
-document.addEventListener("DOMContentLoaded", async () => {
 
-    /* ==========================================
-            CONFIGURATION
-    ========================================== */
+const API_URL =
+    "http://localhost:5000/api/users";
 
-    const API_URL = "http://localhost:5000/api/users";
 
+// ========================================
+// AUTHENTICATION GUARD
+// ========================================
 
-    /* ==========================================
-            AUTH GUARD
-    ========================================== */
+const storedUser =
+    localStorage.getItem("loggedInUser");
 
-    let loggedInUser =
-        JSON.parse(localStorage.getItem("loggedInUser"));
+let loggedInUser = null;
 
-    if (!loggedInUser || !loggedInUser.id) {
 
-        if (typeof showError === "function") {
-            showError("Please login first.");
-        }
+try {
 
-        setTimeout(() => {
-            window.location.href = "login.html";
-        }, 800);
+    loggedInUser =
+        storedUser
+            ? JSON.parse(storedUser)
+            : null;
 
-        return;
-    }
+} catch (error) {
 
+    console.error(
+        "Invalid logged-in user data:",
+        error
+    );
 
-    const userId = loggedInUser.id;
+    localStorage.removeItem(
+        "loggedInUser"
+    );
 
+    window.location.replace(
+        "login.html"
+    );
 
-    /* ==========================================
-            DOM ELEMENTS
-    ========================================== */
+}
 
-    const profileAvatar =
-        document.getElementById("profileAvatar");
 
-    const profileName =
-        document.getElementById("profileName");
+const token =
+    loggedInUser?.token;
 
-    const profileEmail =
-        document.getElementById("profileEmail");
 
-    const profileJoined =
-        document.getElementById("profileJoined");
+if (
+    !loggedInUser ||
+    typeof token !== "string" ||
+    token.trim() === ""
+) {
 
+    localStorage.removeItem(
+        "loggedInUser"
+    );
 
-    const statBlogs =
-        document.getElementById("statBlogs");
+    window.location.replace(
+        "login.html"
+    );
 
-    const statLikes =
-        document.getElementById("statLikes");
+}
 
-    const statComments =
-        document.getElementById("statComments");
 
-    const statViews =
-        document.getElementById("statViews");
+// ========================================
+// PROFILE PAGE
+// ========================================
 
+document.addEventListener(
+    "DOMContentLoaded",
+    async () => {
 
-    const editForm =
-        document.getElementById("editProfileForm");
 
-    const editName =
-        document.getElementById("editName");
+        /* ==========================================
+                DOM ELEMENTS
+        ========================================== */
 
-    const editEmail =
-        document.getElementById("editEmail");
-
-    const editBio =
-        document.getElementById("editBio");
-
-
-    const passwordForm =
-        document.getElementById("changePasswordForm");
-
-    const currentPassword =
-        document.getElementById("currentPassword");
-
-    const newPassword =
-        document.getElementById("newPassword");
-
-    const confirmNewPassword =
-        document.getElementById("confirmNewPassword");
-
-
-    const deleteAccountBtn =
-        document.getElementById("deleteAccountBtn");
-
-
-    /* ==========================================
-            HELPERS
-    ========================================== */
-
-    function validateEmail(mail) {
-
-        const regex =
-            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        return regex.test(mail);
-
-    }
-
-
-    function setFieldError(
-        input,
-        errorId,
-        message
-    ) {
-
-        const errorEl =
-            document.getElementById(errorId);
-
-        if (message) {
-
-            input.classList.add("input-error");
-
-            if (errorEl) {
-                errorEl.textContent = message;
-            }
-
-        } else {
-
-            input.classList.remove("input-error");
-
-            if (errorEl) {
-                errorEl.textContent = "";
-            }
-
-        }
-
-    }
-
-
-    function getInitials(name) {
-
-        if (!name) {
-            return "U";
-        }
-
-        return name
-            .trim()
-            .split(/\s+/)
-            .slice(0, 2)
-            .map(
-                part =>
-                    part[0].toUpperCase()
-            )
-            .join("");
-
-    }
-
-
-    function formatMemberDate(date) {
-
-        if (!date) {
-            return "Scriptora Member";
-        }
-
-        const formattedDate =
-            new Date(date).toLocaleDateString(
-                "en-IN",
-                {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric"
-                }
-            );
-
-        return `Member since ${formattedDate}`;
-
-    }
-
-
-    /* ==========================================
-            RENDER PROFILE
-    ========================================== */
-
-    function renderProfile(user) {
-
-        profileAvatar.textContent =
-            getInitials(user.name);
-
-        profileName.textContent =
-            user.name || "User";
-
-        profileEmail.textContent =
-            user.email || "";
-
-
-        profileJoined.innerHTML =
-            `<i class="fa-solid fa-calendar-check"></i> ` +
-            formatMemberDate(
-                user.createdAt
-            );
-
-
-        editName.value =
-            user.name || "";
-
-        editEmail.value =
-            user.email || "";
-
-        editBio.value =
-            user.bio || "";
-
-
-        const navbarUserName =
+        const profileAvatar =
             document.getElementById(
-                "navbarUserName"
+                "profileAvatar"
             );
 
-        if (navbarUserName) {
+        const profileName =
+            document.getElementById(
+                "profileName"
+            );
 
-            navbarUserName.textContent =
-                user.name || "User";
+        const profileEmail =
+            document.getElementById(
+                "profileEmail"
+            );
+
+        const profileJoined =
+            document.getElementById(
+                "profileJoined"
+            );
+
+
+        const statBlogs =
+            document.getElementById(
+                "statBlogs"
+            );
+
+        const statLikes =
+            document.getElementById(
+                "statLikes"
+            );
+
+        const statComments =
+            document.getElementById(
+                "statComments"
+            );
+
+        const statViews =
+            document.getElementById(
+                "statViews"
+            );
+
+
+        const editForm =
+            document.getElementById(
+                "editProfileForm"
+            );
+
+        const editName =
+            document.getElementById(
+                "editName"
+            );
+
+        const editEmail =
+            document.getElementById(
+                "editEmail"
+            );
+
+        const editBio =
+            document.getElementById(
+                "editBio"
+            );
+
+
+        const passwordForm =
+            document.getElementById(
+                "changePasswordForm"
+            );
+
+        const currentPassword =
+            document.getElementById(
+                "currentPassword"
+            );
+
+        const newPassword =
+            document.getElementById(
+                "newPassword"
+            );
+
+        const confirmNewPassword =
+            document.getElementById(
+                "confirmNewPassword"
+            );
+
+
+        const deleteAccountBtn =
+            document.getElementById(
+                "deleteAccountBtn"
+            );
+
+
+        /* ==========================================
+                HELPERS
+        ========================================== */
+
+        function validateEmail(mail) {
+
+            const regex =
+                /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            return regex.test(mail);
 
         }
 
-    }
+
+        function setFieldError(
+            input,
+            errorId,
+            message
+        ) {
+
+            const errorEl =
+                document.getElementById(
+                    errorId
+                );
 
 
-    /* ==========================================
-            RENDER STATS
-    ========================================== */
+            if (message) {
 
-    function renderStats(stats) {
-
-        statBlogs.textContent =
-            stats?.blogs ?? 0;
-
-        statLikes.textContent =
-            stats?.likes ?? 0;
-
-        statComments.textContent =
-            stats?.comments ?? 0;
-
-        statViews.textContent =
-            stats?.views ?? 0;
-
-    }
+                input.classList.add(
+                    "input-error"
+                );
 
 
-    /* ==========================================
-            LOAD PROFILE FROM MONGODB
-    ========================================== */
+                if (errorEl) {
 
-    async function loadProfile() {
+                    errorEl.textContent =
+                        message;
 
-        try {
+                }
+
+            } else {
+
+                input.classList.remove(
+                    "input-error"
+                );
+
+
+                if (errorEl) {
+
+                    errorEl.textContent =
+                        "";
+
+                }
+
+            }
+
+        }
+
+
+        function getInitials(name) {
+
+            if (!name) {
+
+                return "U";
+
+            }
+
+
+            return name
+                .trim()
+                .split(/\s+/)
+                .slice(0, 2)
+                .map(
+                    part =>
+                        part[0]
+                            .toUpperCase()
+                )
+                .join("");
+
+        }
+
+
+        function formatMemberDate(date) {
+
+            if (!date) {
+
+                return "Scriptora Member";
+
+            }
+
+
+            const formattedDate =
+                new Date(date)
+                    .toLocaleDateString(
+                        "en-IN",
+                        {
+                            day:
+                                "numeric",
+
+                            month:
+                                "short",
+
+                            year:
+                                "numeric"
+                        }
+                    );
+
+
+            return `Member since ${formattedDate}`;
+
+        }
+
+
+        /* ==========================================
+                AUTHENTICATED FETCH HELPER
+        ========================================== */
+
+        async function authenticatedFetch(
+            url,
+            options = {}
+        ) {
+
+            const currentUser =
+                JSON.parse(
+                    localStorage.getItem(
+                        "loggedInUser"
+                    )
+                );
+
+
+            const currentToken =
+                currentUser?.token;
+
+
+            if (
+                !currentUser ||
+                typeof currentToken !==
+                    "string" ||
+                currentToken.trim() === ""
+            ) {
+
+                localStorage.removeItem(
+                    "loggedInUser"
+                );
+
+                window.location.replace(
+                    "login.html"
+                );
+
+                return null;
+
+            }
+
 
             const response =
                 await fetch(
-                    `${API_URL}/${encodeURIComponent(userId)}`
+                    url,
+                    {
+
+                        ...options,
+
+                        headers: {
+
+                            ...(options.headers ||
+                                {}),
+
+                            "Authorization":
+                                `Bearer ${currentToken.trim()}`
+
+                        }
+
+                    }
                 );
 
 
-            const data =
-                await response.json();
+            if (
+                response.status === 401
+            ) {
 
-
-            if (!response.ok || !data.success) {
-
-                throw new Error(
-                    data.message ||
-                    "Unable to load profile"
+                localStorage.removeItem(
+                    "loggedInUser"
                 );
+
+                window.location.replace(
+                    "login.html"
+                );
+
+                return null;
 
             }
 
 
-            /* Update local logged-in user
-               with latest database data */
+            return response;
 
-            loggedInUser = {
-
-                ...loggedInUser,
-
-                id: data.user.id,
-
-                name: data.user.name,
-
-                email: data.user.email,
-
-                bio: data.user.bio || "",
-
-                createdAt:
-                    data.user.createdAt
-
-            };
+        }
 
 
-            localStorage.setItem(
-                "loggedInUser",
-                JSON.stringify(loggedInUser)
-            );
+        /* ==========================================
+                RENDER PROFILE
+        ========================================== */
 
+        function renderProfile(user) {
 
-            /* Render MongoDB data */
-
-            renderProfile(
-                data.user
-            );
-
-            renderStats(
-                data.stats
-            );
-
-
-        } catch (error) {
-
-            console.error(
-                "Load profile error:",
-                error
-            );
-
-
-            if (typeof showError === "function") {
-
-                showError(
-                    error.message ||
-                    "Unable to load profile."
+            profileAvatar.textContent =
+                getInitials(
+                    user.name
                 );
 
-            } else {
 
-                alert(
-                    error.message ||
-                    "Unable to load profile."
+            profileName.textContent =
+                user.name ||
+                "User";
+
+
+            profileEmail.textContent =
+                user.email ||
+                "";
+
+
+            profileJoined.innerHTML =
+                `<i class="fa-solid fa-calendar-check"></i> ` +
+                formatMemberDate(
+                    user.createdAt
                 );
+
+
+            editName.value =
+                user.name ||
+                "";
+
+
+            editEmail.value =
+                user.email ||
+                "";
+
+
+            editBio.value =
+                user.bio ||
+                "";
+
+
+            const navbarUserName =
+                document.getElementById(
+                    "navbarUserName"
+                );
+
+
+            if (navbarUserName) {
+
+                navbarUserName.textContent =
+                    user.name ||
+                    "User";
 
             }
 
         }
 
-    }
 
+        /* ==========================================
+                RENDER STATS
+        ========================================== */
 
-    /* Load profile immediately */
+        function renderStats(stats) {
 
-    await loadProfile();
+            statBlogs.textContent =
+                stats?.blogs ??
+                0;
 
 
-    /* ==========================================
-            TABS
-    ========================================== */
+            statLikes.textContent =
+                stats?.likes ??
+                0;
 
-    const tabButtons =
-        document.querySelectorAll(
-            ".tab-btn"
-        );
 
-    const panels =
-        document.querySelectorAll(
-            ".profile-panel"
-        );
+            statComments.textContent =
+                stats?.comments ??
+                0;
 
 
-    tabButtons.forEach(button => {
+            statViews.textContent =
+                stats?.views ??
+                0;
 
-        button.addEventListener(
-            "click",
-            () => {
+        }
 
-                tabButtons.forEach(
-                    btn =>
-                        btn.classList.remove(
-                            "active"
-                        )
-                );
 
-                panels.forEach(
-                    panel =>
-                        panel.classList.remove(
-                            "active"
-                        )
-                );
+        /* ==========================================
+                LOAD PROFILE
+        ========================================== */
 
-
-                button.classList.add(
-                    "active"
-                );
-
-
-                const target =
-                    document.getElementById(
-                        button.dataset.tab
-                    );
-
-
-                if (target) {
-
-                    target.classList.add(
-                        "active"
-                    );
-
-                }
-
-            }
-        );
-
-    });
-
-
-    /* ==========================================
-            PASSWORD VISIBILITY TOGGLE
-    ========================================== */
-
-    document
-        .querySelectorAll("[data-toggle]")
-        .forEach(icon => {
-
-            icon.addEventListener(
-                "click",
-                () => {
-
-                    const input =
-                        document.getElementById(
-                            icon.dataset.toggle
-                        );
-
-
-                    if (!input) {
-                        return;
-                    }
-
-
-                    if (
-                        input.type ===
-                        "password"
-                    ) {
-
-                        input.type =
-                            "text";
-
-                        icon.classList.replace(
-                            "fa-eye",
-                            "fa-eye-slash"
-                        );
-
-                    } else {
-
-                        input.type =
-                            "password";
-
-                        icon.classList.replace(
-                            "fa-eye-slash",
-                            "fa-eye"
-                        );
-
-                    }
-
-                }
-            );
-
-        });
-
-
-    /* ==========================================
-            EDIT PROFILE
-    ========================================== */
-
-    editForm.addEventListener(
-        "submit",
-        async event => {
-
-            event.preventDefault();
-
-
-            const name =
-                editName.value.trim();
-
-            const email =
-                editEmail.value
-                    .trim()
-                    .toLowerCase();
-
-            const bio =
-                editBio.value.trim();
-
-
-            let isValid = true;
-
-
-            /* Name validation */
-
-            if (name.length < 3) {
-
-                setFieldError(
-                    editName,
-                    "editNameError",
-                    "Full name must be at least 3 characters."
-                );
-
-                isValid = false;
-
-            } else {
-
-                setFieldError(
-                    editName,
-                    "editNameError",
-                    ""
-                );
-
-            }
-
-
-            /* Email validation */
-
-            if (!validateEmail(email)) {
-
-                setFieldError(
-                    editEmail,
-                    "editEmailError",
-                    "Please enter a valid email address."
-                );
-
-                isValid = false;
-
-            } else {
-
-                setFieldError(
-                    editEmail,
-                    "editEmailError",
-                    ""
-                );
-
-            }
-
-
-            if (!isValid) {
-
-                if (
-                    typeof showError ===
-                    "function"
-                ) {
-
-                    showError(
-                        "Please fix the highlighted fields."
-                    );
-
-                }
-
-                return;
-
-            }
-
-
-            /* Disable submit button */
-
-            const submitButton =
-                editForm.querySelector(
-                    "button[type='submit']"
-                );
-
-
-            const originalButtonHTML =
-                submitButton.innerHTML;
-
-
-            submitButton.disabled = true;
-
-            submitButton.innerHTML =
-                `<i class="fa-solid fa-spinner fa-spin"></i> Saving...`;
-
+        async function loadProfile() {
 
             try {
 
                 const response =
-                    await fetch(
-                        `${API_URL}/${encodeURIComponent(userId)}`,
+                    await authenticatedFetch(
+                        `${API_URL}/me`,
                         {
-
-                            method: "PUT",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-
-                            body:
-                                JSON.stringify({
-
-                                    name,
-                                    email,
-                                    bio
-
-                                })
-
+                            method:
+                                "GET"
                         }
                     );
+
+
+                if (!response) {
+
+                    return;
+
+                }
 
 
                 const data =
@@ -610,25 +489,31 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                     throw new Error(
                         data.message ||
-                        "Failed to update profile"
+                        "Unable to load profile"
                     );
 
                 }
 
 
-                /* Update local logged-in user */
+                /* Update local user
+                   while preserving JWT */
 
                 loggedInUser = {
 
                     ...loggedInUser,
 
-                    id: data.user.id,
+                    id:
+                        data.user.id,
 
-                    name: data.user.name,
+                    name:
+                        data.user.name,
 
-                    email: data.user.email,
+                    email:
+                        data.user.email,
 
-                    bio: data.user.bio || "",
+                    bio:
+                        data.user.bio ||
+                        "",
 
                     createdAt:
                         data.user.createdAt
@@ -644,34 +529,20 @@ document.addEventListener("DOMContentLoaded", async () => {
                 );
 
 
-                /* Render updated data */
-
                 renderProfile(
                     data.user
                 );
 
 
-                /* Reload stats from MongoDB */
-
-                await loadProfile();
-
-
-                if (
-                    typeof showSuccess ===
-                    "function"
-                ) {
-
-                    showSuccess(
-                        "Profile updated successfully!"
-                    );
-
-                }
+                renderStats(
+                    data.stats
+                );
 
 
             } catch (error) {
 
                 console.error(
-                    "Update profile error:",
+                    "Load profile error:",
                     error
                 );
 
@@ -683,423 +554,861 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                     showError(
                         error.message ||
-                        "Unable to update profile."
+                        "Unable to load profile."
+                    );
+
+                } else {
+
+                    alert(
+                        error.message ||
+                        "Unable to load profile."
                     );
 
                 }
-
-            } finally {
-
-                submitButton.disabled =
-                    false;
-
-                submitButton.innerHTML =
-                    originalButtonHTML;
 
             }
 
         }
-    );
 
 
-    /* ==========================================
-            CHANGE PASSWORD
-    ========================================== */
+        /* Load profile immediately */
 
-    passwordForm.addEventListener(
-        "submit",
-        async event => {
-
-            event.preventDefault();
+        await loadProfile();
 
 
-            const current =
-                currentPassword.value;
+        /* ==========================================
+                TABS
+        ========================================== */
 
-            const next =
-                newPassword.value;
-
-            const confirmVal =
-                confirmNewPassword.value;
-
-
-            let isValid = true;
+        const tabButtons =
+            document.querySelectorAll(
+                ".tab-btn"
+            );
 
 
-            /* Current password */
-
-            if (!current) {
-
-                setFieldError(
-                    currentPassword,
-                    "currentPasswordError",
-                    "Please enter your current password."
-                );
-
-                isValid = false;
-
-            } else {
-
-                setFieldError(
-                    currentPassword,
-                    "currentPasswordError",
-                    ""
-                );
-
-            }
+        const panels =
+            document.querySelectorAll(
+                ".profile-panel"
+            );
 
 
-            /* New password */
+        tabButtons.forEach(
+            button => {
 
-            if (next.length < 6) {
+                button.addEventListener(
+                    "click",
+                    () => {
 
-                setFieldError(
-                    newPassword,
-                    "newPasswordError",
-                    "Password must contain at least 6 characters."
-                );
-
-                isValid = false;
-
-            } else {
-
-                setFieldError(
-                    newPassword,
-                    "newPasswordError",
-                    ""
-                );
-
-            }
+                        tabButtons.forEach(
+                            btn =>
+                                btn.classList.remove(
+                                    "active"
+                                )
+                        );
 
 
-            /* Confirm password */
-
-            if (next !== confirmVal) {
-
-                setFieldError(
-                    confirmNewPassword,
-                    "confirmNewPasswordError",
-                    "Passwords do not match."
-                );
-
-                isValid = false;
-
-            } else {
-
-                setFieldError(
-                    confirmNewPassword,
-                    "confirmNewPasswordError",
-                    ""
-                );
-
-            }
+                        panels.forEach(
+                            panel =>
+                                panel.classList.remove(
+                                    "active"
+                                )
+                        );
 
 
-            if (!isValid) {
-
-                if (
-                    typeof showError ===
-                    "function"
-                ) {
-
-                    showError(
-                        "Please fix the highlighted fields."
-                    );
-
-                }
-
-                return;
-
-            }
+                        button.classList.add(
+                            "active"
+                        );
 
 
-            const submitButton =
-                passwordForm.querySelector(
-                    "button[type='submit']"
-                );
+                        const target =
+                            document.getElementById(
+                                button.dataset.tab
+                            );
 
 
-            const originalButtonHTML =
-                submitButton.innerHTML;
+                        if (target) {
 
-
-            submitButton.disabled = true;
-
-            submitButton.innerHTML =
-                `<i class="fa-solid fa-spinner fa-spin"></i> Updating...`;
-
-
-            try {
-
-                const response =
-                    await fetch(
-                        `${API_URL}/${encodeURIComponent(userId)}/password`,
-                        {
-
-                            method: "PUT",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-
-                            body:
-                                JSON.stringify({
-
-                                    currentPassword:
-                                        current,
-
-                                    newPassword:
-                                        next
-
-                                })
+                            target.classList.add(
+                                "active"
+                            );
 
                         }
-                    );
 
-
-                const data =
-                    await response.json();
-
-
-                if (
-                    !response.ok ||
-                    !data.success
-                ) {
-
-                    throw new Error(
-                        data.message ||
-                        "Failed to update password"
-                    );
-
-                }
-
-
-                passwordForm.reset();
-
-
-                /* Clear password errors */
-
-                setFieldError(
-                    currentPassword,
-                    "currentPasswordError",
-                    ""
-                );
-
-                setFieldError(
-                    newPassword,
-                    "newPasswordError",
-                    ""
-                );
-
-                setFieldError(
-                    confirmNewPassword,
-                    "confirmNewPasswordError",
-                    ""
-                );
-
-
-                if (
-                    typeof showSuccess ===
-                    "function"
-                ) {
-
-                    showSuccess(
-                        "Password updated successfully!"
-                    );
-
-                }
-
-
-            } catch (error) {
-
-                console.error(
-                    "Change password error:",
-                    error
-                );
-
-
-                if (
-                    typeof showError ===
-                    "function"
-                ) {
-
-                    showError(
-                        error.message ||
-                        "Unable to update password."
-                    );
-
-                }
-
-            } finally {
-
-                submitButton.disabled =
-                    false;
-
-                submitButton.innerHTML =
-                    originalButtonHTML;
-
-            }
-
-        }
-    );
-
-
-    /* ==========================================
-            DELETE ACCOUNT
-    ========================================== */
-
-    deleteAccountBtn.addEventListener(
-        "click",
-        async () => {
-
-            const confirmed =
-                await confirmAction(
-                    "This will permanently delete your account and every blog you've published. This action cannot be undone.",
-                    {
-                        title:
-                            "Delete Account?",
-
-                        confirmText:
-                            "Delete Account",
-
-                        icon:
-                            "fa-trash",
-
-                        tone:
-                            "danger"
                     }
                 );
 
-
-            if (!confirmed) {
-                return;
             }
+        );
 
 
-            deleteAccountBtn.disabled =
-                true;
+        /* ==========================================
+                PASSWORD VISIBILITY TOGGLE
+        ========================================== */
+
+        document
+            .querySelectorAll(
+                "[data-toggle]"
+            )
+            .forEach(
+                icon => {
+
+                    icon.addEventListener(
+                        "click",
+                        () => {
+
+                            const input =
+                                document.getElementById(
+                                    icon.dataset.toggle
+                                );
 
 
-            const originalButtonHTML =
-                deleteAccountBtn.innerHTML;
+                            if (!input) {
+
+                                return;
+
+                            }
 
 
-            deleteAccountBtn.innerHTML =
-                `<i class="fa-solid fa-spinner fa-spin"></i> Deleting...`;
+                            if (
+                                input.type ===
+                                "password"
+                            ) {
+
+                                input.type =
+                                    "text";
 
 
-            try {
+                                icon.classList.replace(
+                                    "fa-eye",
+                                    "fa-eye-slash"
+                                );
 
-                const response =
-                    await fetch(
-                        `${API_URL}/${encodeURIComponent(userId)}`,
+                            } else {
+
+                                input.type =
+                                    "password";
+
+
+                                icon.classList.replace(
+                                    "fa-eye-slash",
+                                    "fa-eye"
+                                );
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+
+        /* ==========================================
+                EDIT PROFILE
+        ========================================== */
+
+        editForm.addEventListener(
+            "submit",
+            async event => {
+
+                event.preventDefault();
+
+
+                const name =
+                    editName.value.trim();
+
+
+                const email =
+                    editEmail.value
+                        .trim()
+                        .toLowerCase();
+
+
+                const bio =
+                    editBio.value.trim();
+
+
+                let isValid = true;
+
+
+                /* Name validation */
+
+                if (name.length < 3) {
+
+                    setFieldError(
+                        editName,
+                        "editNameError",
+                        "Full name must be at least 3 characters."
+                    );
+
+
+                    isValid = false;
+
+                } else {
+
+                    setFieldError(
+                        editName,
+                        "editNameError",
+                        ""
+                    );
+
+                }
+
+
+                /* Email validation */
+
+                if (
+                    !validateEmail(
+                        email
+                    )
+                ) {
+
+                    setFieldError(
+                        editEmail,
+                        "editEmailError",
+                        "Please enter a valid email address."
+                    );
+
+
+                    isValid = false;
+
+                } else {
+
+                    setFieldError(
+                        editEmail,
+                        "editEmailError",
+                        ""
+                    );
+
+                }
+
+
+                if (!isValid) {
+
+                    if (
+                        typeof showError ===
+                        "function"
+                    ) {
+
+                        showError(
+                            "Please fix the highlighted fields."
+                        );
+
+                    }
+
+                    return;
+
+                }
+
+
+                /* Disable button */
+
+                const submitButton =
+                    editForm.querySelector(
+                        "button[type='submit']"
+                    );
+
+
+                const originalButtonHTML =
+                    submitButton.innerHTML;
+
+
+                submitButton.disabled =
+                    true;
+
+
+                submitButton.innerHTML =
+                    `<i class="fa-solid fa-spinner fa-spin"></i> Saving...`;
+
+
+                try {
+
+                    const response =
+                        await authenticatedFetch(
+                            `${API_URL}/me`,
+                            {
+
+                                method:
+                                    "PUT",
+
+                                headers: {
+
+                                    "Content-Type":
+                                        "application/json"
+
+                                },
+
+                                body:
+                                    JSON.stringify(
+                                        {
+                                            name,
+                                            email,
+                                            bio
+                                        }
+                                    )
+
+                            }
+                        );
+
+
+                    if (!response) {
+
+                        return;
+
+                    }
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (
+                        !response.ok ||
+                        !data.success
+                    ) {
+
+                        throw new Error(
+                            data.message ||
+                            "Failed to update profile"
+                        );
+
+                    }
+
+
+                    /* Preserve JWT */
+
+                    loggedInUser = {
+
+                        ...loggedInUser,
+
+                        id:
+                            data.user.id,
+
+                        name:
+                            data.user.name,
+
+                        email:
+                            data.user.email,
+
+                        bio:
+                            data.user.bio ||
+                            "",
+
+                        createdAt:
+                            data.user.createdAt
+
+                    };
+
+
+                    localStorage.setItem(
+                        "loggedInUser",
+                        JSON.stringify(
+                            loggedInUser
+                        )
+                    );
+
+
+                    renderProfile(
+                        data.user
+                    );
+
+
+                    await loadProfile();
+
+
+                    if (
+                        typeof showSuccess ===
+                        "function"
+                    ) {
+
+                        showSuccess(
+                            "Profile updated successfully!"
+                        );
+
+                    }
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Update profile error:",
+                        error
+                    );
+
+
+                    if (
+                        typeof showError ===
+                        "function"
+                    ) {
+
+                        showError(
+                            error.message ||
+                            "Unable to update profile."
+                        );
+
+                    }
+
+                } finally {
+
+                    submitButton.disabled =
+                        false;
+
+
+                    submitButton.innerHTML =
+                        originalButtonHTML;
+
+                }
+
+            }
+        );
+
+
+        /* ==========================================
+                CHANGE PASSWORD
+        ========================================== */
+
+        passwordForm.addEventListener(
+            "submit",
+            async event => {
+
+                event.preventDefault();
+
+
+                const current =
+                    currentPassword.value;
+
+
+                const next =
+                    newPassword.value;
+
+
+                const confirmVal =
+                    confirmNewPassword.value;
+
+
+                let isValid = true;
+
+
+                /* Current password */
+
+                if (!current) {
+
+                    setFieldError(
+                        currentPassword,
+                        "currentPasswordError",
+                        "Please enter your current password."
+                    );
+
+
+                    isValid = false;
+
+                } else {
+
+                    setFieldError(
+                        currentPassword,
+                        "currentPasswordError",
+                        ""
+                    );
+
+                }
+
+
+                /* New password */
+
+                if (next.length < 6) {
+
+                    setFieldError(
+                        newPassword,
+                        "newPasswordError",
+                        "Password must contain at least 6 characters."
+                    );
+
+
+                    isValid = false;
+
+                } else {
+
+                    setFieldError(
+                        newPassword,
+                        "newPasswordError",
+                        ""
+                    );
+
+                }
+
+
+                /* Confirm password */
+
+                if (
+                    next !==
+                    confirmVal
+                ) {
+
+                    setFieldError(
+                        confirmNewPassword,
+                        "confirmNewPasswordError",
+                        "Passwords do not match."
+                    );
+
+
+                    isValid = false;
+
+                } else {
+
+                    setFieldError(
+                        confirmNewPassword,
+                        "confirmNewPasswordError",
+                        ""
+                    );
+
+                }
+
+
+                if (!isValid) {
+
+                    if (
+                        typeof showError ===
+                        "function"
+                    ) {
+
+                        showError(
+                            "Please fix the highlighted fields."
+                        );
+
+                    }
+
+                    return;
+
+                }
+
+
+                const submitButton =
+                    passwordForm.querySelector(
+                        "button[type='submit']"
+                    );
+
+
+                const originalButtonHTML =
+                    submitButton.innerHTML;
+
+
+                submitButton.disabled =
+                    true;
+
+
+                submitButton.innerHTML =
+                    `<i class="fa-solid fa-spinner fa-spin"></i> Updating...`;
+
+
+                try {
+
+                    const response =
+                        await authenticatedFetch(
+                            `${API_URL}/me/password`,
+                            {
+
+                                method:
+                                    "PUT",
+
+                                headers: {
+
+                                    "Content-Type":
+                                        "application/json"
+
+                                },
+
+                                body:
+                                    JSON.stringify(
+                                        {
+
+                                            currentPassword:
+                                                current,
+
+                                            newPassword:
+                                                next
+
+                                        }
+                                    )
+
+                            }
+                        );
+
+
+                    if (!response) {
+
+                        return;
+
+                    }
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (
+                        !response.ok ||
+                        !data.success
+                    ) {
+
+                        throw new Error(
+                            data.message ||
+                            "Failed to update password"
+                        );
+
+                    }
+
+
+                    passwordForm.reset();
+
+
+                    setFieldError(
+                        currentPassword,
+                        "currentPasswordError",
+                        ""
+                    );
+
+
+                    setFieldError(
+                        newPassword,
+                        "newPasswordError",
+                        ""
+                    );
+
+
+                    setFieldError(
+                        confirmNewPassword,
+                        "confirmNewPasswordError",
+                        ""
+                    );
+
+
+                    if (
+                        typeof showSuccess ===
+                        "function"
+                    ) {
+
+                        showSuccess(
+                            "Password updated successfully!"
+                        );
+
+                    }
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Change password error:",
+                        error
+                    );
+
+
+                    if (
+                        typeof showError ===
+                        "function"
+                    ) {
+
+                        showError(
+                            error.message ||
+                            "Unable to update password."
+                        );
+
+                    }
+
+                } finally {
+
+                    submitButton.disabled =
+                        false;
+
+
+                    submitButton.innerHTML =
+                        originalButtonHTML;
+
+                }
+
+            }
+        );
+
+
+        /* ==========================================
+                DELETE ACCOUNT
+        ========================================== */
+
+        deleteAccountBtn.addEventListener(
+            "click",
+            async () => {
+
+                const confirmed =
+                    await confirmAction(
+                        "This will permanently delete your account and every blog you've published. This action cannot be undone.",
                         {
-                            method: "DELETE"
+
+                            title:
+                                "Delete Account?",
+
+                            confirmText:
+                                "Delete Account",
+
+                            icon:
+                                "fa-trash",
+
+                            tone:
+                                "danger"
+
                         }
                     );
 
 
-                const data =
-                    await response.json();
+                if (!confirmed) {
 
-
-                if (
-                    !response.ok ||
-                    !data.success
-                ) {
-
-                    throw new Error(
-                        data.message ||
-                        "Failed to delete account"
-                    );
-
-                }
-
-
-                /* Remove local login */
-
-                localStorage.removeItem(
-                    "loggedInUser"
-                );
-
-
-                /* Remove old frontend-only
-                   user data if it exists */
-
-                const users =
-                    JSON.parse(
-                        localStorage.getItem(
-                            "scriptoraUsers"
-                        )
-                    ) || [];
-
-
-                const remainingUsers =
-                    users.filter(
-                        user =>
-                            user.id !== userId
-                    );
-
-
-                localStorage.setItem(
-                    "scriptoraUsers",
-                    JSON.stringify(
-                        remainingUsers
-                    )
-                );
-
-
-                if (
-                    typeof showSuccess ===
-                    "function"
-                ) {
-
-                    showSuccess(
-                        "Account deleted successfully."
-                    );
-
-                }
-
-
-                setTimeout(() => {
-
-                    window.location.href =
-                        "../index.html";
-
-                }, 1200);
-
-
-            } catch (error) {
-
-                console.error(
-                    "Delete account error:",
-                    error
-                );
-
-
-                if (
-                    typeof showError ===
-                    "function"
-                ) {
-
-                    showError(
-                        error.message ||
-                        "Unable to delete account."
-                    );
+                    return;
 
                 }
 
 
                 deleteAccountBtn.disabled =
-                    false;
+                    true;
+
+
+                const originalButtonHTML =
+                    deleteAccountBtn.innerHTML;
+
 
                 deleteAccountBtn.innerHTML =
-                    originalButtonHTML;
+                    `<i class="fa-solid fa-spinner fa-spin"></i> Deleting...`;
+
+
+                try {
+
+                    const response =
+                        await authenticatedFetch(
+                            `${API_URL}/me`,
+                            {
+
+                                method:
+                                    "DELETE"
+
+                            }
+                        );
+
+
+                    if (!response) {
+
+                        return;
+
+                    }
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (
+                        !response.ok ||
+                        !data.success
+                    ) {
+
+                        throw new Error(
+                            data.message ||
+                            "Failed to delete account"
+                        );
+
+                    }
+
+
+                    /* Remove login */
+
+                    localStorage.removeItem(
+                        "loggedInUser"
+                    );
+
+
+                    /* Remove old frontend-only
+                       user data if it exists */
+
+                    const users =
+                        JSON.parse(
+                            localStorage.getItem(
+                                "scriptoraUsers"
+                            )
+                        ) || [];
+
+
+                    const deletedUserId =
+                        data.userId ||
+                        loggedInUser.id;
+
+
+                    const remainingUsers =
+                        users.filter(
+                            user =>
+                                user.id !==
+                                deletedUserId
+                        );
+
+
+                    localStorage.setItem(
+                        "scriptoraUsers",
+                        JSON.stringify(
+                            remainingUsers
+                        )
+                    );
+
+
+                    if (
+                        typeof showSuccess ===
+                        "function"
+                    ) {
+
+                        showSuccess(
+                            "Account deleted successfully."
+                        );
+
+                    }
+
+
+                    setTimeout(
+                        () => {
+
+                            window.location.href =
+                                "../index.html";
+
+                        },
+                        1200
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Delete account error:",
+                        error
+                    );
+
+
+                    if (
+                        typeof showError ===
+                        "function"
+                    ) {
+
+                        showError(
+                            error.message ||
+                            "Unable to delete account."
+                        );
+
+                    }
+
+
+                    deleteAccountBtn.disabled =
+                        false;
+
+
+                    deleteAccountBtn.innerHTML =
+                        originalButtonHTML;
+
+                }
 
             }
+        );
 
-        }
-    );
-
-});
+    }
+);

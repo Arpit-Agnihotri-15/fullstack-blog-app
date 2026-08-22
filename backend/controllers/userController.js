@@ -14,7 +14,7 @@ const getUserProfile = async (req, res) => {
 
     try {
 
-        const userId = req.params.id;
+        const userId = req.user.id;
 
         if (!mongoose.Types.ObjectId.isValid(userId)) {
 
@@ -122,7 +122,7 @@ const updateProfile = async (req, res) => {
 
     try {
 
-        const userId = req.params.id;
+        const userId = req.user.id;
 
         const {
             name,
@@ -253,7 +253,7 @@ const changePassword = async (req, res) => {
 
     try {
 
-        const userId = req.params.id;
+        const userId = req.user.id;
 
         const {
             currentPassword,
@@ -373,7 +373,7 @@ const deleteAccount = async (req, res) => {
 
     try {
 
-        const userId = req.params.id;
+        const userId = req.user.id;
 
 
         if (!mongoose.Types.ObjectId.isValid(userId)) {

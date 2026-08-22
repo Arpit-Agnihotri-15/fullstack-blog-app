@@ -118,6 +118,26 @@ A modern Full Stack Blogging Platform developed during my **Full Stack Web Devel
 - Verified secure API requests through browser Network testing
 - Completed end-to-end user-specific blog access testing
 
+### 🟢 Day 19 – Profile & User Management
+
+- Secured profile operations using JWT authentication
+- Added protected `GET /api/users/me` endpoint
+- Added protected `PUT /api/users/me` endpoint for profile updates
+- Added protected `PUT /api/users/me/password` endpoint for password changes
+- Added protected `DELETE /api/users/me` endpoint for account deletion
+- Replaced URL-based user identification with `req.user.id` from the verified JWT
+- Connected Profile page to the authenticated `/me` endpoints
+- Added Bearer JWT authentication to profile requests
+- Implemented profile information and user statistics loading
+- Implemented secure profile update functionality
+- Implemented secure password change with current-password verification
+- Implemented account deletion with associated blogs and comments cleanup
+- Tested profile access and updates with multiple user accounts
+- Tested incorrect password and missing JWT scenarios
+- Verified authenticated requests through browser Network testing
+- Verified deleted accounts can no longer log in
+- Completed end-to-end Profile & User Management testing
+
 ### Current Progress
 
 | Module | Status |
@@ -126,7 +146,7 @@ A modern Full Stack Blogging Platform developed during my **Full Stack Web Devel
 | Module 2 – Backend | 🟢 Completed |
 | Module 3 – Database & Full Stack Integration | 🟢 Completed |
 | Module 4 – CRUD Operations | 🟢 Completed |
-| Module 5 – Authentication & Security | 🟢 Day 18 Completed |
+| Module 5 – Authentication & Security | 🟢 Day 19 Completed |
 
 # Project Structure
 

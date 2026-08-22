@@ -7,23 +7,54 @@ const {
     deleteAccount
 } = require("../controllers/userController");
 
+const authMiddleware =
+    require("../middleware/authMiddleware");
+
 const router = express.Router();
 
 
-// Get profile
-router.get("/:id", getUserProfile);
+// ========================================
+// GET CURRENT USER PROFILE
+// ========================================
+
+router.get(
+    "/me",
+    authMiddleware,
+    getUserProfile
+);
 
 
-// Update profile
-router.put("/:id", updateProfile);
+// ========================================
+// UPDATE CURRENT USER PROFILE
+// ========================================
+
+router.put(
+    "/me",
+    authMiddleware,
+    updateProfile
+);
 
 
-// Change password
-router.put("/:id/password", changePassword);
+// ========================================
+// CHANGE CURRENT USER PASSWORD
+// ========================================
+
+router.put(
+    "/me/password",
+    authMiddleware,
+    changePassword
+);
 
 
-// Delete account
-router.delete("/:id", deleteAccount);
+// ========================================
+// DELETE CURRENT USER ACCOUNT
+// ========================================
+
+router.delete(
+    "/me",
+    authMiddleware,
+    deleteAccount
+);
 
 
 module.exports = router;
